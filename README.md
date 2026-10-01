@@ -70,6 +70,20 @@ npm run dev                 # http://localhost:3000, админка — /admin
 7. **Бэкапы** — `deploy/backup.sh` (база + фото), например ежедневно через cron:
    `0 3 * * * /var/www/mwp/deploy/backup.sh /var/backups/mwp`
 
+### Текущий стенд
+
+Сейчас сайт работает по адресу https://mwp.135.106.192.220.sslip.io. Сервер — тот же, где Reckon. Вместо nginx и PM2 там:
+
+- код лежит в `/srv/mwp-site` и запускается от системного пользователя `mwp`;
+- сервис — `systemd` `mwp-site` (`deploy/mwp-site.service`), порт 127.0.0.1:3000;
+- Caddy проксирует на него из `/etc/caddy/sites/mwp.caddy`;
+- Node 24 стоит в `/opt/node24`;
+- база и фото — в `/srv/mwp-site/data`, пароль первого админа — в `/srv/mwp-site/.env`.
+
+Обновить сайт после `git push`: `ssh root@135.106.192.220 /srv/mwp-site/deploy/update.sh`.
+
+Старая статическая сборка от 5 сентября отключена в `mwp.caddy`, но её файлы остались в `/srv/mwp`. Чтобы вернуть её под другим адресом, раскомментируйте блок в `mwp.caddy`.
+
 ### Обновление
 
 ```bash
