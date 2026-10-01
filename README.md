@@ -47,7 +47,7 @@ npm run dev                 # http://localhost:3000, админка — /admin
 1. **Node.js 24 и PM2**
    ```bash
    curl -fsSL https://deb.nodesource.com/setup_24.x | sudo -E bash -
-   sudo apt install -y nodejs nginx sqlite3
+   sudo apt install -y nodejs nginx sqlite3   # или официальный архив с nodejs.org в /opt/node24
    sudo npm install -g pm2
    ```
 2. **Код и настройки**
