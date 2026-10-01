@@ -1,0 +1,25 @@
+# /etc/systemd/system/mwp-site.service
+# systemctl daemon-reload && systemctl enable --now mwp-site
+[Unit]
+Description=MWP — сайт хоккейной экипировки (Next.js)
+After=network.target
+
+[Service]
+Type=simple
+User=mwp
+Group=mwp
+WorkingDirectory=/srv/mwp-site
+Environment=NODE_ENV=production
+ExecStart=/usr/bin/node node_modules/next/dist/bin/next start -p 3000 -H 127.0.0.1
+Restart=always
+RestartSec=3
+
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/srv/mwp-site/data /srv/mwp-site/.next
+MemoryMax=700M
+
+[Install]
+WantedBy=multi-user.target
