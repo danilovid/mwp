@@ -1,0 +1,272 @@
+/* ---------- Шапка ---------- */
+.header {
+  position: relative;
+  z-index: 5;
+  max-width: var(--wrap);
+  margin: 0 auto;
+  padding: 18px var(--gutter);
+  display: flex;
+  align-items: center;
+  gap: 12px 28px;
+}
+
+.logo {
+  color: #fff;
+  font-weight: 800;
+  font-size: 24px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: none;
+}
+.logo:hover {
+  opacity: 1;
+}
+.logoBar {
+  width: 8px;
+  height: 24px;
+  background: #e0304a;
+  transform: skewX(-12deg);
+}
+.logoText {
+  display: inline-block;
+  transform: skewX(-12deg);
+  letter-spacing: 0.01em;
+}
+
+.nav {
+  display: flex;
+  gap: 6px 22px;
+  flex-wrap: wrap;
+  font-size: 14px;
+  font-weight: 600;
+  flex: 1;
+}
+.nav a {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.headerTools {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: none;
+}
+
+.pillGlass {
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  color: #fff;
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 999px;
+  padding: 6px 12px;
+  backdrop-filter: blur(8px);
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.pillGlass:hover {
+  opacity: 1;
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.cartCount {
+  min-width: 18px;
+  height: 18px;
+  padding: 0 5px;
+  border-radius: 999px;
+  background: #e0304a;
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.phonePill {
+  color: #0b2748;
+  background: #fff;
+  border-radius: 999px;
+  padding: 8px 14px;
+  font-family: var(--mono);
+  font-size: 13px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.burger {
+  display: none;
+  width: 40px;
+  height: 36px;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  background: rgba(255, 255, 255, 0.12);
+  color: #fff;
+  cursor: pointer;
+  align-items: center;
+  justify-content: center;
+}
+
+.mobileMenu {
+  display: none;
+}
+
+@media (max-width: 1120px) {
+  .nav {
+    display: none;
+  }
+  .header {
+    justify-content: space-between;
+  }
+  .burger {
+    display: inline-flex;
+  }
+  .mobileMenu[data-open="true"] {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    position: absolute;
+    top: 64px;
+    left: var(--gutter);
+    right: var(--gutter);
+    padding: 12px;
+    border-radius: 18px;
+    background: rgba(11, 39, 72, 0.92);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(14px);
+    box-shadow: 0 20px 40px -20px rgba(0, 0, 0, 0.6);
+  }
+  .mobileMenu a {
+    color: #fff;
+    font-weight: 600;
+    padding: 10px 12px;
+    border-radius: 10px;
+  }
+  .mobileMenu a:hover {
+    background: rgba(255, 255, 255, 0.1);
+    opacity: 1;
+  }
+}
+
+@media (max-width: 560px) {
+  .phonePill,
+  .themeBtn {
+    display: none;
+  }
+}
+
+/* ---------- Полоса шапки внутренних страниц ---------- */
+.band {
+  position: relative;
+  overflow: hidden;
+  color: #fff;
+  border-radius: 0 0 28px 28px;
+  background:
+    radial-gradient(ellipse 45% 120% at 100% 100%, rgba(224, 48, 74, 0.5), transparent 70%),
+    radial-gradient(ellipse 70% 160% at 72% 30%, #7ccbf5 0%, #1a7ab7 42%, #0b2748 100%);
+}
+.bandStripe {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 58%;
+  width: 56px;
+  background: linear-gradient(180deg, rgba(224, 48, 74, 0), rgba(224, 48, 74, 0.5) 40%, rgba(224, 48, 74, 0.8));
+  transform: skewX(-12deg);
+  pointer-events: none;
+}
+.bandBody {
+  position: relative;
+  max-width: var(--wrap);
+  margin: 0 auto;
+  padding: 8px var(--gutter) 36px;
+}
+.crumbs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.8);
+}
+.crumbs a {
+  color: rgba(255, 255, 255, 0.9);
+}
+.bandTitle {
+  margin: 8px 0 0;
+  font-size: 40px;
+  line-height: 1.08;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+}
+.bandLead {
+  margin: 10px 0 0;
+  max-width: 640px;
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 16px;
+}
+
+@media (max-width: 760px) {
+  .bandTitle {
+    font-size: 30px;
+  }
+}
+
+/* ---------- Подвал ---------- */
+.footer {
+  background: #081a30;
+  color: #e6eef6;
+  border-top: 4px solid #e0304a;
+  margin-top: 0;
+}
+.footerGrid {
+  max-width: var(--wrap);
+  margin: 0 auto;
+  padding: 48px var(--gutter) 24px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 28px;
+}
+.footerCol {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 14px;
+}
+.footerCol a {
+  color: #e6eef6;
+}
+.footerLogo {
+  font-weight: 800;
+  font-size: 28px;
+  transform: skewX(-12deg);
+  display: inline-block;
+  align-self: flex-start;
+  margin-bottom: 4px;
+}
+.footerMono {
+  font-family: var(--mono);
+}
+.footerAccent {
+  color: #7ccbf5 !important;
+  font-family: var(--mono);
+  font-weight: 700;
+}
+.footerSmall {
+  font-size: 12px;
+  opacity: 0.7;
+}
+.footerLegal {
+  grid-column: 1 / -1;
+  font-size: 11px;
+  opacity: 0.6;
+  border-top: 1px solid rgba(255, 255, 255, 0.14);
+  padding-top: 12px;
+  display: flex;
+  justify-content: space-between;
+  gap: 8px 24px;
+  flex-wrap: wrap;
+}

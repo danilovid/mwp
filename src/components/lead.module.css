@@ -1,0 +1,93 @@
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.cols {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 14px;
+}
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+.hint {
+  font-size: 12px;
+  color: var(--muted);
+  max-width: 300px;
+}
+.error {
+  margin: 0;
+  color: var(--red);
+  font-weight: 600;
+  font-size: 14px;
+}
+.done {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 20px;
+  border-radius: 16px;
+  background: var(--tint);
+  border-left: 4px solid var(--red);
+}
+.done b {
+  font-size: 18px;
+}
+
+.dialog {
+  border: 0;
+  padding: 0;
+  border-radius: 24px;
+  width: min(640px, calc(100vw - 24px));
+  max-height: calc(100vh - 24px);
+  background: var(--card);
+  color: var(--ink);
+  box-shadow: var(--shadow);
+}
+.dialog::backdrop {
+  background: rgba(8, 26, 48, 0.55);
+  backdrop-filter: blur(4px);
+}
+.dialogBody {
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.dialogHead {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+}
+.dialogHead h2 {
+  margin: 0;
+  font-size: 24px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+.close {
+  border: 0;
+  background: var(--tint);
+  color: var(--ink);
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  font-size: 22px;
+  line-height: 1;
+  cursor: pointer;
+  flex: none;
+}
+.summary {
+  font-size: 14px;
+  background: var(--tint);
+  border-radius: 14px;
+  padding: 12px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}

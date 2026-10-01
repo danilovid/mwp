@@ -1,0 +1,106 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+/// Раздел каталога («Голова и шея», «Корпус», …)
+model Category {
+  id       Int       @id @default(autoincrement())
+  slug     String    @unique
+  name     String
+  sort     Int       @default(0)
+  products Product[]
+}
+
+/// Товар. Линейка CUBE — отдельный товар, связанный с базовым через baseId:
+/// на витрине пара показывается одной карточкой с переключателем.
+model Product {
+  id          Int            @id @default(autoincrement())
+  slug        String         @unique
+  name        String
+  line        String         @default("base") // base | cube
+  baseId      Int?           @unique
+  base        Product?       @relation("CubePair", fields: [baseId], references: [id], onDelete: SetNull)
+  cube        Product?       @relation("CubePair")
+  categoryId  Int
+  category    Category       @relation(fields: [categoryId], references: [id])
+  note        String         @default("") // короткая подпись: «2 штуки в комплекте»
+  description String         @default("")
+  published   Boolean        @default(true)
+  sort        Int            @default(0)
+  kitSort     Int? // позиция в «Комплекте на игрока»; null — не входит
+  ozonUrl     String         @default("")
+  marketUrl   String         @default("")
+  /// JSON: [{ "name": "Размер", "values": ["S", "M", "L"] }]
+  options     String         @default("[]")
+  images      ProductImage[]
+  editions    Edition[]
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
+
+  @@index([categoryId])
+}
+
+model ProductImage {
+  id        Int     @id @default(autoincrement())
+  productId Int
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+  /// имя файла без суффикса размера: «p12-ab12cd» → p12-ab12cd-1200.webp / -480.webp
+  file      String
+  sort      Int     @default(0)
+  /// значение опции, к которому привязано фото (например, цвет «Черный»)
+  optionValue String @default("")
+
+  @@index([productId])
+}
+
+/// Вариант исполнения: конкретное сочетание опций и его цена
+model Edition {
+  id        Int     @id @default(autoincrement())
+  productId Int
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+  /// JSON: { "Цвет": "Черный", "Размер": "S" }
+  values    String  @default("{}")
+  price     Int
+  sort      Int     @default(0)
+
+  @@index([productId])
+}
+
+/// Заявка: из корзины (order), заказ для клуба (club), оптовый запрос (wholesale)
+model Lead {
+  id           Int      @id @default(autoincrement())
+  type         String
+  status       String   @default("new") // new | work | done | cancel
+  name         String   @default("")
+  phone        String   @default("")
+  email        String   @default("")
+  address      String   @default("")
+  org          String   @default("")
+  comment      String   @default("")
+  /// JSON со строками заявки
+  items        String   @default("[]")
+  total        Int?
+  emailSent    Boolean  @default(false)
+  telegramSent Boolean  @default(false)
+  adminNote    String   @default("")
+  createdAt    DateTime @default(now())
+
+  @@index([createdAt])
+}
+
+model AdminUser {
+  id           Int      @id @default(autoincrement())
+  login        String   @unique
+  passwordHash String
+  createdAt    DateTime @default(now())
+}
+
+model Setting {
+  key   String @id
+  value String
+}
