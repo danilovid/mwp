@@ -830,6 +830,20 @@
   margin: 0;
   font-size: 14px;
 }
+.textLink {
+  align-self: flex-start;
+  margin-top: auto;
+  border: 0;
+  background: none;
+  padding: 0;
+  color: var(--acc);
+  font-weight: 700;
+  font-size: 14px;
+  cursor: pointer;
+}
+.textLink:hover {
+  opacity: 0.85;
+}
 .miniRow {
   display: flex;
   justify-content: space-between;

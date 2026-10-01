@@ -9,6 +9,7 @@ import { FACTORY_TEASER } from "@/lib/factory";
 import { CatalogSection } from "./CatalogSection";
 import { KitAndClub } from "./KitAndClub";
 import { PricesSection } from "./PricesSection";
+import { SupplyCard } from "./SupplyCard";
 import s from "./home.module.css";
 
 export default async function HomePage() {
@@ -154,18 +155,7 @@ export default async function HomePage() {
       <KitAndClub kit={kit} />
 
       <section className={`wrap ${s.trio}`}>
-        <div className={s.tint}>
-          <b>Купить на маркетплейсе</b>
-          <p>Поштучно, по розничной цене — в наших магазинах на OZON и Яндекс Маркете.</p>
-          <a className={s.miniRow} href={settings.ozonUrl} target="_blank" rel="noopener noreferrer">
-            <span>Магазин MWP на OZON</span>
-            <span>↗</span>
-          </a>
-          <a className={s.miniRow} href={settings.marketUrl} target="_blank" rel="noopener noreferrer">
-            <span>Магазин MWP на Яндекс Маркете</span>
-            <span>↗</span>
-          </a>
-        </div>
+        <SupplyCard />
         {parts.length > 0 && (
           <div id="parts" className={s.tint}>
             <b>Запчасти к шлемам — от {formatPrice(partsFrom!)}</b>
