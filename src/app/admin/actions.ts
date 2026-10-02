@@ -93,7 +93,13 @@ const OptionSchema = z.array(
   z.object({ name: z.string().trim().min(1).max(60), values: z.array(z.string().trim().min(1).max(80)).min(1).max(60) }),
 );
 const EditionSchema = z.array(
-  z.object({ values: z.record(z.string(), z.string()), price: z.number().int().min(0).max(10_000_000) }),
+  z.object({
+    values: z.record(z.string(), z.string()),
+    price: z.number().int().min(0).max(10_000_000),
+    // Оптовые ступени необязательны: null — цены нет, на витрине «по запросу»
+    priceOpt1: z.number().int().min(0).max(10_000_000).nullable().default(null),
+    priceOpt2: z.number().int().min(0).max(10_000_000).nullable().default(null),
+  }),
 );
 
 export async function saveProduct(_prev: FormState, form: FormData): Promise<FormState> {
@@ -143,7 +149,14 @@ export async function saveProduct(_prev: FormState, form: FormData): Promise<For
     }),
     db.edition.deleteMany({ where: { productId: id } }),
     db.edition.createMany({
-      data: editions.map((e, sort) => ({ productId: id, values: JSON.stringify(e.values), price: e.price, sort })),
+      data: editions.map((e, sort) => ({
+        productId: id,
+        values: JSON.stringify(e.values),
+        price: e.price,
+        priceOpt1: e.priceOpt1,
+        priceOpt2: e.priceOpt2,
+        sort,
+      })),
     }),
   ]);
   revalidateSite();

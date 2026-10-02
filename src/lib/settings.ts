@@ -16,6 +16,9 @@ export const SETTING_DEFAULTS = {
   addressShort: "Чебоксары, ул. 324 Стрелковой дивизии, 28",
   mapLat: "56.10057",
   mapLon: "47.28947",
+  /** Пороги оптовых ступеней, как в прайс-листе производителя */
+  optStep1: "30 000 ₽",
+  optStep2: "100 000 ₽",
   priceListUrl: "https://disk.yandex.ru/i/JMAZZEc5ZnyWmw",
   ozonUrl: "https://ozon.ru/s/mwp",
   marketUrl: "https://market.yandex.ru/cc/Axt8sS",

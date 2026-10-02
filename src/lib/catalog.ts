@@ -20,6 +20,12 @@ export const parseValues = (json: string): EditionValues => {
 };
 
 const minOf = (prices: number[]) => (prices.length ? Math.min(...prices) : 0);
+
+/** Минимальная оптовая цена товара по ступени; null — ни у одного варианта её нет. */
+const optMin = (p: Loaded | null, field: "priceOpt1" | "priceOpt2") => {
+  const vals = (p?.editions ?? []).map((e) => e[field]).filter((v): v is number => v != null);
+  return vals.length ? Math.min(...vals) : null;
+};
 const maxOf = (prices: number[]) => (prices.length ? Math.max(...prices) : 0);
 
 /** «рост 110-120» → [110, 120] */
@@ -93,6 +99,10 @@ export type CatalogCard = {
   ozonUrl: string;
   /** базовая и CUBE-версии с размерами и ценами — для добавления в корзину из каталога */
   buy: CardVariant[];
+  /** минимальная оптовая цена: ступень «от 30 000 ₽». null — цены в прайсе нет (вся линейка CUBE и часть мелочи) */
+  optFrom: number | null;
+  /** минимальная оптовая цена: ступень «от 100 000 ₽» */
+  opt2From: number | null;
 };
 
 function toCard(base: Loaded | null, cube: Loaded | null): CatalogCard {
@@ -118,6 +128,8 @@ function toCard(base: Loaded | null, cube: Loaded | null): CatalogCard {
     cubeHasRange: minOf(cp) !== maxOf(cp),
     colors: options.find((o) => o.name === "Цвет")?.values ?? [],
     ozonUrl: main.ozonUrl,
+    optFrom: optMin(base, "priceOpt1"),
+    opt2From: optMin(base, "priceOpt2"),
     buy: [base, cube].filter((p): p is Loaded => p !== null).map((p) => ({
       id: p.id,
       slug: p.slug,
@@ -168,7 +180,13 @@ export async function getProductBySlug(slug: string) {
     marketUrl: p.marketUrl,
     options: parseOptions(p.options),
     images: p.images.map((i) => ({ file: i.file, optionValue: i.optionValue })),
-    editions: p.editions.map((e) => ({ id: e.id, values: parseValues(e.values), price: e.price })),
+    editions: p.editions.map((e) => ({
+      id: e.id,
+      values: parseValues(e.values),
+      price: e.price,
+      priceOpt1: e.priceOpt1,
+      priceOpt2: e.priceOpt2,
+    })),
     minPrice: minOf(p.editions.map((e) => e.price)),
     pair:
       pair && pair.published

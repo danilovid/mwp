@@ -45,11 +45,22 @@ export default async function ProductPage(props: PageProps<"/catalog/[slug]">) {
   const sizeOpt = product.options.find((o) => o.name === "Размер");
   const sizeRows = sizeOpt
     ? sizeOpt.values.map((v) => {
-        const prices = product.editions.filter((e) => e.values["Размер"] === v).map((e) => e.price);
+        const rows = product.editions.filter((e) => e.values["Размер"] === v);
+        const low = (xs: (number | null)[]) => {
+          const ok = xs.filter((x): x is number => x != null);
+          return ok.length ? Math.min(...ok) : null;
+        };
         const m = v.match(/\((.*)\)/);
-        return { size: sizeShort(v), hint: m ? m[1] : "", price: prices.length ? Math.min(...prices) : null };
+        return {
+          size: sizeShort(v),
+          hint: m ? m[1] : "",
+          price: low(rows.map((e) => e.price)),
+          opt1: low(rows.map((e) => e.priceOpt1)),
+          opt2: low(rows.map((e) => e.priceOpt2)),
+        };
       })
     : [];
+  const hasOpt = sizeRows.some((r) => r.opt1 != null);
   const prices = product.editions.map((e) => e.price);
 
   const jsonLd = {
@@ -100,16 +111,28 @@ export default async function ProductPage(props: PageProps<"/catalog/[slug]">) {
         </div>
         {sizeRows.length > 0 && (
           <div className={s.sizeTable}>
-            <div className={s.sizeHead}>
+            <div className={`${s.sizeHead} ${hasOpt ? s.sizeRowOpt : ""}`}>
               <span>Размер</span>
               <span>Розница</span>
+              {hasOpt && (
+                <>
+                  <span>от {settings.optStep1}</span>
+                  <span>от {settings.optStep2}</span>
+                </>
+              )}
             </div>
             {sizeRows.map((r) => (
-              <div key={r.size} className={s.sizeRow}>
+              <div key={r.size} className={`${s.sizeRow} ${hasOpt ? s.sizeRowOpt : ""}`}>
                 <span>
                   <b className="mono">{r.size}</b> {r.hint && <span className="muted">{r.hint}</span>}
                 </span>
                 <span className="mono">{r.price != null ? formatPrice(r.price) : "—"}</span>
+                {hasOpt && (
+                  <>
+                    <span className={`mono ${s.sizeOpt}`}>{r.opt1 != null ? formatPrice(r.opt1) : "—"}</span>
+                    <span className={`mono ${s.sizeOpt}`}>{r.opt2 != null ? formatPrice(r.opt2) : "—"}</span>
+                  </>
+                )}
               </div>
             ))}
           </div>

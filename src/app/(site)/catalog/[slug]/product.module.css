@@ -330,3 +330,26 @@
   padding-top: 18px;
   padding-bottom: 2px;
 }
+
+/* Таблица размеров с оптовыми ступенями */
+.sizeRowOpt {
+  display: grid;
+  grid-template-columns: minmax(0, 1.6fr) 90px 90px 90px;
+  justify-content: initial;
+  align-items: center;
+}
+.sizeRowOpt span:not(:first-child) {
+  text-align: right;
+}
+.sizeOpt {
+  color: var(--acc);
+}
+.sizeHead.sizeRowOpt .sizeOpt {
+  color: inherit;
+}
+@media (max-width: 520px) {
+  .sizeRowOpt {
+    grid-template-columns: minmax(0, 1.3fr) 70px 70px 70px;
+    font-size: 13px;
+  }
+}

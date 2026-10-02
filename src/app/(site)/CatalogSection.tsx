@@ -25,10 +25,14 @@ export function CatalogSection({
   cards,
   categories,
   mode = "retail",
+  optStep1 = "30 000 ₽",
+  optStep2 = "100 000 ₽",
 }: {
   cards: CatalogCard[];
   categories: Category[];
   mode?: CatalogMode;
+  optStep1?: string;
+  optStep2?: string;
 }) {
   const [zone, setZone] = useState("all");
   const [view, setView] = useState<"grid" | "table">("grid");
@@ -94,6 +98,11 @@ export function CatalogSection({
                   <div className={s.cardMeta}>{meta(c)}</div>
                 </div>
                 <div className={s.cardPrices}>
+                  {mode === "opt" && (
+                    <span className={`priceChip ${s.optChip}`} title={`Цена при заказе от ${optStep1}`}>
+                      {c.optFrom != null ? `${from(c.optFrom, true)} опт` : "опт по запросу"}
+                    </span>
+                  )}
                   {c.basePrice != null && (
                     <span className="priceChip">
                       {from(c.basePrice, c.baseHasRange)} <small>розн.</small>
@@ -122,7 +131,7 @@ export function CatalogSection({
           ))}
         </div>
       ) : (
-        <div className={s.table}>
+        <div className={`${s.table} ${mode === "opt" ? s.tableOpt : ""}`}>
           <div className={`${s.row} ${s.rowHead}`}>
             <span />
             <span>Позиция</span>
@@ -133,6 +142,16 @@ export function CatalogSection({
             <span className={s.rowPrice} style={{ fontFamily: "var(--font)" }}>
               CUBE
             </span>
+            {mode === "opt" && (
+              <>
+                <span className={s.rowPrice} style={{ fontFamily: "var(--font)" }}>
+                  от {optStep1}
+                </span>
+                <span className={s.rowPrice} style={{ fontFamily: "var(--font)" }}>
+                  от {optStep2}
+                </span>
+              </>
+            )}
           </div>
           {shown.map((c) => (
             <Link key={c.slug} href={`/catalog/${c.slug}`} className={s.row}>
@@ -148,6 +167,16 @@ export function CatalogSection({
               <span className={s.rowPrice} style={{ color: c.cubePrice != null ? "var(--ink)" : "var(--muted)" }}>
                 {c.cubePrice != null ? from(c.cubePrice, c.cubeHasRange) : "—"}
               </span>
+              {mode === "opt" && (
+                <>
+                  <span className={s.rowPrice} style={{ color: c.optFrom != null ? "var(--acc)" : "var(--muted)" }}>
+                    {c.optFrom != null ? from(c.optFrom, true) : "по запросу"}
+                  </span>
+                  <span className={s.rowPrice} style={{ color: c.opt2From != null ? "var(--acc)" : "var(--muted)" }}>
+                    {c.opt2From != null ? from(c.opt2From, true) : "по запросу"}
+                  </span>
+                </>
+              )}
             </Link>
           ))}
         </div>

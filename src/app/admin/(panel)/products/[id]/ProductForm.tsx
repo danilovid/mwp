@@ -6,7 +6,7 @@ import { saveProduct } from "../../../actions";
 import { Message, Submit } from "../../../ui";
 import s from "../../../admin.module.css";
 
-type Edition = { values: Record<string, string>; price: number };
+type Edition = { values: Record<string, string>; price: number; priceOpt1: number | null; priceOpt2: number | null };
 type ProductData = {
   id: number;
   name: string;
@@ -55,6 +55,15 @@ export function ProductForm({
     const names = product.options.map((o) => o.name);
     return Object.fromEntries(product.editions.map((e) => [keyOf(e.values, names), String(e.price)]));
   });
+  // Оптовые ступени. Пустое поле — цены нет, на сайте показывается «по запросу»
+  const [opt1, setOpt1] = useState<Record<string, string>>(() => {
+    const names = product.options.map((o) => o.name);
+    return Object.fromEntries(product.editions.map((e) => [keyOf(e.values, names), e.priceOpt1 == null ? "" : String(e.priceOpt1)]));
+  });
+  const [opt2, setOpt2] = useState<Record<string, string>>(() => {
+    const names = product.options.map((o) => o.name);
+    return Object.fromEntries(product.editions.map((e) => [keyOf(e.values, names), e.priceOpt2 == null ? "" : String(e.priceOpt2)]));
+  });
   const [bulk, setBulk] = useState("");
 
   const options: ProductOption[] = useMemo(
@@ -69,22 +78,37 @@ export function ProductForm({
   );
   const names = options.map((o) => o.name);
   const rows = combos(options);
-  const editions: Edition[] = rows.map((values) => ({
-    values,
-    price: Math.round(Number((prices[keyOf(values, names)] ?? "").replace(/\s/g, "").replace(",", "."))) || 0,
-  }));
+  const num = (raw: string | undefined) => {
+    const t = (raw ?? "").replace(/\s/g, "").replace(",", ".");
+    if (!t) return null;
+    const n = Math.round(Number(t));
+    return Number.isFinite(n) && n > 0 ? n : null;
+  };
+  const editions: Edition[] = rows.map((values) => {
+    const k = keyOf(values, names);
+    return {
+      values,
+      price: num(prices[k]) ?? 0,
+      priceOpt1: num(opt1[k]),
+      priceOpt2: num(opt2[k]),
+    };
+  });
 
   const setPrice = (k: string, v: string) => setPrices((p) => ({ ...p, [k]: v }));
+  const setOptA = (k: string, v: string) => setOpt1((p) => ({ ...p, [k]: v }));
+  const setOptB = (k: string, v: string) => setOpt2((p) => ({ ...p, [k]: v }));
   const fillAll = () => {
     if (!bulk.trim()) return;
     setPrices((p) => ({ ...p, ...Object.fromEntries(rows.map((r) => [keyOf(r, names), bulk])) }));
   };
   /** Одна цена на все варианты с тем же значением этой опции (например, размер — независимо от цвета). */
-  const fillSame = (optName: string, value: string, price: string) =>
-    setPrices((p) => ({
-      ...p,
-      ...Object.fromEntries(rows.filter((r) => r[optName] === value).map((r) => [keyOf(r, names), price])),
-    }));
+  const fillSame = (optName: string, value: string, k: string) => {
+    const keys = rows.filter((r) => r[optName] === value).map((r) => keyOf(r, names));
+    const spread = (map: Record<string, string>) => Object.fromEntries(keys.map((x) => [x, map[k] ?? ""]));
+    setPrices((p) => ({ ...p, ...spread(p) }));
+    setOpt1((p) => ({ ...p, ...spread(p) }));
+    setOpt2((p) => ({ ...p, ...spread(p) }));
+  };
 
   return (
     <form action={action}>
@@ -206,7 +230,10 @@ export function ProductForm({
 
       <div className={s.card}>
         <h2>Цены по вариантам</h2>
-        <p className={s.cardHint}>Розничная цена в рублях для каждого сочетания опций.</p>
+        <p className={s.cardHint}>
+          Цены в рублях для каждого сочетания опций. «Опт 1» и «Опт 2» — ступени из прайс-листа; пустое поле значит,
+          что на сайте вместо цены будет «по запросу».
+        </p>
         <div className={s.row} style={{ marginBottom: 12 }}>
           <input
             className={s.priceInput}
@@ -228,7 +255,9 @@ export function ProductForm({
                   <th key={n}>{n}</th>
                 ))}
                 {!names.length && <th>Вариант</th>}
-                <th>Цена, ₽</th>
+                <th>Розница, ₽</th>
+                <th>Опт 1, ₽</th>
+                <th>Опт 2, ₽</th>
                 {names.length > 1 && <th />}
               </tr>
             </thead>
@@ -252,12 +281,32 @@ export function ProductForm({
                         required
                       />
                     </td>
+                    <td>
+                      <input
+                        className={s.priceInput}
+                        inputMode="numeric"
+                        value={opt1[k] ?? ""}
+                        onChange={(e) => setOptA(k, e.target.value)}
+                        aria-label={`Оптовая цена, первая ступень: ${Object.values(r).join(", ") || "товар"}`}
+                        placeholder="—"
+                      />
+                    </td>
+                    <td>
+                      <input
+                        className={s.priceInput}
+                        inputMode="numeric"
+                        value={opt2[k] ?? ""}
+                        onChange={(e) => setOptB(k, e.target.value)}
+                        aria-label={`Оптовая цена, вторая ступень: ${Object.values(r).join(", ") || "товар"}`}
+                        placeholder="—"
+                      />
+                    </td>
                     {names.length > 1 && (
                       <td>
                         <button
                           type="button"
                           className={`${s.btn} ${s.btnSmall}`}
-                          onClick={() => fillSame(sizeName, r[sizeName], prices[k] ?? "")}
+                          onClick={() => fillSame(sizeName, r[sizeName], k)}
                           title={`Эта цена для всех вариантов «${r[sizeName]}»`}
                         >
                           всем «{r[sizeName]}»

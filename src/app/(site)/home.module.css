@@ -1224,3 +1224,21 @@
   flex: 1;
   min-width: 180px;
 }
+
+/* Оптовый режим каталога */
+.optChip {
+  border-color: var(--acc) !important;
+  color: var(--acc) !important;
+  font-weight: 700;
+}
+.tableOpt .row {
+  grid-template-columns: 44px minmax(0, 1.8fr) minmax(0, 1fr) 104px 104px 110px 110px;
+}
+@media (max-width: 1100px) {
+  .tableOpt {
+    overflow-x: auto;
+  }
+  .tableOpt .row {
+    min-width: 820px;
+  }
+}

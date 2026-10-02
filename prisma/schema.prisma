@@ -66,6 +66,10 @@ model Edition {
   /// JSON: { "Цвет": "Черный", "Размер": "S" }
   values    String  @default("{}")
   price     Int
+  /// Оптовая цена при заказе от первой ступени (по умолчанию от 30 000 ₽). null — не задана, показываем «по запросу»
+  priceOpt1 Int?
+  /// Оптовая цена при заказе от второй ступени (по умолчанию от 100 000 ₽)
+  priceOpt2 Int?
   sort      Int     @default(0)
 
   @@index([productId])

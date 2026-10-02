@@ -31,12 +31,12 @@ export default async function OptPage() {
       <section className={`wrap ${s.steps}`}>
         <div className={s.step}>
           <span className={s.stepLabel}>Ступень 1</span>
-          <b>от 30 000 ₽</b>
+          <b>от {settings.optStep1}</b>
           <span className="muted">Оптовая цена для заказа от тридцати тысяч рублей.</span>
         </div>
         <div className={s.step}>
           <span className={s.stepLabel}>Ступень 2</span>
-          <b>от 100 000 ₽</b>
+          <b>от {settings.optStep2}</b>
           <span className="muted">Цена для крупных закупок — магазинам и спортшколам.</span>
         </div>
         <a href={settings.priceListUrl} target="_blank" rel="noopener noreferrer" className={`${s.step} ${s.stepFile}`}>
@@ -53,7 +53,7 @@ export default async function OptPage() {
         </p>
       </section>
 
-      <CatalogSection cards={cards} categories={categories} mode="opt" />
+      <CatalogSection cards={cards} categories={categories} mode="opt" optStep1={settings.optStep1} optStep2={settings.optStep2} />
 
       <KitAndClub kit={kit} />
 

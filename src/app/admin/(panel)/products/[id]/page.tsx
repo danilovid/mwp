@@ -63,7 +63,12 @@ export default async function EditProductPage(props: PageProps<"/admin/products/
           ozonUrl: product.ozonUrl,
           marketUrl: product.marketUrl,
           options,
-          editions: product.editions.map((e) => ({ values: parseValues(e.values), price: e.price })),
+          editions: product.editions.map((e) => ({
+            values: parseValues(e.values),
+            price: e.price,
+            priceOpt1: e.priceOpt1,
+            priceOpt2: e.priceOpt2,
+          })),
         }}
         categories={categories.map((c) => ({ id: c.id, name: c.name }))}
         baseCandidates={baseCandidates
