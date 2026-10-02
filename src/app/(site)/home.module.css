@@ -1052,3 +1052,175 @@
   color: var(--acc);
   border-color: var(--acc);
 }
+
+/* Кнопка «в заявку» в карточке каталога: поверх растянутой ссылки на товар */
+.addBtn {
+  position: relative;
+  z-index: 2;
+  margin-left: auto;
+  flex: none;
+  width: 32px;
+  height: 32px;
+  border-radius: 999px;
+  border: 1px solid var(--acc);
+  background: var(--acc);
+  color: #fff;
+  font-size: 19px;
+  line-height: 1;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s, transform 0.15s;
+}
+.addBtn:hover {
+  transform: scale(1.08);
+}
+.addBtnDone {
+  background: #1f9d55;
+  border-color: #1f9d55;
+  font-size: 16px;
+}
+
+/* Всплывающая панель выбора размера */
+.sheetWrap {
+  position: fixed;
+  inset: 0;
+  z-index: 120;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+}
+.sheetBack {
+  position: absolute;
+  inset: 0;
+  border: 0;
+  padding: 0;
+  background: rgba(8, 20, 36, 0.5);
+  cursor: pointer;
+}
+.sheet {
+  position: relative;
+  width: min(560px, 100%);
+  background: var(--card);
+  border-radius: 24px 24px 0 0;
+  padding: 18px 20px calc(20px + env(safe-area-inset-bottom));
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  max-height: 88vh;
+  overflow-y: auto;
+  box-shadow: 0 -20px 60px -20px rgba(8, 20, 36, 0.5);
+  animation: sheetUp 0.22s ease-out;
+}
+@media (min-width: 760px) {
+  .sheetWrap {
+    align-items: center;
+  }
+  .sheet {
+    border-radius: 24px;
+    animation: none;
+  }
+}
+@keyframes sheetUp {
+  from {
+    transform: translateY(12%);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .sheet {
+    animation: none;
+  }
+}
+
+.sheetHead {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  font-size: 18px;
+}
+.sheetClose {
+  flex: none;
+  width: 32px;
+  height: 32px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: transparent;
+  color: var(--muted);
+  font-size: 22px;
+  line-height: 1;
+  cursor: pointer;
+}
+.sheetClose:hover {
+  color: var(--ink);
+}
+
+.sheetOpt {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.sheetOptName {
+  font-size: 13px;
+  color: var(--muted);
+}
+.sheetChips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.sheetChip {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1px;
+  min-width: 64px;
+  padding: 8px 12px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: transparent;
+  color: var(--ink);
+  font: inherit;
+  cursor: pointer;
+}
+.sheetChip small {
+  font-size: 11px;
+  color: var(--muted);
+}
+.sheetChip[aria-pressed="true"] {
+  border-color: var(--acc);
+  background: var(--tint);
+}
+.sheetChip[aria-pressed="true"] small {
+  color: var(--acc);
+}
+
+.sheetFoot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  border-top: 1px solid var(--line);
+  padding-top: 14px;
+  position: sticky;
+  bottom: 0;
+  background: var(--card);
+}
+.sheetPrice {
+  font-family: var(--mono);
+  font-size: 24px;
+  font-weight: 700;
+}
+.sheetPrice small {
+  font-size: 15px;
+}
+.sheetRetail {
+  font-family: var(--font);
+  font-weight: 500;
+  font-size: 13px !important;
+  color: var(--muted);
+}
+.sheetFoot :global(.btnRed) {
+  flex: 1;
+  min-width: 180px;
+}

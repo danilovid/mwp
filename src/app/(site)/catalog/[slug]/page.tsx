@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
+import { BackButton } from "@/components/BackButton";
 import { ProductImg } from "@/components/ProductImg";
 import { PageBand } from "@/components/SiteChrome";
 import { getProductBySlug, getPublishedSlugs, getRelated, sizeShort } from "@/lib/catalog";
@@ -78,6 +79,10 @@ export default async function ProductPage(props: PageProps<"/catalog/[slug]">) {
           { label: product.name },
         ]}
       />
+
+      <div className={`wrap ${s.backRow}`}>
+        <BackButton label="Назад в каталог" />
+      </div>
 
       <section className={`wrap ${s.main}`}>
         <ProductBuy product={product} storeOzon={settings.ozonUrl} storeMarket={settings.marketUrl} />

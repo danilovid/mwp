@@ -326,3 +326,7 @@
   flex-direction: column;
   gap: 10px;
 }
+.backRow {
+  padding-top: 18px;
+  padding-bottom: 2px;
+}

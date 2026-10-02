@@ -60,6 +60,17 @@ async function loadPublished() {
 }
 type Loaded = Awaited<ReturnType<typeof loadPublished>>[number];
 
+/** Данные для добавления в корзину прямо из каталога, без захода в карточку. */
+export type CardVariant = {
+  id: number;
+  slug: string;
+  name: string;
+  line: Line;
+  options: ProductOption[];
+  editions: { values: EditionValues; price: number }[];
+  image: string | null;
+};
+
 export type CatalogCard = {
   slug: string;
   name: string;
@@ -80,6 +91,8 @@ export type CatalogCard = {
   colors: string[];
   /** прямая ссылка на товар в OZON; пустая строка — ссылки нет */
   ozonUrl: string;
+  /** базовая и CUBE-версии с размерами и ценами — для добавления в корзину из каталога */
+  buy: CardVariant[];
 };
 
 function toCard(base: Loaded | null, cube: Loaded | null): CatalogCard {
@@ -105,6 +118,15 @@ function toCard(base: Loaded | null, cube: Loaded | null): CatalogCard {
     cubeHasRange: minOf(cp) !== maxOf(cp),
     colors: options.find((o) => o.name === "Цвет")?.values ?? [],
     ozonUrl: main.ozonUrl,
+    buy: [base, cube].filter((p): p is Loaded => p !== null).map((p) => ({
+      id: p.id,
+      slug: p.slug,
+      name: p.name,
+      line: p.line as Line,
+      options: parseOptions(p.options),
+      editions: p.editions.map((e) => ({ values: parseValues(e.values), price: e.price })),
+      image: p.images[0]?.file ?? null,
+    })),
   };
 }
 

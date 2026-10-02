@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useState } from "react";
 import { ProductImg } from "@/components/ProductImg";
+import { QuickAdd } from "./QuickAdd";
 import type { CatalogCard } from "@/lib/catalog";
 import { formatPrice, plural } from "@/lib/format";
 import s from "./home.module.css";
@@ -97,6 +98,7 @@ export function CatalogSection({ cards, categories }: { cards: CatalogCard[]; ca
                       OZON ↗
                     </a>
                   )}
+                  <QuickAdd card={c} />
                 </div>
               </div>
             </div>
