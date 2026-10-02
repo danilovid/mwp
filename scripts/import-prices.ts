@@ -11,6 +11,10 @@
  *  - у части товаров размеры умножены на цвета, и правило должно применяться ко всем вариантам размера;
  *  - строк линейки CUBE в прайсе нет вовсе, поэтому для неё оптовых цен не существует.
  *
+ * Для линейки CUBE в прайсе строк нет. По решению заказчика её оптовые цены считаются от базовой версии
+ * с той же наценкой, что и в рознице: CUBE = база + (розница CUBE − розница базы). У пяти товаров эта
+ * наценка 100 ₽, у защиты шеи — 60 ₽, поэтому берётся фактическая разница, а не фиксированные 100.
+ *
  * retail в правиле — розничная цена из прайса. Она не пишется в базу, а служит проверкой:
  * если в базе другая цена, значит строка сопоставлена не с тем товаром либо прайс разошёлся с сайтом.
  */
@@ -146,9 +150,53 @@ async function main() {
     touched++;
   }
 
+  // CUBE: цены выводим от базовой версии с её розничной наценкой
+  const keyOf = (json: string) => {
+    const v = parseValues(json);
+    return Object.keys(v)
+      .sort()
+      .map((k) => `${k}=${v[k]}`)
+      .join("|");
+  };
+  const derived: string[] = [];
+  for (const cube of products.filter((p) => p.line === "cube")) {
+    if (!cube.baseId) {
+      warnings.push(`${cube.slug}: нет базовой версии, оптовую цену вывести не из чего`);
+      continue;
+    }
+    const base = products.find((p) => p.id === cube.baseId);
+    if (!base) continue;
+    const byKey = new Map(base.editions.map((e) => [keyOf(e.values), e]));
+    const deltas = new Set<number>();
+    let n = 0;
+    for (const e of cube.editions) {
+      const b = byKey.get(keyOf(e.values));
+      if (!b) {
+        warnings.push(`${cube.slug}: варианту ${keyOf(e.values) || "—"} не нашлось пары в базовой версии`);
+        continue;
+      }
+      if (b.priceOpt1 == null || b.priceOpt2 == null) continue;
+      const delta = e.price - b.price;
+      deltas.add(delta);
+      const opt1 = b.priceOpt1 + delta;
+      const opt2 = b.priceOpt2 + delta;
+      if (e.priceOpt1 !== opt1 || e.priceOpt2 !== opt2) updates.push({ id: e.id, opt1, opt2 });
+      n++;
+    }
+    if (n) derived.push(`${cube.slug}: ${n} вариантов, наценка ${[...deltas].join("/")} ₽`);
+    if (deltas.size > 1) warnings.push(`${cube.slug}: наценка не одинаковая по размерам — ${[...deltas].join(", ")} ₽`);
+  }
+  if (derived.length) {
+    console.log("\nCUBE выведен от базовой линейки:");
+    for (const d of derived) console.log("  •", d);
+  }
+
   const noPrices = products.filter((p) => !(p.slug in MAP));
-  console.log(`Товаров в прайсе: ${touched}. Без оптовых цен: ${noPrices.length}.`);
-  console.log("Без оптовых цен:", noPrices.map((p) => p.slug).join(", ") || "—");
+  console.log(`\nТоваров из прайса: ${touched}.`);
+  console.log(
+    "Нет ни в прайсе, ни в CUBE:",
+    noPrices.filter((p) => p.line !== "cube").map((p) => p.slug).join(", ") || "—",
+  );
   if (warnings.length) {
     console.log("\nПредупреждения:");
     for (const w of warnings) console.log("  •", w);
