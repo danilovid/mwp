@@ -270,3 +270,34 @@
   gap: 8px 24px;
   flex-wrap: wrap;
 }
+
+/* Переключатель «Розница / Опт» */
+.modeSwitch {
+  display: inline-flex;
+  padding: 3px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.14);
+  border: 1px solid rgba(255, 255, 255, 0.22);
+}
+.modeSwitch a {
+  padding: 6px 14px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 700;
+  color: inherit;
+  white-space: nowrap;
+  transition: background 0.15s, color 0.15s;
+}
+.modeSwitch a[data-active="true"] {
+  background: #fff;
+  color: var(--ink);
+}
+.modeSwitch a:hover {
+  opacity: 1;
+}
+@media (max-width: 560px) {
+  .modeSwitch a {
+    padding: 6px 11px;
+    font-size: 12px;
+  }
+}

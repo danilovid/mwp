@@ -1,0 +1,102 @@
+.steps {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr));
+  gap: 14px;
+  padding-top: 24px;
+}
+.step {
+  background: var(--tint);
+  border-radius: 20px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  color: var(--ink);
+}
+.step b {
+  font-family: var(--mono);
+  font-size: 26px;
+  line-height: 1.1;
+}
+.stepLabel {
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.stepFile {
+  background: var(--tint2);
+}
+.stepFile:hover {
+  opacity: 1;
+  box-shadow: var(--shadow);
+}
+
+.note {
+  padding-top: 18px;
+}
+.note p {
+  margin: 0;
+  max-width: 70ch;
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+.trio {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
+  gap: 16px;
+  padding-top: 32px;
+}
+.tint {
+  background: var(--tint);
+  border-radius: 22px;
+  padding: 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-size: 14px;
+}
+.tint b {
+  font-size: 18px;
+}
+.tint p {
+  margin: 0;
+  line-height: 1.55;
+}
+.tint a {
+  font-weight: 700;
+}
+
+.formWrap {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr);
+  gap: 28px;
+  padding-top: 48px;
+  padding-bottom: 72px;
+  align-items: start;
+}
+@media (max-width: 900px) {
+  .formWrap {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+.formText h2 {
+  margin: 10px 0 8px;
+}
+.formText p {
+  margin: 0;
+  max-width: 44ch;
+}
+.contacts {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 18px;
+  font-size: 15px;
+}
+.formCard {
+  background: var(--tint);
+  border-radius: 22px;
+  padding: 22px;
+}

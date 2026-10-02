@@ -19,7 +19,17 @@ function meta(c: CatalogCard) {
   return parts.filter(Boolean).join(" · ");
 }
 
-export function CatalogSection({ cards, categories }: { cards: CatalogCard[]; categories: Category[] }) {
+export type CatalogMode = "retail" | "opt";
+
+export function CatalogSection({
+  cards,
+  categories,
+  mode = "retail",
+}: {
+  cards: CatalogCard[];
+  categories: Category[];
+  mode?: CatalogMode;
+}) {
   const [zone, setZone] = useState("all");
   const [view, setView] = useState<"grid" | "table">("grid");
   const shown = zone === "all" ? cards : cards.filter((c) => c.category === zone);
@@ -31,9 +41,16 @@ export function CatalogSection({ cards, categories }: { cards: CatalogCard[]; ca
         <div>
           <span className="skewBar" />
           <h2>Каталог</h2>
-          <span className="muted">
-            Собственное производство. Все цены в каталоге — <b style={{ color: "var(--ink)" }}>розничные</b>.
-          </span>
+          {mode === "opt" ? (
+            <span className="muted">
+              Собственное производство. Цены показаны <b style={{ color: "var(--ink)" }}>розничные</b> — как ориентир.
+              Оптовая зависит от суммы заказа, её посчитает менеджер по вашей заявке.
+            </span>
+          ) : (
+            <span className="muted">
+              Собственное производство. Все цены в каталоге — <b style={{ color: "var(--ink)" }}>розничные</b>.
+            </span>
+          )}
         </div>
         <div className="seg" role="group" aria-label="Вид каталога">
           <button type="button" aria-pressed={view === "grid"} onClick={() => setView("grid")}>
@@ -87,7 +104,7 @@ export function CatalogSection({ cards, categories }: { cards: CatalogCard[]; ca
                       <span className="cubeWord">CUBE</span> {from(c.cubePrice, c.cubeHasRange)}
                     </span>
                   )}
-                  {c.ozonUrl && (
+                  {mode === "retail" && c.ozonUrl && (
                     <a
                       href={c.ozonUrl}
                       target="_blank"

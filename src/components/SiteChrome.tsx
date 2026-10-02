@@ -1,11 +1,12 @@
 import Link from "next/link";
 import { telHref, type PublicSettings } from "@/lib/settings";
 import { CartLink, MobileMenu, ThemeToggle } from "./HeaderClient";
+import { ModeSwitch } from "./ModeSwitch";
 import s from "./chrome.module.css";
 
 const NAV = [
   { href: "/#catalog", label: "Каталог" },
-  { href: "/#prices", label: "Цены и опт" },
+  { href: "/#prices", label: "Цены" },
   { href: "/#kit", label: "Комплект" },
   { href: "/#order", label: "Для клуба" },
   { href: "/about", label: "О компании" },
@@ -33,6 +34,7 @@ export function SiteHeader({ settings }: { settings: PublicSettings }) {
         ))}
       </nav>
       <div className={s.headerTools}>
+        <ModeSwitch />
         <ThemeToggle />
         <CartLink />
         <a href={telHref(settings.phone2)} className={s.phonePill}>

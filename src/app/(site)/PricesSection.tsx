@@ -39,8 +39,8 @@ export function PricesSection({ cards, priceListUrl }: { cards: CatalogCard[]; p
           <div className="sectionHead" style={{ marginBottom: 16 }}>
             <div>
               <span className="skewBar" />
-              <h2>Розница и опт</h2>
-              <span className="muted">Розничные цены по размерам. Для магазинов и клубов — оптовая скидка.</span>
+              <h2>Розничные цены</h2>
+              <span className="muted">Цены по размерам. Магазинам, клубам и спортшколам — отдельные условия.</span>
             </div>
             <div className="seg" role="group" aria-label="Линейка" style={{ background: "var(--card)", border: "1px solid var(--line)" }}>
               <button type="button" aria-pressed={line === "base"} onClick={() => setLine("base")}>
@@ -71,15 +71,16 @@ export function PricesSection({ cards, priceListUrl }: { cards: CatalogCard[]; p
 
         <div className={s.sideCol}>
           <div className={s.sideCard}>
-            <b>Оптовые продажи</b>
+            <b>Закупаете оптом?</b>
             <span>
-              Если вы хотите приобрести хоккейную экипировку оптом, оставьте запрос или напишите на электронную почту.
+              Для спортивных магазинов, хоккейных клубов и спортшкол — отдельная страница: ступени цен, прайс-лист,
+              комплектация на игрока и заказ на группу.
             </span>
-            <span>
-              Окончательные цены для спортивных магазинов и на крупные оптовые закупки обговариваются индивидуально.
-            </span>
-            <button type="button" className="btnRed" onClick={() => setOpen(true)} style={{ alignSelf: "flex-start" }}>
-              Оптовый запрос
+            <Link href="/opt" className="btnRed" style={{ alignSelf: "flex-start" }}>
+              Перейти в опт
+            </Link>
+            <button type="button" className={s.textLink} onClick={() => setOpen(true)} style={{ alignSelf: "flex-start" }}>
+              Или сразу оставить запрос →
             </button>
           </div>
           <a href={priceListUrl} target="_blank" rel="noopener noreferrer" className={s.priceListCard}>
