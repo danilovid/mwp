@@ -1,7 +1,11 @@
 /**
  * Проставляет оптовые цены по ступеням из прайс-листа производителя.
- *   npm run import:prices        — показать, что изменится
- *   npm run import:prices -- --apply
+ *   npm run import:prices             — показать, что изменится
+ *   npm run import:prices -- --apply  — записать оптовые цены
+ *   npm run import:prices -- --retail --apply — заодно выровнять розницу по прайсу
+ *
+ * По умолчанию розница не трогается: она пришла со старого сайта и местами расходится с прайсом.
+ * Флаг --retail делает прайс источником истины и для неё.
  *
  * Источник: materials/docs/price-mwp.xlsx («!Прайс и заказ MWP», цены действительны с 01.11.2025).
  * В файле три колонки: «Цена на сайте» (розница), «Опт 10% (от 30 000 руб)» и «Опт 20% (от 100 000 руб)».
@@ -112,6 +116,8 @@ const MAP: Record<string, { source: string; rules: Rule[] }> = {
 
 async function main() {
   const apply = process.argv.includes("--apply");
+  const alignRetail = process.argv.includes("--retail");
+  const retailUpdates: { id: number; price: number }[] = [];
   const products = await db.product.findMany({ include: { editions: true } });
   const updates: { id: number; opt1: number; opt2: number }[] = [];
   const warnings: string[] = [];
@@ -136,9 +142,15 @@ async function main() {
       for (const e of hits) {
         covered.add(e.id);
         if (e.price !== rule.retail) {
-          warnings.push(
-            `${slug} / ${parseValues(e.values)["Размер"] ?? "—"}: розница в базе ${e.price}, в прайсе ${rule.retail}`,
-          );
+          const size = parseValues(e.values)["Размер"] ?? "—";
+          if (alignRetail) {
+            retailUpdates.push({ id: e.id, price: rule.retail });
+            console.log(`  розница ${slug} / ${size}: ${e.price} → ${rule.retail}`);
+            // правим и в памяти: ниже от этой цены считается наценка CUBE
+            e.price = rule.retail;
+          } else {
+            warnings.push(`${slug} / ${size}: розница в базе ${e.price}, в прайсе ${rule.retail}`);
+          }
         }
         if (e.priceOpt1 !== rule.opt1 || e.priceOpt2 !== rule.opt2) {
           updates.push({ id: e.id, opt1: rule.opt1, opt2: rule.opt2 });
@@ -201,16 +213,19 @@ async function main() {
     console.log("\nПредупреждения:");
     for (const w of warnings) console.log("  •", w);
   }
-  console.log(`\nВариантов к обновлению: ${updates.length}`);
+  console.log(`\nВариантов к обновлению: ${updates.length}` + (alignRetail ? `, розничных цен: ${retailUpdates.length}` : ""));
 
   if (!apply) {
     console.log("Это предпросмотр. Чтобы записать, запустите с --apply");
     return;
   }
+  for (const u of retailUpdates) {
+    await db.edition.update({ where: { id: u.id }, data: { price: u.price } });
+  }
   for (const u of updates) {
     await db.edition.update({ where: { id: u.id }, data: { priceOpt1: u.opt1, priceOpt2: u.opt2 } });
   }
-  console.log(`Записано: ${updates.length}`);
+  console.log(`Записано: оптовых ${updates.length}` + (alignRetail ? `, розничных ${retailUpdates.length}` : ""));
 }
 
 main()
