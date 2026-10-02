@@ -156,6 +156,16 @@ export function ProductBuy({
           <small className={s.retail}> розница</small>
         </div>
 
+        <div className={s.markets}>
+          <span className={s.marketsLabel}>Поштучно:</span>
+          <a href={product.ozonUrl || storeOzon} target="_blank" rel="noopener noreferrer">
+            OZON ↗
+          </a>
+          <a href={product.marketUrl || storeMarket} target="_blank" rel="noopener noreferrer">
+            Яндекс Маркет ↗
+          </a>
+        </div>
+
         {product.options.map((o) => (
           <div key={o.name} className={s.option}>
             <span className={s.optionName}>
@@ -202,15 +212,6 @@ export function ProductBuy({
             Добавлено в заявку. <Link href="/cart">Перейти к оформлению →</Link>
           </div>
         )}
-
-        <div className={s.markets}>
-          <a href={product.ozonUrl || storeOzon} target="_blank" rel="noopener noreferrer" className="btnGhost">
-            Купить на OZON ↗
-          </a>
-          <a href={product.marketUrl || storeMarket} target="_blank" rel="noopener noreferrer" className="btnGhost">
-            Яндекс Маркет ↗
-          </a>
-        </div>
 
         <ul className={s.facts}>
           <li>Заявку подтвердит менеджер: уточнит наличие, доставку и оплату.</li>

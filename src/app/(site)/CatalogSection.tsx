@@ -61,14 +61,18 @@ export function CatalogSection({ cards, categories }: { cards: CatalogCard[]; ca
       {view === "grid" ? (
         <div className={s.grid}>
           {shown.map((c) => (
-            <Link key={c.slug} href={`/catalog/${c.slug}`} className={s.card}>
+            <div key={c.slug} className={s.card}>
               <div className={`${s.cardPhoto} photoBg`}>
                 <ProductImg file={c.image} alt={c.name} sizes="(max-width: 520px) 100vw, (max-width: 980px) 50vw, 300px" />
                 <span className={s.cardZone}>{c.categoryName}</span>
               </div>
               <div className={s.cardBody}>
                 <div>
-                  <div className={s.cardName}>{c.name}</div>
+                  <div className={s.cardName}>
+                    <Link href={`/catalog/${c.slug}`} className={s.cardLink}>
+                      {c.name}
+                    </Link>
+                  </div>
                   <div className={s.cardMeta}>{meta(c)}</div>
                 </div>
                 <div className={s.cardPrices}>
@@ -82,9 +86,20 @@ export function CatalogSection({ cards, categories }: { cards: CatalogCard[]; ca
                       <span className="cubeWord">CUBE</span> {from(c.cubePrice, c.cubeHasRange)}
                     </span>
                   )}
+                  {c.ozonUrl && (
+                    <a
+                      href={c.ozonUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className={s.ozonChip}
+                      title={`${c.name} — купить поштучно на OZON`}
+                    >
+                      OZON ↗
+                    </a>
+                  )}
                 </div>
               </div>
-            </Link>
+            </div>
           ))}
         </div>
       ) : (

@@ -14,7 +14,7 @@ export const metadata: Metadata = {
   alternates: { canonical: "/about" },
 };
 
-const DOCS = [
+const DOCS: { title: string; lines: string[]; file: string; page?: string }[] = [
   {
     title: "Сертификат соответствия",
     lines: [
@@ -33,6 +33,7 @@ const DOCS = [
       "Срок действия регистрации — до 14.10.2035",
     ],
     file: "tovarnyj-znak-1265239",
+    page: "/tovarnyj-znak",
   },
 ];
 
@@ -125,7 +126,7 @@ export default async function AboutPage() {
         </div>
         <div className={s.docGrid}>
           {DOCS.map((d) => (
-            <a key={d.file} href={`/files/${d.file}.pdf`} className={s.doc}>
+            <a key={d.file} href={d.page ?? `/files/${d.file}.pdf`} className={s.doc}>
               <span className={s.docThumb}>
                 <img src={`/images/docs/${d.file}.webp`} alt={d.title} loading="lazy" />
               </span>
@@ -134,7 +135,7 @@ export default async function AboutPage() {
                 {d.lines.map((l) => (
                   <span key={l}>{l}</span>
                 ))}
-                <span className={s.docLink}>Скачать PDF ↓</span>
+                <span className={s.docLink}>{d.page ? "Подробнее о знаке →" : "Скачать PDF ↓"}</span>
               </span>
             </a>
           ))}

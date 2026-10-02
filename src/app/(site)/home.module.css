@@ -1022,3 +1022,33 @@
     padding: 7px 12px;
   }
 }
+
+/* Карточка каталога: ссылка на товар растянута на всю карточку,
+   чтобы рядом с ценой помещалась отдельная ссылка на маркетплейс. */
+.cardLink {
+  color: inherit;
+}
+.cardLink::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+}
+.ozonChip {
+  position: relative;
+  z-index: 2;
+  display: inline-flex;
+  align-items: center;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 3px 10px;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--muted);
+  white-space: nowrap;
+}
+.ozonChip:hover {
+  opacity: 1;
+  color: var(--acc);
+  border-color: var(--acc);
+}

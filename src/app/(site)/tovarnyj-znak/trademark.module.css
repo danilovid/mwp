@@ -1,0 +1,110 @@
+.main {
+  display: grid;
+  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+  gap: 28px;
+  align-items: start;
+  padding-bottom: 48px;
+}
+@media (max-width: 900px) {
+  .main {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+.sheet {
+  display: block;
+  border-radius: 22px;
+  overflow: hidden;
+  background: #fff;
+  border: 1px solid var(--line);
+  box-shadow: var(--shadow);
+}
+.sheet img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+.sheet:hover {
+  opacity: 1;
+  transform: translateY(-2px);
+}
+
+.side {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.card {
+  background: var(--tint);
+  border-radius: 22px;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  align-items: flex-start;
+}
+.card h2 {
+  font-size: 24px;
+  margin: 0;
+}
+
+.rows {
+  margin: 0;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+.row {
+  display: grid;
+  grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+  gap: 16px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--line);
+}
+.row:last-child {
+  border-bottom: 0;
+}
+.row dt {
+  margin: 0;
+  font-size: 13px;
+  color: var(--muted);
+}
+.row dd {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 600;
+}
+@media (max-width: 520px) {
+  .row {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 2px;
+  }
+}
+
+.note {
+  background: var(--tint);
+  border-radius: 18px;
+  padding: 18px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 14px;
+}
+.note b {
+  font-size: 16px;
+}
+.note p {
+  margin: 0;
+  line-height: 1.55;
+}
+
+.more {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 24px;
+  padding-bottom: 72px;
+}
+.moreLink {
+  font-weight: 700;
+}

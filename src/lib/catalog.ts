@@ -78,6 +78,8 @@ export type CatalogCard = {
   cubeMax: number | null;
   cubeHasRange: boolean;
   colors: string[];
+  /** прямая ссылка на товар в OZON; пустая строка — ссылки нет */
+  ozonUrl: string;
 };
 
 function toCard(base: Loaded | null, cube: Loaded | null): CatalogCard {
@@ -102,6 +104,7 @@ function toCard(base: Loaded | null, cube: Loaded | null): CatalogCard {
     cubeMax: cube ? maxOf(cp) : null,
     cubeHasRange: minOf(cp) !== maxOf(cp),
     colors: options.find((o) => o.name === "Цвет")?.values ?? [],
+    ozonUrl: main.ozonUrl,
   };
 }
 

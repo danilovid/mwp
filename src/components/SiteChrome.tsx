@@ -112,6 +112,7 @@ export function SiteFooter({ settings }: { settings: PublicSettings }) {
             Оптовый прайс-лист
           </a>
           <a href="/files/sertifikat-ROSS-RU-OS02-N00479.pdf">Сертификат, PDF</a>
+          <Link href="/tovarnyj-znak">Товарный знак</Link>
         </div>
         <div className={s.footerCol}>
           <Link href="/#catalog">Каталог</Link>
