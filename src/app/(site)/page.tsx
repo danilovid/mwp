@@ -53,6 +53,16 @@ export default async function HomePage() {
                 Оптовые закупки
               </a>
             </div>
+            {/* Розница уходит на маркетплейсы — даём переход сразу с первого экрана */}
+            <div className={s.heroShops}>
+              <span>Купить поштучно:</span>
+              <a href={settings.ozonUrl} target="_blank" rel="noopener noreferrer">
+                OZON <i aria-hidden="true">↗</i>
+              </a>
+              <a href={settings.marketUrl} target="_blank" rel="noopener noreferrer">
+                Яндекс Маркет <i aria-hidden="true">↗</i>
+              </a>
+            </div>
           </div>
           <div className={s.heroVisual}>
             <div className={`${s.heroPhoto} photoBg`}>

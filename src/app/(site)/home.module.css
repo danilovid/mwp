@@ -1242,3 +1242,46 @@
     min-width: 820px;
   }
 }
+
+/* Маркетплейсы на первом экране: розница покупает там, путь должен быть виден сразу */
+.heroShops {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  max-width: 480px;
+}
+.heroShops span {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.75);
+}
+.heroShops a {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 9px 16px;
+  border-radius: 999px;
+  font-size: 14px;
+  font-weight: 700;
+  color: #fff;
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.32);
+  backdrop-filter: blur(8px);
+  white-space: nowrap;
+  transition: background 0.15s, border-color 0.15s;
+}
+.heroShops a:hover {
+  opacity: 1;
+  background: rgba(255, 255, 255, 0.22);
+  border-color: rgba(255, 255, 255, 0.6);
+}
+.heroShops i {
+  font-style: normal;
+  font-size: 12px;
+  opacity: 0.8;
+}
+@media (max-width: 560px) {
+  .heroShops span {
+    width: 100%;
+  }
+}
