@@ -1,5 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
 import Link from "next/link";
+import { CardLink, InfoCard } from "@/components/InfoCard";
 import { FactoryImg, ProductImg } from "@/components/ProductImg";
 import { SiteHeader } from "@/components/SiteChrome";
 import { getCatalog, getKit } from "@/lib/catalog";
@@ -167,8 +168,7 @@ export default async function HomePage() {
       <section className={`wrap ${s.trio}`}>
         <SupplyCard />
         {parts.length > 0 && (
-          <div id="parts" className={s.tint}>
-            <b>Запчасти к шлемам — от {formatPrice(partsFrom!)}</b>
+          <InfoCard id="parts" title={`Запчасти к шлемам — от ${formatPrice(partsFrom!)}`}>
             <p>Ремкомплекты и наборы клипс для хоккейных шлемов MWP.</p>
             {parts.map((p) => (
               <Link key={p.slug} href={`/catalog/${p.slug}`} className={s.miniRow}>
@@ -176,23 +176,27 @@ export default async function HomePage() {
                 <span>{formatPrice(p.basePrice!)}</span>
               </Link>
             ))}
-          </div>
+          </InfoCard>
         )}
-        <div id="cert" className={`${s.tint} ${s.certCard}`}>
-          <a href="/files/sertifikat-ROSS-RU-OS02-N00479.pdf" className={s.certThumb}>
-            <img src="/images/docs/sertifikat-ROSS-RU-OS02-N00479.webp" alt="Сертификат соответствия" loading="lazy" />
-          </a>
-          <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
-            <b>Сертификат соответствия</b>
-            <p>
-              Добровольная сертификация, № РОСС RU.ОС02.Н00479. Действует с 29.09.2026 по 28.09.2029. Продукция по ТУ
-              96 14-002-03037400-2005.
-            </p>
-            <a href="/files/sertifikat-ROSS-RU-OS02-N00479.pdf" style={{ fontWeight: 700 }}>
-              Скачать PDF ↓
+        <InfoCard
+          id="cert"
+          title="Сертификат соответствия"
+          media={
+            <a href="/files/sertifikat-ROSS-RU-OS02-N00479.pdf">
+              <img src="/images/docs/sertifikat-ROSS-RU-OS02-N00479.webp" alt="Сертификат соответствия" loading="lazy" />
             </a>
-          </div>
-        </div>
+          }
+          actions={
+            <CardLink href="/files/sertifikat-ROSS-RU-OS02-N00479.pdf" arrow="down" external>
+              Скачать PDF
+            </CardLink>
+          }
+        >
+          <p>
+            Добровольная сертификация, № РОСС RU.ОС02.Н00479. Действует с 29.09.2026 по 28.09.2029. Продукция по ТУ
+            96 14-002-03037400-2005.
+          </p>
+        </InfoCard>
       </section>
 
       <section id="factory" className={`wrap ${s.factory}`}>

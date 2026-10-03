@@ -1,0 +1,74 @@
+.card {
+  background: var(--tint);
+  border-radius: 22px;
+  padding: 22px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 16px;
+  font-size: 14px;
+  color: var(--ink);
+}
+.cardMedia {
+  grid-template-columns: 84px minmax(0, 1fr);
+}
+@media (max-width: 420px) {
+  .cardMedia {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+.media {
+  align-self: start;
+}
+.media :global(a),
+.media > * {
+  display: block;
+  aspect-ratio: 210 / 297;
+  border-radius: 6px;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  background: #fff;
+}
+.media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.body {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+}
+.title {
+  font-size: 18px;
+  line-height: 1.25;
+}
+.body p {
+  margin: 0;
+  line-height: 1.55;
+}
+
+/* Действия всегда внизу карточки — ряд выравнивается независимо от длины текста */
+.actions {
+  margin-top: auto;
+  padding-top: 6px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+}
+.link {
+  border: 0;
+  background: none;
+  padding: 0;
+  font: inherit;
+  font-weight: 700;
+  color: var(--acc);
+  text-align: left;
+  cursor: pointer;
+}
+.link:hover {
+  opacity: 0.85;
+}

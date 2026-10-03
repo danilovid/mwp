@@ -48,25 +48,6 @@
   gap: 16px;
   padding-top: 32px;
 }
-.tint {
-  background: var(--tint);
-  border-radius: 22px;
-  padding: 22px;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  font-size: 14px;
-}
-.tint b {
-  font-size: 18px;
-}
-.tint p {
-  margin: 0;
-  line-height: 1.55;
-}
-.tint a {
-  font-weight: 700;
-}
 
 .formWrap {
   display: grid;

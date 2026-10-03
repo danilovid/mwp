@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import Link from "next/link";
+import { CardLink, InfoCard } from "@/components/InfoCard";
 import { LeadForm } from "@/components/LeadForm";
 import { PageBand } from "@/components/SiteChrome";
 import { getCatalog, getKit } from "@/lib/catalog";
@@ -59,19 +59,26 @@ export default async function OptPage() {
 
       <section className={`wrap ${s.trio}`}>
         <SupplyCard />
-        <div className={s.tint}>
-          <b>Закупки и тендеры</b>
+        <InfoCard
+          title="Закупки и тендеры"
+          actions={<CardLink href="/zakupki">Условия, документы и спецификация</CardLink>}
+        >
           <p>Клубам и спортшколам — комплектуем заявку целиком, включая то, что не производим сами.</p>
-          <Link href="/zakupki">Условия, документы и спецификация →</Link>
-        </div>
-        <div className={s.tint}>
-          <b>Документы</b>
+        </InfoCard>
+        <InfoCard
+          title="Документы"
+          actions={
+            <>
+              <CardLink href="/files/sertifikat-ROSS-RU-OS02-N00479.pdf" arrow="down" external>
+                Сертификат соответствия, PDF
+              </CardLink>
+              <CardLink href="/tovarnyj-znak">Товарный знак Masters World MWP</CardLink>
+            </>
+          }
+        >
           <p>Сертификат соответствия и свидетельство на товарный знак — можно скачать и приложить к закупке.</p>
-          <a href="/files/sertifikat-ROSS-RU-OS02-N00479.pdf">Сертификат соответствия, PDF ↓</a>
-          <Link href="/tovarnyj-znak">Товарный знак Masters World MWP →</Link>
-        </div>
-        <div className={s.tint}>
-          <b>Реквизиты</b>
+        </InfoCard>
+        <InfoCard title="Реквизиты" actions={<CardLink href="/about#address">Адрес и карта</CardLink>}>
           <p className="mono">
             {settings.company}
             <br />
@@ -79,8 +86,7 @@ export default async function OptPage() {
             <br />
             ОГРН {settings.ogrn}
           </p>
-          <Link href="/about#address">Адрес и карта →</Link>
-        </div>
+        </InfoCard>
       </section>
 
       <section id="request" className={`wrap ${s.formWrap}`}>

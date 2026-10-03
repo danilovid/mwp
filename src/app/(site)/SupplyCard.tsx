@@ -1,21 +1,17 @@
 "use client";
 
 import { useState } from "react";
+import { CardButton, InfoCard } from "@/components/InfoCard";
 import { LeadForm, Modal } from "@/components/LeadForm";
-import s from "./home.module.css";
 
 export function SupplyCard() {
   const [open, setOpen] = useState(false);
   return (
-    <div className={s.tint}>
-      <b>Поставляем под заказ</b>
+    <InfoCard title="Поставляем под заказ" actions={<CardButton onClick={() => setOpen(true)}>Запросить поставку</CardButton>}>
       <p>
         Вратарская экипировка, клюшки, коньки, баулы — есть возможность поставки под заказ. Можем укомплектовать
         заявку целиком.
       </p>
-      <button type="button" className={s.textLink} onClick={() => setOpen(true)}>
-        Запросить поставку →
-      </button>
       <Modal open={open} onClose={() => setOpen(false)} title="Запрос на поставку">
         <LeadForm
           type="wholesale"
@@ -24,6 +20,6 @@ export function SupplyCard() {
           commentPlaceholder="Что нужно поставить: позиции, размеры, количество, сроки"
         />
       </Modal>
-    </div>
+    </InfoCard>
   );
 }
