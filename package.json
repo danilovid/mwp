@@ -12,7 +12,8 @@
     "postinstall": "prisma generate",
     "seed": "tsx scripts/seed.ts",
     "import:tilda": "tsx scripts/import-tilda.ts",
-    "import:prices": "tsx scripts/import-prices.ts"
+    "import:prices": "tsx scripts/import-prices.ts",
+    "admin": "tsx scripts/admin-password.ts"
   },
   "dependencies": {
     "@prisma/adapter-better-sqlite3": "^7.10.0",
