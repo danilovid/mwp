@@ -6,26 +6,42 @@ import { usePathname } from "next/navigation";
 import { useCart } from "./cart";
 import s from "./chrome.module.css";
 
+type Theme = "auto" | "light" | "dark";
+const THEMES: Theme[] = ["auto", "light", "dark"];
+const THEME_LABEL: Record<Theme, string> = { auto: "Авто", light: "Светлая", dark: "Тёмная" };
+
 export function ThemeToggle() {
-  const [dark, setDark] = useState(false);
+  const [theme, setTheme] = useState<Theme>("auto");
   useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect -- тему выставил скрипт в <head>, синхронизируем подпись
-    setDark(document.documentElement.dataset.theme === "dark");
+    // Тему уже выставил скрипт в <head>; здесь только синхронизируем подпись кнопки
+    const t = document.documentElement.dataset.theme;
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- значение известно только в браузере
+    setTheme(t === "dark" || t === "light" ? t : "auto");
   }, []);
-  const toggle = () => {
-    const next = !dark;
-    setDark(next);
-    if (next) document.documentElement.dataset.theme = "dark";
-    else delete document.documentElement.dataset.theme;
+
+  const next = () => {
+    const value = THEMES[(THEMES.indexOf(theme) + 1) % THEMES.length];
+    setTheme(value);
+    if (value === "auto") delete document.documentElement.dataset.theme;
+    else document.documentElement.dataset.theme = value;
     try {
-      localStorage.setItem("mwp-theme", next ? "dark" : "light");
+      // «Авто» — это отсутствие записи: тему начинает задавать настройка устройства
+      if (value === "auto") localStorage.removeItem("mwp-theme");
+      else localStorage.setItem("mwp-theme", value);
     } catch {
       /* без сохранения */
     }
   };
+
   return (
-    <button type="button" onClick={toggle} className={`${s.pillGlass} ${s.themeBtn}`}>
-      {dark ? "Светлая тема" : "Тёмная тема"}
+    <button
+      type="button"
+      onClick={next}
+      className={`${s.pillGlass} ${s.themeBtn}`}
+      aria-label={`Тема оформления: ${THEME_LABEL[theme].toLowerCase()}${theme === "auto" ? " — как на устройстве" : ""}. Нажмите, чтобы сменить`}
+      title={theme === "auto" ? "Тема как на устройстве" : "Тема выбрана вручную"}
+    >
+      Тема: {THEME_LABEL[theme].toLowerCase()}
     </button>
   );
 }

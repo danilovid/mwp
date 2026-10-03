@@ -290,7 +290,9 @@
 }
 .modeSwitch a[data-active="true"] {
   background: #fff;
-  color: var(--ink);
+  /* Фон у активной вкладки всегда белый, поэтому цвет текста фиксированный:
+     var(--ink) в тёмной теме светлеет и получается белое по белому. Так же сделан .phonePill. */
+  color: #0b2748;
 }
 .modeSwitch a:hover {
   opacity: 1;

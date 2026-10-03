@@ -41,6 +41,27 @@
   color-scheme: dark;
 }
 
+@media (prefers-color-scheme: dark) {
+  /* Те же токены, что и выше: без явного выбора тема берётся с устройства.
+     :not([data-theme="light"]) — чтобы выбранная вручную светлая побеждала тёмную систему.
+     Значения обязаны совпадать с блоком :root[data-theme="dark"] выше. */
+  :root:not([data-theme="light"]) {
+    --bg: #07111f;
+    --card: #0e1b2e;
+    --ink: #e6eef6;
+    --muted: #8fa3ba;
+    --line: #1d2e45;
+    --acc: #7ccbf5;
+    --btn: #2e8fd6;
+    --btnInk: #ffffff;
+    --tint: #112238;
+    --tint2: #1a3150;
+    --red: #ff5068;
+    --shadow: 0 20px 50px -20px rgba(0, 0, 0, 0.7);
+    color-scheme: dark;
+  }
+}
+
 * {
   box-sizing: border-box;
 }

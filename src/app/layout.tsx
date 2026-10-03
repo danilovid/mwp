@@ -25,8 +25,12 @@ export const metadata: Metadata = {
   openGraph: { siteName: "MWP", locale: "ru_RU", type: "website" },
 };
 
-/** Тема выставляется до отрисовки, чтобы не было вспышки светлой темы. */
-const themeScript = `try{if(localStorage.getItem('mwp-theme')==='dark')document.documentElement.dataset.theme='dark'}catch(e){}`;
+/**
+ * Явный выбор темы проставляется до отрисовки, чтобы не было вспышки.
+ * Если выбора нет, атрибут не ставится — тогда тему задаёт @media (prefers-color-scheme) в globals.css,
+ * то есть она следует за настройкой устройства.
+ */
+const themeScript = `try{var t=localStorage.getItem('mwp-theme');if(t==='dark'||t==='light')document.documentElement.dataset.theme=t}catch(e){}`;
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
