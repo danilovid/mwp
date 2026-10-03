@@ -8,6 +8,7 @@ export const LEAD_TYPES: Record<string, string> = {
   order: "Заказ с сайта",
   club: "Заявка для клуба",
   wholesale: "Оптовый запрос",
+  tender: "Закупка или тендер",
 };
 
 export const LEAD_STATUSES: Record<string, string> = {

@@ -1,0 +1,233 @@
+/* Заглушка для фактов, которых пока нет: должна бросаться в глаза */
+.todo {
+  display: inline-block;
+  background: #fff3cd;
+  color: #7a5b00;
+  border: 1px dashed #d4a72c;
+  border-radius: 8px;
+  padding: 3px 8px;
+  font-size: 13px;
+  line-height: 1.45;
+}
+
+.lead {
+  display: grid;
+  grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr);
+  gap: 24px;
+  padding-top: 28px;
+  align-items: start;
+}
+@media (max-width: 860px) {
+  .lead {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+.leadMain p {
+  margin: 0;
+  font-size: 17px;
+  line-height: 1.6;
+  max-width: 62ch;
+}
+.leadActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 20px;
+}
+.leadAside {
+  background: var(--tint);
+  border-radius: 20px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-size: 15px;
+}
+.leadAside b {
+  font-size: 16px;
+}
+
+.split {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr));
+  gap: 16px;
+  padding-top: 40px;
+}
+.col {
+  background: var(--tint);
+  border-radius: 22px;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.colAlt {
+  background: var(--tint2);
+}
+.col h2 {
+  font-size: 22px;
+  margin: 6px 0 0;
+}
+.col p {
+  margin: 0;
+  line-height: 1.55;
+}
+.list {
+  margin: 6px 0 0;
+  padding-left: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  line-height: 1.5;
+}
+.colLink {
+  margin-top: auto;
+  padding-top: 10px;
+  font-weight: 700;
+}
+.small {
+  font-size: 13.5px;
+  line-height: 1.5;
+}
+
+.equal {
+  padding-top: 40px;
+}
+.equal h2 {
+  font-size: 24px;
+  margin: 8px 0 10px;
+}
+.equal p {
+  margin: 0;
+  max-width: 76ch;
+  line-height: 1.65;
+}
+
+.kp {
+  margin-top: 40px;
+  background: var(--tint);
+  border-radius: 24px;
+  padding: 28px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px 32px;
+  align-items: center;
+  justify-content: space-between;
+}
+.kpText {
+  max-width: 68ch;
+}
+.kpText h2 {
+  font-size: 24px;
+  margin: 8px 0 10px;
+}
+.kpText p {
+  margin: 0 0 8px;
+  line-height: 1.6;
+}
+
+.docs {
+  padding-top: 48px;
+}
+.docGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
+  gap: 16px;
+}
+.doc {
+  background: var(--tint);
+  border-radius: 20px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  font-size: 14px;
+  color: var(--ink);
+  line-height: 1.5;
+}
+.doc b {
+  font-size: 17px;
+}
+.docLink {
+  margin-top: auto;
+  padding-top: 6px;
+  font-weight: 700;
+  color: var(--acc);
+}
+
+.terms {
+  padding-top: 48px;
+}
+.termsList {
+  margin: 0;
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  overflow: hidden;
+}
+.termsList > div {
+  display: grid;
+  grid-template-columns: minmax(0, 0.8fr) minmax(0, 2fr);
+  gap: 20px;
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--line);
+}
+.termsList > div:last-child {
+  border-bottom: 0;
+}
+.termsList dt {
+  margin: 0;
+  font-weight: 700;
+}
+.termsList dd {
+  margin: 0;
+  line-height: 1.55;
+}
+@media (max-width: 620px) {
+  .termsList > div {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 4px;
+  }
+}
+
+.agents {
+  padding-top: 40px;
+}
+.agents > div {
+  background: var(--tint2);
+  border-radius: 22px;
+  padding: 24px;
+}
+.agents b {
+  font-size: 18px;
+}
+.agents p {
+  margin: 8px 0 0;
+  max-width: 72ch;
+  line-height: 1.6;
+}
+
+.formWrap {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr);
+  gap: 28px;
+  padding-top: 48px;
+  padding-bottom: 72px;
+  align-items: start;
+}
+@media (max-width: 900px) {
+  .formWrap {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+.formText h2 {
+  margin: 10px 0 8px;
+}
+.formText p {
+  margin: 0 0 10px;
+  max-width: 48ch;
+}
+.formCard {
+  background: var(--tint);
+  border-radius: 22px;
+  padding: 22px;
+}

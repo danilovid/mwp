@@ -60,6 +60,11 @@ export default async function OptPage() {
       <section className={`wrap ${s.trio}`}>
         <SupplyCard />
         <div className={s.tint}>
+          <b>Закупки и тендеры</b>
+          <p>Клубам и спортшколам — комплектуем заявку целиком, включая то, что не производим сами.</p>
+          <Link href="/zakupki">Условия, документы и спецификация →</Link>
+        </div>
+        <div className={s.tint}>
           <b>Документы</b>
           <p>Сертификат соответствия и свидетельство на товарный знак — можно скачать и приложить к закупке.</p>
           <a href="/files/sertifikat-ROSS-RU-OS02-N00479.pdf">Сертификат соответствия, PDF ↓</a>

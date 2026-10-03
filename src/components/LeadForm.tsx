@@ -11,7 +11,7 @@ export type LeadItem = {
   productId?: number;
   values?: Record<string, string>;
 };
-export type LeadType = "order" | "club" | "wholesale";
+export type LeadType = "order" | "club" | "wholesale" | "tender";
 
 type Props = {
   type: LeadType;

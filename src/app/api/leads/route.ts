@@ -13,7 +13,7 @@ const Item = z.object({
 });
 
 const Body = z.object({
-  type: z.enum(["order", "club", "wholesale"]),
+  type: z.enum(["order", "club", "wholesale", "tender"]),
   name: z.string().trim().min(1, "Укажите имя").max(120),
   phone: z
     .string()
