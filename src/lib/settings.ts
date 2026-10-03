@@ -19,7 +19,8 @@ export const SETTING_DEFAULTS = {
   /** Пороги оптовых ступеней, как в прайс-листе производителя */
   optStep1: "30 000 ₽",
   optStep2: "100 000 ₽",
-  priceListUrl: "https://disk.yandex.ru/i/JMAZZEc5ZnyWmw",
+  /** Прайс собирается из базы на лету; можно заменить на внешнюю ссылку, если понадобится */
+  priceListUrl: "/price.xlsx",
   ozonUrl: "https://ozon.ru/s/mwp",
   marketUrl: "https://market.yandex.ru/cc/Axt8sS",
   telegramBotToken: "",
