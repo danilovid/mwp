@@ -29,6 +29,9 @@ export default async function HomePage() {
   return (
     <>
       <section id="top" className={s.hero}>
+        {/* Фон со старого сайта: снимок размытый, поэтому работает как текстура, а не как фото */}
+        <div className={s.heroIce} />
+        <div className={s.heroScrim} />
         <div className={s.heroStripe} />
         <div className={s.heroGlow} />
         <div className={s.heroLines} />
