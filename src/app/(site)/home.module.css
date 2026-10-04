@@ -50,48 +50,18 @@
  */
 @media (max-width: 760px) {
   .heroIce {
-    background-position: 66% 45%;
+    /* 40% — красный свитер и клюшка: при узком кадре это единственный узнаваемый кусок,
+       на 66% попадали однотонные рейтузы и фон выглядел просто синим */
+    background-position: 40% 42%;
   }
   .heroScrim {
+    /* Ровная заливка, как на старом сайте: кадр виден целиком, текст читается за счёт плотности, а не градиента */
     background:
-      linear-gradient(180deg, rgba(8, 28, 54, 0.93) 0 40%, rgba(8, 28, 54, 0.5) 58%, rgba(8, 28, 54, 0.2) 78%, rgba(8, 28, 54, 0.45) 100%),
-      linear-gradient(0deg, rgba(13, 60, 110, 0.14), rgba(13, 60, 110, 0.14));
+      linear-gradient(180deg, rgba(8, 28, 54, 0.74) 0 55%, rgba(8, 28, 54, 0.66) 78%, rgba(8, 28, 54, 0.78) 100%),
+      linear-gradient(0deg, rgba(13, 60, 110, 0.12), rgba(13, 60, 110, 0.12));
   }
 }
 
-.heroStripe {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 46%;
-  width: 70px;
-  background: linear-gradient(180deg, rgba(224, 48, 74, 0), rgba(224, 48, 74, 0.55) 40%, rgba(224, 48, 74, 0.85));
-  transform: skewX(-12deg);
-  pointer-events: none;
-}
-.heroGlow {
-  position: absolute;
-  width: 420px;
-  height: 420px;
-  right: -120px;
-  bottom: -200px;
-  border-radius: 50%;
-  background: radial-gradient(circle, rgba(224, 48, 74, 0.45), transparent 65%);
-  pointer-events: none;
-}
-.heroLines {
-  position: absolute;
-  inset: 0;
-  background-image: linear-gradient(
-    105deg,
-    transparent 0 60%,
-    rgba(255, 255, 255, 0.06) 60% 61%,
-    transparent 61% 70%,
-    rgba(255, 255, 255, 0.05) 70% 70.6%,
-    transparent 70.6%
-  );
-  pointer-events: none;
-}
 .heroGrid {
   position: relative;
   max-width: var(--wrap);
