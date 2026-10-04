@@ -32,6 +32,9 @@ export default async function HomePage() {
         {/* Фон со старого сайта: снимок размытый, поэтому работает как текстура, а не как фото */}
         <div className={s.heroIce} />
         <div className={s.heroScrim} />
+        <div className={s.heroStripe} />
+        <div className={s.heroGlow} />
+        <div className={s.heroLines} />
         <SiteHeader settings={settings} />
         <div className={s.heroGrid}>
           <div className={s.heroText}>
