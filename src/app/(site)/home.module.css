@@ -2,41 +2,12 @@
 .hero {
   position: relative;
   overflow: hidden;
-  /* смешивание слоёв не должно выходить за пределы первого экрана */
-  isolation: isolate;
   color: #fff;
   border-radius: 0 0 36px 36px;
   background:
     radial-gradient(ellipse 45% 60% at 100% 100%, rgba(224, 48, 74, 0.55), transparent 70%),
     radial-gradient(ellipse 70% 90% at 72% 38%, #7ccbf5 0%, #1a7ab7 42%, #0b2748 100%);
 }
-/*
- * Фон со старого сайта. Снимок низкого разрешения и сильно размыт, поэтому
- * показывать его как фотографию нельзя — он работает текстурой.
- *
- * Режим soft-light подмешивает кадр к градиенту, а не заменяет его светотень:
- * luminosity здесь пробовался и выбеливал первый экран, потому что лёд на снимке
- * почти белый и поднимал яркость всего блока. Снимок дополнительно притушен
- * фильтром, иначе он всё равно тянет картинку в серое.
- */
-.heroIce {
-  position: absolute;
-  inset: 0;
-  background: url("/images/hero-ice.webp") center 38% / cover no-repeat;
-  opacity: 0.5;
-  filter: brightness(0.82) contrast(1.25) saturate(0.6);
-  mix-blend-mode: soft-light;
-  pointer-events: none;
-}
-
-/* Затемнение слева — под текстом, чтобы светлый лёд не съедал контраст заголовка */
-.heroScrim {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(100deg, rgba(11, 39, 72, 0.6) 0 26%, rgba(11, 39, 72, 0.18) 58%, transparent 82%);
-  pointer-events: none;
-}
-
 .heroStripe {
   position: absolute;
   top: 0;
