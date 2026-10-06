@@ -19,6 +19,7 @@ const GROUPS: { title: string; hint?: string; fields: Field[] }[] = [
       { key: "email2", label: "Почта 2", type: "email" },
       { key: "address", label: "Адрес полностью", wide: true },
       { key: "addressShort", label: "Адрес коротко" },
+      { key: "productionAddress", label: "Адрес производства", hint: "Показывается под картой на странице «О компании»", wide: true },
       { key: "mapLat", label: "Карта: широта", hint: "Координаты точки на Яндекс Карте" },
       { key: "mapLon", label: "Карта: долгота" },
     ],

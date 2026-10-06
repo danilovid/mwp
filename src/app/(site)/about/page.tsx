@@ -47,7 +47,7 @@ export default async function AboutPage() {
         settings={settings}
         crumbs={[{ href: "/", label: "Главная" }, { label: "О компании" }]}
         title="О компании MWP"
-        lead="Мы — российский производитель хоккейной экипировки. Работаем уже более 20 лет и находимся в городе Чебоксары."
+        lead="Мы — российский производитель хоккейной экипировки. Работаем уже более 25 лет и находимся в городе Чебоксары."
       />
 
       <section className={`wrap ${s.intro}`}>
@@ -57,12 +57,12 @@ export default async function AboutPage() {
             другие элементы.
           </p>
           <p>
-            Мы гордимся качеством нашей продукции и отправляем заказы транспортными компаниями по всей России и в другие
-            страны. Вы можете оформить заказ у нас на сайте или в наших магазинах на маркетплейсах.
+            Отправляем заказы транспортными компаниями по всей России и в другие страны. Вы можете оформить заказ у нас
+            на сайте или в наших магазинах на маркетплейсах.
           </p>
           <div className={s.facts}>
             <div>
-              <b>20+ лет</b>
+              <b>25+ лет</b>
               <span>производим хоккейную экипировку</span>
             </div>
             <div>
@@ -148,7 +148,7 @@ export default async function AboutPage() {
           <h2>Контакты</h2>
           <p className="muted">Мы с удовольствием ответим на ваши вопросы.</p>
           <dl>
-            <dt>Адрес производства</dt>
+            <dt>Адрес</dt>
             <dd>{settings.address}</dd>
             <dt>Телефон</dt>
             <dd className="mono">
@@ -186,6 +186,9 @@ export default async function AboutPage() {
             loading="lazy"
             allowFullScreen
           />
+          <p className={s.mapNote}>
+            Производство находится по адресу: <b>{settings.productionAddress}</b>
+          </p>
         </div>
       </section>
     </>
