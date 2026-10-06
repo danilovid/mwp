@@ -2,45 +2,66 @@
 .hero {
   position: relative;
   overflow: hidden;
+  /* смешивание слоёв не должно выходить за пределы первого экрана */
+  isolation: isolate;
   color: #fff;
   border-radius: 0 0 36px 36px;
   background:
     radial-gradient(ellipse 45% 60% at 100% 100%, rgba(224, 48, 74, 0.55), transparent 70%),
     radial-gradient(ellipse 70% 90% at 72% 38%, #7ccbf5 0%, #1a7ab7 42%, #0b2748 100%);
 }
-.heroStripe {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 46%;
-  width: 70px;
-  background: linear-gradient(180deg, rgba(224, 48, 74, 0), rgba(224, 48, 74, 0.55) 40%, rgba(224, 48, 74, 0.85));
-  transform: skewX(-12deg);
-  pointer-events: none;
-}
-.heroGlow {
-  position: absolute;
-  width: 420px;
-  height: 420px;
-  right: -120px;
-  bottom: -200px;
-  border-radius: 50%;
-  background: radial-gradient(circle, rgba(224, 48, 74, 0.45), transparent 65%);
-  pointer-events: none;
-}
-.heroLines {
+/*
+ * Фон со старого сайта — показан именно фотографией: по просьбе заказчика хоккеист
+ * должен читаться отчётливо. Снимок размытый и низкого разрешения, поэтому крупный
+ * масштаб ему не вредит — деталей в нём всё равно нет.
+ *
+ * Кадр смещён вправо: слева лежит текст, и игрок не должен попадать под него.
+ */
+.heroIce {
   position: absolute;
   inset: 0;
-  background-image: linear-gradient(
-    105deg,
-    transparent 0 60%,
-    rgba(255, 255, 255, 0.06) 60% 61%,
-    transparent 61% 70%,
-    rgba(255, 255, 255, 0.05) 70% 70.6%,
-    transparent 70.6%
-  );
+  background: url("/images/hero-ice.webp") 50% 42% / cover no-repeat;
+  filter: contrast(1.14) saturate(1.2) brightness(1.02);
   pointer-events: none;
 }
+
+/*
+ * Затемнение в три слоя: густое слева под заголовком, лёгкая синяя вуаль по всему
+ * кадру, чтобы белый лёд не выбивался из палитры сайта, и затемнение снизу под
+ * плашкой с цифрами. Без этого белый текст на светлом льду не читается.
+ */
+.heroScrim {
+  position: absolute;
+  inset: 0;
+  background:
+    /* плотно только под колонкой с текстом, дальше быстро расходится — иначе игрок пропадает */
+    linear-gradient(100deg, rgba(8, 28, 54, 0.94) 0 24%, rgba(8, 28, 54, 0.55) 38%, rgba(8, 28, 54, 0.1) 56%, transparent 70%),
+    linear-gradient(180deg, transparent 62%, rgba(8, 28, 54, 0.5) 100%),
+    /* лёгкая синяя вуаль, чтобы белый лёд не выпадал из палитры */
+    linear-gradient(0deg, rgba(13, 60, 110, 0.14), rgba(13, 60, 110, 0.14));
+  pointer-events: none;
+}
+
+/*
+ * На узких экранах первый экран высокий, а снимок широкий: cover оставляет от него
+ * вертикальную полоску. Поэтому кадр сдвигается на ноги игрока, а затемнение
+ * из горизонтального становится вертикальным — плотным сверху под текстом
+ * и расходящимся ниже, где фото и должно быть видно.
+ */
+@media (max-width: 760px) {
+  .heroIce {
+    /* 40% — красный свитер и клюшка: при узком кадре это единственный узнаваемый кусок,
+       на 66% попадали однотонные рейтузы и фон выглядел просто синим */
+    background-position: 40% 42%;
+  }
+  .heroScrim {
+    /* Ровная заливка, как на старом сайте: кадр виден целиком, текст читается за счёт плотности, а не градиента */
+    background:
+      linear-gradient(180deg, rgba(8, 28, 54, 0.74) 0 55%, rgba(8, 28, 54, 0.66) 78%, rgba(8, 28, 54, 0.78) 100%),
+      linear-gradient(0deg, rgba(13, 60, 110, 0.12), rgba(13, 60, 110, 0.12));
+  }
+}
+
 .heroGrid {
   position: relative;
   max-width: var(--wrap);
