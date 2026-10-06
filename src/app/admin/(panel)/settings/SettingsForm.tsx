@@ -20,7 +20,7 @@ const GROUPS: { title: string; hint?: string; fields: Field[] }[] = [
       { key: "address", label: "Адрес полностью", wide: true },
       { key: "addressShort", label: "Адрес коротко" },
       { key: "productionAddress", label: "Адрес производства", hint: "Показывается под картой на странице «О компании»", wide: true },
-      { key: "mapLat", label: "Карта: широта", hint: "Координаты точки на Яндекс Карте" },
+      { key: "mapLat", label: "Карта: широта", hint: "Координаты метки на Яндекс Карте — сейчас это производство" },
       { key: "mapLon", label: "Карта: долгота" },
     ],
   },

@@ -181,7 +181,7 @@ export default async function AboutPage() {
         </div>
         <div className={s.map}>
           <iframe
-            title={`Карта: ${settings.addressShort}`}
+            title={`Карта: ${settings.productionAddress}`}
             src={`https://yandex.ru/map-widget/v1/?ll=${encodeURIComponent(mapPoint)}&z=16&pt=${encodeURIComponent(mapPoint + ",pm2rdm")}`}
             loading="lazy"
             allowFullScreen
