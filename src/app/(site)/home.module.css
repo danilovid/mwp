@@ -143,17 +143,23 @@
   position: relative;
   height: 440px;
 }
+/* Матовая панель вместо прежней синей плашки: у снимка прозрачный фон,
+   поэтому сквозь панель виден фон первого экрана, а шлем выходит за её верх. */
 .heroPhoto {
   position: absolute;
   inset: 0 40px;
   border-radius: 28px;
-  overflow: hidden;
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  backdrop-filter: blur(12px);
   box-shadow: 0 30px 60px -30px rgba(0, 0, 0, 0.5);
 }
 .heroPhoto img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
+  position: absolute;
+  /* поля, чтобы шлем не наезжал на плашки с ценой и размерами */
+  inset: 5% 12% 9% 2%;
+  object-fit: contain;
+  filter: drop-shadow(0 26px 34px rgba(0, 0, 0, 0.45));
 }
 .glass {
   position: absolute;

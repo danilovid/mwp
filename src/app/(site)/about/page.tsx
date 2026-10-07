@@ -148,8 +148,10 @@ export default async function AboutPage() {
           <h2>Контакты</h2>
           <p className="muted">Мы с удовольствием ответим на ваши вопросы.</p>
           <dl>
-            <dt>Адрес</dt>
+            <dt>Офис</dt>
             <dd>{settings.address}</dd>
+            <dt>Производство и продажи</dt>
+            <dd>{settings.productionAddress}</dd>
             <dt>Телефон</dt>
             <dd className="mono">
               <a href={telHref(settings.phone1)}>{settings.phone1}</a>
@@ -187,7 +189,7 @@ export default async function AboutPage() {
             allowFullScreen
           />
           <p className={s.mapNote}>
-            Производство находится по адресу: <b>{settings.productionAddress}</b>
+            На карте — <b>производство и продажи</b>
           </p>
         </div>
       </section>

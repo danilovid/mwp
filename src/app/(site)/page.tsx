@@ -66,8 +66,17 @@ export default async function HomePage() {
             </div>
           </div>
           <div className={s.heroVisual}>
-            <div className={`${s.heroPhoto} photoBg`}>
-              <ProductImg file={heroCard?.image ?? null} alt={heroCard?.name ?? "Шлем MWP"} sizes="(max-width: 760px) 90vw, 560px" eager />
+            {/* Фото с прозрачным фоном: шлем стоит прямо на первом экране, без синей плашки.
+                Снимок отдельный, не из галереи товара, поэтому берётся из public, а не через ProductImg. */}
+            <div className={s.heroPhoto}>
+              <img
+                src="/images/hero-helmet-1100.webp"
+                srcSet="/images/hero-helmet-560.webp 560w, /images/hero-helmet-1100.webp 1100w"
+                sizes="(max-width: 760px) 90vw, 560px"
+                alt={heroCard?.name ?? "Шлем хоккейный MWP с маской"}
+                fetchPriority="high"
+                decoding="async"
+              />
             </div>
             {heroCard?.basePrice != null && (
               <Link href={`/catalog/${heroCard.slug}`} className={s.glass} style={{ left: 0, bottom: 36 }}>
