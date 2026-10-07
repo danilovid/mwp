@@ -156,8 +156,13 @@
 }
 .heroPhoto img {
   position: absolute;
-  /* поля, чтобы шлем не наезжал на плашки с ценой и размерами */
-  inset: 5% 12% 9% 2%;
+  inset: 0;
+  /* Размеры заданы явно: у картинки с auto браузер берёт собственный размер файла,
+     а не отступы, и шлем вылезал за низ панели. Поля держат его внутри рамки. */
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+  padding: 20px 44px 28px;
   object-fit: contain;
   filter: drop-shadow(0 26px 34px rgba(0, 0, 0, 0.45));
 }
@@ -228,6 +233,9 @@
   }
   .heroPhoto {
     inset: 0 12px;
+  }
+  .heroPhoto img {
+    padding: 16px 20px 22px;
   }
   .heroGrid {
     padding-bottom: 80px;
