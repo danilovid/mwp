@@ -1,17 +1,8 @@
 import Link from "next/link";
 import { telHref, type PublicSettings } from "@/lib/settings";
-import { CartLink, MobileMenu, ThemeToggle } from "./HeaderClient";
+import { CartLink, MainNav, MobileMenu, ThemeToggle } from "./HeaderClient";
 import { ModeSwitch } from "./ModeSwitch";
 import s from "./chrome.module.css";
-
-const NAV = [
-  { href: "/#catalog", label: "Каталог" },
-  { href: "/#prices", label: "Цены" },
-  { href: "/#kit", label: "Комплект" },
-  { href: "/#order", label: "Для клуба" },
-  { href: "/about", label: "О компании" },
-  { href: "#contacts", label: "Контакты" },
-];
 
 export function Logo() {
   return (
@@ -26,13 +17,7 @@ export function SiteHeader({ settings }: { settings: PublicSettings }) {
   return (
     <header className={s.header}>
       <Logo />
-      <nav className={s.nav} aria-label="Основное меню">
-        {NAV.map((l) => (
-          <Link key={l.href} href={l.href}>
-            {l.label}
-          </Link>
-        ))}
-      </nav>
+      <MainNav />
       <div className={s.headerTools}>
         <ModeSwitch />
         <ThemeToggle />
@@ -40,7 +25,7 @@ export function SiteHeader({ settings }: { settings: PublicSettings }) {
         <a href={telHref(settings.phone2)} className={s.phonePill}>
           {settings.phone2.replace(/^8 /, "+7 ")}
         </a>
-        <MobileMenu links={NAV} />
+        <MobileMenu />
       </div>
     </header>
   );
@@ -118,6 +103,7 @@ export function SiteFooter({ settings }: { settings: PublicSettings }) {
         </div>
         <div className={s.footerCol}>
           <Link href="/#catalog">Каталог</Link>
+          <Link href="/opt">Оптовые закупки</Link>
           <Link href="/about">О компании и производстве</Link>
           <a href={settings.ozonUrl} target="_blank" rel="noopener noreferrer">
             Магазин на OZON

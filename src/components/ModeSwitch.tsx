@@ -2,25 +2,21 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { isOptRoute } from "./nav";
 import s from "./chrome.module.css";
 
 /**
  * Переключатель «Розница / Опт».
  *
- * Режим определяется явными списками, а не префиксом: /zakupki относится к опту,
- * хотя с /opt не начинается. На страницах вне обоих режимов — о компании, товарный
+ * Какие маршруты относятся к опту — в ./nav, рядом со ссылками меню: раздел и его
+ * меню должны меняться вместе. На страницах вне обоих режимов — о компании, товарный
  * знак, карточка товара — не подсвечивается ничего: переключатель там просто навигация,
  * и подсвечивать «Розницу» значило бы утверждать то, чего на странице нет.
  */
-const RETAIL = ["/"];
-const OPT = ["/opt", "/zakupki"];
-const inSection = (pathname: string, routes: string[]) =>
-  routes.some((r) => pathname === r || (r !== "/" && pathname.startsWith(r + "/")));
-
 export function ModeSwitch() {
   const pathname = usePathname();
-  const isOpt = inSection(pathname, OPT);
-  const isRetail = inSection(pathname, RETAIL);
+  const isOpt = isOptRoute(pathname);
+  const isRetail = pathname === "/";
   return (
     <div className={s.modeSwitch} role="group" aria-label="Розничные или оптовые условия">
       <Link href="/" aria-current={isRetail ? "page" : undefined} data-active={isRetail}>

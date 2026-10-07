@@ -28,7 +28,7 @@ export default async function OptPage() {
         lead="Спортивным магазинам, хоккейным клубам и спортшколам. Производим сами, в Чебоксарах — поэтому работаем напрямую, без посредников."
       />
 
-      <section className={`wrap ${s.steps}`}>
+      <section id="prices" className={`wrap ${s.steps}`}>
         <div className={s.step}>
           <span className={s.stepLabel}>Ступень 1</span>
           <b>от {settings.optStep1}</b>

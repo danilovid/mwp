@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import { useCart } from "./cart";
+import { navLinks } from "./nav";
 import s from "./chrome.module.css";
 
 type Theme = "auto" | "light" | "dark";
@@ -56,9 +57,24 @@ export function CartLink() {
   );
 }
 
-export function MobileMenu({ links }: { links: { href: string; label: string }[] }) {
+/** Главное меню. Клиентское, потому что набор ссылок зависит от текущего раздела. */
+export function MainNav() {
+  const pathname = usePathname();
+  return (
+    <nav className={s.nav} aria-label="Основное меню">
+      {navLinks(pathname).map((l) => (
+        <Link key={l.href} href={l.href}>
+          {l.label}
+        </Link>
+      ))}
+    </nav>
+  );
+}
+
+export function MobileMenu() {
   const [open, setOpen] = useState(false);
   const pathname = usePathname();
+  const links = navLinks(pathname);
   useEffect(() => {
     // eslint-disable-next-line react-hooks/set-state-in-effect -- закрываем меню при переходе
     setOpen(false);
