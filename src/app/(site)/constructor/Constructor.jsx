@@ -20,8 +20,8 @@ function Modal({title,onClose,children}){
  return <dialog ref={ref} onCancel={onClose} onClick={e=>{if(e.target===e.currentTarget)onClose();}}><div className="dialog-head"><h2>{title}</h2><button className="icon-button" onClick={onClose} aria-label="Закрыть"><X size={22}/></button></div>{children}</dialog>;
 }
 
-/** @param {{catalog: import("@/lib/constructor").ConstructorCatalog, extras?: import("@/lib/constructor").ConstructorExtras}} props */
-export function Constructor({catalog,extras=[]}){
+/** @param {{catalog: import("@/lib/constructor").ConstructorCatalog, extras?: import("@/lib/constructor").ConstructorExtras, embedded?: boolean}} props */
+export function Constructor({catalog,extras=[],embedded=false}){
  const router=useRouter();
  const cart=useCart();
  // Warm the cropped colour and CUBE assets at low priority for smooth switching.
@@ -114,7 +114,7 @@ export function Constructor({catalog,extras=[]}){
  const visualNote=visibilityNote(active,selections,catalog);
 
 
- return <section className={styles.root}>
+ return <section className={styles.root+(embedded?' '+styles.embedded:'')}>
   
   <section className="constructor" id="constructor" aria-label="Конструктор экипировки">
    <aside className="profile">

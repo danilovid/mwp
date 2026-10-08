@@ -19,8 +19,7 @@ export type NavLink = { href: string; label: string };
 const RETAIL: NavLink[] = [
   { href: "/#catalog", label: "Каталог" },
   { href: "/#prices", label: "Цены" },
-  { href: "/constructor", label: "Комплект" },
-  { href: "/#order", label: "Для клуба" },
+  { href: "/#kit", label: "Комплект" },
   { href: "/about", label: "О компании" },
   { href: "/about#address", label: "Контакты" },
 ];

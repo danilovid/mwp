@@ -4,17 +4,26 @@ import { CardLink, InfoCard } from "@/components/InfoCard";
 import { FactoryImg, ProductImg } from "@/components/ProductImg";
 import { SiteHeader } from "@/components/SiteChrome";
 import { getCatalog, getKit } from "@/lib/catalog";
+import { getConstructorCatalog, getConstructorExtras } from "@/lib/constructor";
 import { formatPrice } from "@/lib/format";
 import { getPublicSettings } from "@/lib/settings";
 import { FACTORY_TEASER } from "@/lib/factory";
 import { CatalogSection } from "./CatalogSection";
-import { KitAndClub } from "./KitAndClub";
+import { Constructor } from "./constructor/Constructor";
 import { PricesSection } from "./PricesSection";
 import { SupplyCard } from "./SupplyCard";
 import s from "./home.module.css";
 
 export default async function HomePage() {
-  const [settings, { cards, categories }, kit] = await Promise.all([getPublicSettings(), getCatalog(), getKit()]);
+  const [settings, { cards, categories }, kit, builder] = await Promise.all([
+    getPublicSettings(),
+    getCatalog(),
+    getKit(),
+    getConstructorCatalog(),
+  ]);
+  // Комплект на игрока и заказ для клуба остались только в опте: в рознице
+  // посетитель собирает комплект сам, прямо на главной.
+  const builderExtras = builder.length ? await getConstructorExtras(builder) : [];
 
   const heroCard = cards.find((c) => c.slug === "shlem-s-maskoj") ?? cards[0];
   const kitFrom = kit.items.reduce((a, i) => a + Math.min(...i.base), 0);
@@ -172,7 +181,20 @@ export default async function HomePage() {
 
       <PricesSection cards={cards} priceListUrl={settings.priceListUrl} />
 
-      <KitAndClub kit={kit} kitPanel="constructor" />
+      {builder.length > 0 && (
+        <section id="kit" className={`wrap ${s.builder}`}>
+          <div className="sectionHead">
+            <div>
+              <span className="skewBar" />
+              <h2>Собери комплект</h2>
+              <span className="muted">
+                Укажите рост, выберите снаряжение на фигуре — и комплект уйдёт в заявку целиком.
+              </span>
+            </div>
+          </div>
+          <Constructor catalog={builder} extras={builderExtras} embedded />
+        </section>
+      )}
 
       <section className={`wrap ${s.trio}`}>
         <SupplyCard />

@@ -654,6 +654,12 @@
 }
 
 /* ---------- Комплект и заказ для клуба ---------- */
+.builder {
+  padding-top: 24px;
+  padding-bottom: 72px;
+  --page-ink: var(--ink);
+  --page-muted: var(--muted);
+}
 .duo {
   padding-top: 24px;
   padding-bottom: 72px;
@@ -750,13 +756,6 @@
   .kitHeights {
     grid-template-columns: repeat(4, minmax(0, 1fr));
   }
-}
-.panelText {
-  color: var(--muted);
-  font-size: 15px;
-  line-height: 1.55;
-  margin: 0;
-  flex: 1;
 }
 .kitSum {
   display: flex;

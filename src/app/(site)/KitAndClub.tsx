@@ -29,7 +29,7 @@ const priceAt = (item: KitData["items"][number], line: LineId, h: number) =>
 
 const kitSum = (kit: KitData, line: LineId, h: number) => kit.items.reduce((a, i) => a + priceAt(i, line, h), 0);
 
-export function KitAndClub({ kit, kitPanel = "table" }: { kit: KitData; kitPanel?: "table" | "constructor" }) {
+export function KitAndClub({ kit }: { kit: KitData }) {
   const [kitLine, setKitLine] = useState<LineId>("base");
   const [height, setHeight] = useState(Math.min(3, kit.heights.length - 1));
   const [orderLine, setOrderLine] = useState<LineId>("base");
@@ -56,8 +56,7 @@ export function KitAndClub({ kit, kitPanel = "table" }: { kit: KitData; kitPanel
 
   return (
     <section className={`wrap ${s.duo}`}>
-      {kitPanel === "constructor" ? (
-        <div id="kit" className={s.panel}>
+      <div id="kit" className={s.panel}>
           <div className={s.panelHead}>
             <div>
               <h2>Собери комплект на фигуре</h2>
@@ -123,7 +122,6 @@ export function KitAndClub({ kit, kitPanel = "table" }: { kit: KitData; kitPanel
           </div>
         </div>
       </div>
-      )}
 
       <div id="order" className={s.panel}>
         <div className={s.panelHead}>
