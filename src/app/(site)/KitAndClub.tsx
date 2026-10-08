@@ -29,7 +29,7 @@ const priceAt = (item: KitData["items"][number], line: LineId, h: number) =>
 
 const kitSum = (kit: KitData, line: LineId, h: number) => kit.items.reduce((a, i) => a + priceAt(i, line, h), 0);
 
-export function KitAndClub({ kit }: { kit: KitData }) {
+export function KitAndClub({ kit, kitPanel = "table" }: { kit: KitData; kitPanel?: "table" | "constructor" }) {
   const [kitLine, setKitLine] = useState<LineId>("base");
   const [height, setHeight] = useState(Math.min(3, kit.heights.length - 1));
   const [orderLine, setOrderLine] = useState<LineId>("base");
@@ -56,6 +56,31 @@ export function KitAndClub({ kit }: { kit: KitData }) {
 
   return (
     <section className={`wrap ${s.duo}`}>
+      {kitPanel === "constructor" ? (
+        <div id="kit" className={s.panel}>
+          <div className={s.panelHead}>
+            <div>
+              <h2>Собери комплект на фигуре</h2>
+              <span className={s.panelSub}>
+                {kit.items.length} {plural(kit.items.length, "позиция", "позиции", "позиций")}, рост {lo}–{hi} см
+              </span>
+            </div>
+          </div>
+          <p className={s.panelText}>
+            Укажите рост и выбирайте снаряжение прямо на хоккеисте: шлем, нагрудник, перчатки и остальное. Цвет и размер
+            подбираются на месте, собранный комплект уходит в заявку целиком.
+          </p>
+          <div className={s.kitTotal}>
+            <div className={s.kitSum}>
+              <span>Комплект целиком, от</span>
+              <span>{formatPrice(kit.items.reduce((a, i) => a + Math.min(...i.base), 0))}</span>
+            </div>
+          </div>
+          <Link href="/constructor" className="btnRed">
+            Открыть конструктор
+          </Link>
+        </div>
+      ) : (
       <div id="kit" className={s.panel}>
         <div className={s.panelHead}>
           <div>
@@ -98,6 +123,7 @@ export function KitAndClub({ kit }: { kit: KitData }) {
           </div>
         </div>
       </div>
+      )}
 
       <div id="order" className={s.panel}>
         <div className={s.panelHead}>

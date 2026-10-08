@@ -172,7 +172,7 @@ export default async function HomePage() {
 
       <PricesSection cards={cards} priceListUrl={settings.priceListUrl} />
 
-      <KitAndClub kit={kit} />
+      <KitAndClub kit={kit} kitPanel="constructor" />
 
       <section className={`wrap ${s.trio}`}>
         <SupplyCard />
