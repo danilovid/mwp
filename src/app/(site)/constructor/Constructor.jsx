@@ -24,7 +24,7 @@ export function Constructor({catalog}){
  const cart=useCart();
  const [height,setHeight]=useState(178);
  const [active,setActive]=useState(catalog.find(g=>g.key==='gloves')?.key??catalog[0].key);
- const [selections,setSelections]=useState(()=>initialSelections(catalog));
+ const [selections,setSelections]=useState(()=>initialSelections(catalog,178));
  const [gallery,setGallery]=useState(0);
  const [modal,setModal]=useState(null);
  const [notice,setNotice]=useState('');
@@ -42,6 +42,29 @@ export function Constructor({catalog}){
  const patch=values=>setSelections(prev=>({...prev,[active]:{...prev[active],...values}}));
  const choose=key=>{setActive(key);const v=getVariant(catalog.find(g=>g.key===key),selections[key]);setGallery(Math.max(0,v.images.indexOf(previewImage(v,selections[key].colour))));setSizeError(false);};
  const colour=value=>{patch({colour:value});setGallery(Math.max(0,variant.images.indexOf(previewImage(variant,value))));setSizeError(false);};
+ // Рост уже выбран ползунком. Там, где он зашит в размерную сетку — нагрудник,
+ // налокотники, щитки, — размер подставляется сам. Для шлема, перчаток и шорт
+ // рост размера не задаёт, там выбор остаётся за человеком.
+ const applyHeight=next=>{
+  const value=typeof next==='function'?next(height):next;
+  setHeight(value);
+  setSelections(prev=>{
+   let changed=false; const out={...prev};
+   for(const g of catalog){
+    const fit=heightSuggestions(getVariant(g,prev[g.key]),value);
+    if(fit.length===1&&prev[g.key].size!==fit[0]){out[g.key]={...prev[g.key],size:fit[0]};changed=true;}
+   }
+   return changed?out:prev;
+  });
+ };
+ // Цвета берём из опций товара: у шлема их четыре, и все они заказываемые.
+ // У перчаток цвета в каталоге нет — красные показываем как образ и к заказу не пускаем.
+ const palette={white:{label:'Белый',css:'#f2f4f7'},black:{label:'Чёрный',css:'#1b2029'},red:{label:'Красный',css:'#d92b3c'},blue:{label:'Синий',css:'#2b63c6'}};
+ const colourOption=variant.options.find(o=>o.name==='Цвет');
+ const hasColourOption=Boolean(colourOption);
+ const swatches=colourOption
+  ? colourOption.values.map(value=>{const key=Object.keys(palette).find(k=>palette[k].label===value||palette[k].label.replace('ё','е')===value);return key?{key,...palette[key]}:null;}).filter(Boolean)
+  : (active==='gloves'&&selection.line==='base' ? [{key:'black',...palette.black},{key:'red',...palette.red}] : []);
  const line=value=>{setSelections(prev=>({...prev,[active]:changeLine(group,prev[active],value)}));setGallery(0);setSizeError(false);};
  const add=()=>{
   const issue=orderIssue(group,selection);
@@ -65,7 +88,7 @@ export function Constructor({catalog}){
   
   <section className="constructor" id="constructor" aria-label="Конструктор экипировки">
    <aside className="profile">
-    <div className="control-card height-card"><label htmlFor="height">Рост <strong>{height} см</strong></label><div className="range-row"><button className="icon-button" onClick={()=>setHeight(h=>Math.max(110,h-1))} aria-label="Уменьшить рост" disabled={height===110}><Minus size={19}/></button><input id="height" type="range" min="110" max="195" value={height} onChange={e=>setHeight(Number(e.target.value))}/><button className="icon-button" onClick={()=>setHeight(h=>Math.min(195,h+1))} aria-label="Увеличить рост" disabled={height===195}><Plus size={19}/></button></div><small>Начнём с роста. У каждого предмета — своя мерка.</small></div>
+    <div className="control-card height-card"><label htmlFor="height">Рост <strong>{height} см</strong></label><div className="range-row"><button className="icon-button" onClick={()=>applyHeight(h=>Math.max(110,h-1))} aria-label="Уменьшить рост" disabled={height===110}><Minus size={19}/></button><input id="height" type="range" min="110" max="195" value={height} onChange={e=>applyHeight(Number(e.target.value))}/><button className="icon-button" onClick={()=>applyHeight(h=>Math.min(195,h+1))} aria-label="Увеличить рост" disabled={height===195}><Plus size={19}/></button></div><small>Начнём с роста. У каждого предмета — своя мерка.</small></div>
     <div className="control-card"><p className="card-label">Линейка экипировки</p><div className="segmented">{[['base','Базовая'],['cube','CUBE']].map(([key,label])=><button key={key} aria-pressed={dominantLine===key} onClick={()=>setGlobalLine(key)}>{label}</button>)}</div><small>{dominantLine==='cube'?'CUBE для доступных позиций. Шлем и защита паха остаются в базовой линейке.':'Надёжная защита. Продуманный комфорт для твоей игры.'}</small></div>
     <button className="hint-button" onClick={()=>setModal('help')}><Info size={17}/> Как работает подбор</button>
    </aside>
@@ -74,7 +97,7 @@ export function Constructor({catalog}){
     <div className="product-image"><ProductImg file={currentImage?.file??null} alt={variant.name+' — фото из каталога MWP'} sizes="(max-width:620px) 90vw, 415px" eager/>{images.length>1&&<><button className="gallery-prev" aria-label="Предыдущее фото" onClick={()=>setGallery(g=>(g+images.length-1)%images.length)}><ChevronLeft size={19}/></button><button className="gallery-next" aria-label="Следующее фото" onClick={()=>setGallery(g=>(g+1)%images.length)}><ChevronRight size={19}/></button></>}</div><div className="gallery-dots">{images.map((img,i)=><button key={img.src} aria-label={'Фото '+(i+1)} aria-pressed={gallery%images.length===i} onClick={()=>setGallery(i)}/>)}</div>
     <h2>{variant.name.replace(' хоккейные','').replace(' хоккейный','')} <span>MWP</span></h2><p className="product-description">{variant.note||'Защита и комфорт в каждой смене.'}</p>
     {group.variants.length>1&&<div className="product-line"><span>Линейка</span><div className="segmented small">{group.variants.map(v=><button key={v.id} aria-pressed={v.line===selection.line} onClick={()=>line(v.line)}>{v.line==='cube'?'CUBE':'Базовая'}</button>)}</div></div>}
-    {active==='gloves'&&selection.line==='base'&&<div className="colour-row"><span>{variant.options.some(o=>o.name==='Цвет')?'Цвет':'Цвет образа'}</span><button className="swatch black" aria-label="Чёрные перчатки" aria-pressed={selection.colour==='black'} onClick={()=>colour('black')}/><button className="swatch red" aria-label="Красные перчатки" aria-pressed={selection.colour==='red'} onClick={()=>colour('red')}/><span className="colour-name">{selection.colour==='red'?'Красный':'Чёрный'}</span></div>}
+    {swatches.length>1&&<div className="colour-row"><span>{hasColourOption?'Цвет':'Цвет образа'}</span>{swatches.map(s=><button key={s.key} className={'swatch '+s.key} style={{background:s.css}} aria-label={s.label} aria-pressed={selection.colour===s.key} onClick={()=>colour(s.key)}/>)}<span className="colour-name">{swatches.find(s=>s.key===selection.colour)?.label??''}</span>{!hasColourOption&&<span className="colour-hint">только для образа</span>}</div>}
     {active==='gloves'&&selection.colour==='red'&&!variant.options.some(o=>o.name==='Цвет')&&<p className="measure-note">Красный цвет доступен для просмотра. Для заказа уточните его у MWP: цвет ещё не привязан к варианту товара. <Link href={'/catalog/'+variant.slug}>Открыть карточку</Link></p>}
     {active==='helmet'&&<p className="measure-note">На фигуре показан белый шлем. Другие цвета доступны в галерее каталога.</p>}
     {selection.line==='cube'&&<p className="measure-note">Карточка и цена — CUBE. На фигуре пока показана базовая экипировка.</p>}

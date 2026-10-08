@@ -1,10 +1,17 @@
 const colours = {white:'Белый',black:'Черный',red:'Красный',blue:'Синий'};
-export function initialSelections(catalog) {
-  return Object.fromEntries(catalog.map(group => [group.key,{
+export function initialSelections(catalog, height) {
+  return Object.fromEntries(catalog.map(group => {
     // Хоккеист начинает раздетым: посетитель сам набирает комплект.
-    enabled:false,line:group.variants.find(v=>v.line==='base')?.line??group.variants[0].line,
-    size:'',colour:group.key==='helmet'?'white':'black',options:{}
-  }]));
+    const line = group.variants.find(v => v.line === 'base')?.line ?? group.variants[0].line;
+    const variant = group.variants.find(v => v.line === line) ?? group.variants[0];
+    // Если рост известен и однозначно задаёт размер — подставляем сразу, не заставляя выбирать дважды.
+    const fit = height ? heightSuggestions(variant, height) : [];
+    return [group.key, {
+      enabled:false, line,
+      size: fit.length === 1 ? fit[0] : '',
+      colour: group.key === 'helmet' ? 'white' : 'black', options:{}
+    }];
+  }));
 }
 export function getVariant(group,selection) {
   return group.variants.find(v=>v.line===selection.line) ?? group.variants[0];
