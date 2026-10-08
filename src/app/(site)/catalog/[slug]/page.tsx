@@ -16,13 +16,26 @@ export async function generateStaticParams() {
   return rows.map((r) => ({ slug: r.slug }));
 }
 
+/**
+ * Обрезка для <meta name="description">: этот текст видно в выдаче, поэтому режем
+ * по границе предложения, а если её нет — по слову. Раньше срез шёл ровно по 180-му
+ * символу, и к обрубку вроде «щитки сним» приклеивалась цена.
+ */
+function clip(text: string, limit: number) {
+  const flat = text.replace(/\s+/g, " ").trim();
+  if (flat.length <= limit) return flat;
+  const cut = flat.slice(0, limit);
+  const sentence = Math.max(cut.lastIndexOf(". "), cut.lastIndexOf("! "), cut.lastIndexOf("? "));
+  if (sentence > limit / 2) return cut.slice(0, sentence + 1);
+  const space = cut.lastIndexOf(" ");
+  return `${(space > 0 ? cut.slice(0, space) : cut).replace(/[,;:—-]+$/, "")}…`;
+}
+
 export async function generateMetadata(props: PageProps<"/catalog/[slug]">): Promise<Metadata> {
   const { slug } = await props.params;
   const p = await getProductBySlug(slug);
   if (!p) return {};
-  const description =
-    (p.description || `${p.name} MWP — российская хоккейная экипировка.`).slice(0, 180) +
-    ` Цена от ${formatPrice(p.minPrice)}.`;
+  const description = `${clip(p.description || `${p.name} MWP — российская хоккейная экипировка.`, 180)} Цена от ${formatPrice(p.minPrice)}.`;
   return {
     title: p.name,
     description,
