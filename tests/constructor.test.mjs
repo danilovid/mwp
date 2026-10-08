@@ -1,8 +1,11 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
-import {initialSelections,getVariant,getEdition,getPrice,heightSuggestions,changeLine,cartItems,orderIssue,previewImage,visibilityNote,kitLabel} from '../src/app/(site)/constructor/model.js';
-import {createScene} from '../src/app/(site)/constructor/figure.js';
+import {initialSelections,getVariant,getEdition,getPrice,heightSuggestions,changeLine,cartItems,orderIssue,previewImage,visibilityNote,kitLabel,figureSelection} from '../src/app/(site)/constructor/model.js';
+import {createScene,DEFAULT_URLS,HELMET_SOURCES,GLOVE_SOURCES,SOURCE_FRAMES} from '../src/app/(site)/constructor/figure.js';
+import {COLOURS,colourChoices,colourValue,colourKey,normaliseColour} from '../src/app/(site)/constructor/colours.js';
+import {createRequire} from 'node:module';
+const require=createRequire(import.meta.url);
 const catalog=JSON.parse(readFileSync(new URL('./fixtures/constructor-catalog.json',import.meta.url)));
 // Хоккеист начинает раздетым, поэтому полный комплект для проверок собирается явно.
 const allEnabled=(list=catalog)=>{
@@ -118,4 +121,76 @@ test('CUBE glove sole colour remains automatic and 12,5 costs exactly 4220',()=>
  const group=catalog.find(g=>g.key==='gloves');let s=initialSelections([group]).gloves;s=changeLine(group,s,'cube');s={...s,enabled:true,size:'12,5'};
  assert.equal(orderIssue(group,s),null);assert.equal(getPrice(getVariant(group,s),s),4220);
  assert.equal(cartItems([group],{gloves:s})[0].values['Цвет'],'Черно-красный');
+});
+
+test('every catalog colour is a selectable swatch, matching gallery photo and exact cart option',()=>{
+ for(const key of ['helmet','gloves']){
+  const group=catalog.find(g=>g.key===key),variant=group.variants.find(v=>v.line==='base');
+  const choices=colourChoices(variant);assert.equal(choices.length,variant.options.find(o=>o.name==='Цвет').values.length);
+  for(const choice of choices){
+   assert.ok(COLOURS[choice.key]);const selected=initialSelections(catalog);
+   selected[key]={...selected[key],enabled:true,size:key==='helmet'?'M':'12,5',colour:choice.key};
+   assert.equal(orderIssue(group,selected[key]),null);
+   assert.equal(previewImage(variant,choice.key).optionValue,choice.label);
+   const [item]=cartItems(catalog,selected);assert.equal(item.values['Цвет'],choice.label);
+   assert.equal(item.price,getEdition(variant,selected[key].size,choice.key).price);
+   assert.equal(figureSelection(catalog,selected)[key==='helmet'?'helmetColour':'gloveColour'],choice.key);
+  }
+ }
+});
+test('colour spelling is normalised for matching but exact database labels reach the cart',()=>{
+ const group=structuredClone(catalog.find(g=>g.key==='helmet')),variant=group.variants[0];
+ for(const o of variant.options)if(o.name==='Цвет')o.values=o.values.map(v=>v==='Черный'?'Чёрный':v);
+ for(const e of variant.editions)if(e.values.Цвет==='Черный')e.values.Цвет='Чёрный';
+ for(const i of variant.images)if(i.optionValue==='Черный')i.optionValue='Чёрный';
+ const selected=initialSelections([group]);selected.helmet={...selected.helmet,enabled:true,size:'S',colour:'black'};
+ assert.equal(cartItems([group],selected)[0].values.Цвет,'Чёрный');
+ assert.equal(previewImage(variant,'black').optionValue,'Чёрный');
+ assert.equal(colourKey('Сине–чёрный'),'blueblack');
+ assert.notEqual(colourKey('Черно-красный'),colourKey('Красно-черный'));
+ assert.equal(normaliseColour('  Красно — чёрный '),'красно-черный');
+ assert.equal(colourValue(variant,'purple'),'');
+});
+test('every base glove colour switches to genuine CUBE single-colour asset and returns to base',()=>{
+ const group=catalog.find(g=>g.key==='gloves');
+ for(const choice of colourChoices(group.variants[0])){
+  const selected=initialSelections(catalog);selected.gloves={...selected.gloves,enabled:true,size:'12,5',colour:choice.key};
+  selected.gloves=changeLine(group,selected.gloves,'cube');
+  const options=figureSelection(catalog,selected);assert.equal(options.gloveColour,'blackred');assert.equal(options.gloveLine,'cube');
+  const svg=createScene(options);assert.ok(svg.includes('gloves-cube-left.webp'));assert.ok(svg.includes('gloves-cube-right.webp'));
+  assert.equal(cartItems(catalog,selected)[0].price,4220);assert.equal(cartItems(catalog,selected)[0].values.Цвет,'Черно-красный');
+  selected.gloves=changeLine(group,selected.gloves,'base');
+  assert.equal(figureSelection(catalog,selected).gloveLine,'base');assert.equal(orderIssue(group,selected.gloves),null);
+ }
+});
+test('four helmet colours work with mask on/off and chin without changing fixed face sources',()=>{
+ for(const colour of ['white','black','red','blue'])for(const mask of [false,true])for(const chin of [false,true]){
+  const on={helmet:true,mask,chin};const svg=createScene({on,helmetColour:colour,prefix:'colour-check'});
+  const head=svg.match(/<image href="([^"]+)"[^>]*mask="url\(#colour-check-helmet\)"/)[1];
+  assert.equal(head,mask?DEFAULT_URLS.master:DEFAULT_URLS.helmetBare);
+  if(colour==='white')assert.ok(!svg.includes('id="colour-check-helmetPaint"'));
+  else{
+   const key=HELMET_SOURCES[colour][mask?'mask':'bare'];assert.ok(svg.includes(DEFAULT_URLS[key]));
+   assert.ok(svg.includes('fill-rule="evenodd"'));
+  }
+  assert.equal(svg.includes('id="colour-check-chin"'),chin&&!mask);
+ }
+});
+test('all forty helmet/glove colour combinations select the correct available assets',()=>{
+ const gloves=[['base','black'],['base','red'],['base','redblack'],['base','blueblack'],['cube','blackred']];
+ for(const helmetColour of ['white','black','red','blue'])for(const [gloveLine,gloveColour] of gloves)for(const mask of [false,true]){
+  const svg=createScene({on:{helmet:true,gloves:true,mask},helmetColour,gloveLine,gloveColour});
+  const pair=gloveLine==='cube'?GLOVE_SOURCES.cube:GLOVE_SOURCES[gloveColour];
+  if(pair){assert.ok(svg.includes(DEFAULT_URLS[pair.left]));assert.ok(svg.includes(DEFAULT_URLS[pair.right]));}
+  else assert.ok(svg.includes(gloveColour==='red'?DEFAULT_URLS.red:DEFAULT_URLS.master));
+  assert.ok(!svg.includes('undefined'));assert.ok(!svg.includes('NaN'));
+ }
+});
+test('all cropped assets exist, match their coordinate frames and stay below 250 KB combined',async()=>{
+ const sharp=require('sharp');let bytes=0;
+ for(const [key,frame] of Object.entries(SOURCE_FRAMES)){
+  const path=new URL('../public'+DEFAULT_URLS[key],import.meta.url);const buf=readFileSync(path);bytes+=buf.length;
+  const meta=await sharp(buf).metadata();assert.equal(meta.width,frame.width);assert.equal(meta.height,frame.height);assert.ok(meta.hasAlpha);
+ }
+ assert.ok(bytes<250000,`New colour assets total ${bytes} bytes`);
 });

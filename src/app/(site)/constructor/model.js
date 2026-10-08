@@ -1,4 +1,4 @@
-const colours = {white:'Белый',black:'Черный',red:'Красный',blue:'Синий',redblack:'Красно-черный',blueblack:'Сине-черный'};
+import {colourKey,colourValue,normaliseColour} from './colours.js';
 export function initialSelections(catalog, height) {
   return Object.fromEntries(catalog.map(group => {
     // Хоккеист начинает раздетым: посетитель сам набирает комплект.
@@ -23,7 +23,7 @@ const selectedValues = (variant,size,colour,options={}) => Object.fromEntries(va
   option.name,
   option.values.length===1?option.values[0]
   :option.name==='Размер'?size
-  :option.name==='Цвет'?(colours[colour]??colour)
+  :option.name==='Цвет'?colourValue(variant,colour)
   :(options[option.name]??'')
 ]));
 export function getEdition(variant,size,colour,options={}) {
@@ -59,8 +59,8 @@ export function orderIssue(group,selection) {
   return null;
 }
 export function previewImage(variant,colour) {
-  const value=colours[colour]??colour;
-  const matched=variant.images.find(i=>i.optionValue===value);
+  const value=colourValue(variant,colour);
+  const matched=variant.images.find(i=>i.optionValue&&normaliseColour(i.optionValue)===normaliseColour(value));
   // Existing base glove photos have no option mapping. Known source files are only display refs.
   const legacy=variant.slug==='perchatki'?variant.images.find(i=>i.file===(colour==='red'?'p9-b1a24abf':'p9-4f8251a5')):null;
   return matched??legacy??variant.images[0];
@@ -90,4 +90,17 @@ export function kitLabel(group,selection) {
   const edition=getEdition(getVariant(group,selection),selection.size,selection.colour,selection.options);
   if(!edition)return 'Выберите опции';
   return edition.values['Размер']?.split(' (')[0] || 'В комплекте';
+}
+
+export function figureSelection(catalog,selections) {
+  const gloveGroup=catalog.find(g=>g.key==='gloves');
+  const helmetGroup=catalog.find(g=>g.key==='helmet');
+  const glove=gloveGroup&&getVariant(gloveGroup,selections.gloves);
+  const helmet=helmetGroup&&getVariant(helmetGroup,selections.helmet);
+  return {
+    on:Object.fromEntries(catalog.map(g=>[g.key,selections[g.key].enabled])),
+    gloveColour:glove?colourKey(colourValue(glove,selections.gloves.colour)):'black',
+    helmetColour:helmet?colourKey(colourValue(helmet,selections.helmet.colour)):'white',
+    gloveLine:glove?.line??'base',neckLine:selections.neck?.line??'base',
+  };
 }

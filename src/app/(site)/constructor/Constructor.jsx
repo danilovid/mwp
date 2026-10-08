@@ -7,8 +7,9 @@ import {useRouter} from 'next/navigation';
 import {useCart} from '@/components/cart';
 import {ProductImg} from '@/components/ProductImg';
 import styles from './constructor.module.css';
-import {createScene} from './figure.js';
-import {initialSelections,getVariant,getEdition,getPrice,heightSuggestions,changeLine,cartItems,orderIssue,previewImage,rubles,visibilityNote,kitLabel} from './model.js';
+import {createScene,COLOUR_ASSET_URLS} from './figure.js';
+import {COLOURS,colourChoices} from './colours.js';
+import {initialSelections,getVariant,getEdition,getPrice,heightSuggestions,changeLine,cartItems,orderIssue,previewImage,rubles,visibilityNote,kitLabel,figureSelection} from './model.js';
 
 const help={mask:'Выберите S или L по карточке маски и совместимости со своим шлемом. Размер шлема не подставляется автоматически: таблица соответствия в каталоге не задана.',chin:'В каталоге у этой защиты нет размерных опций. Она добавляется отдельным аксессуаром. У маски на фотографии уже есть подбородочная чашка; отдельная защита может понадобиться для замены. Проверьте крепления перед установкой.',neck:'Выберите Детская, Юниор или Взрослая по таблице производителя. Проверьте обхват шеи и посадку воротника. Рост не определяет этот размер автоматически.',helmet:'Измерьте обхват головы над бровями. Размер шлема выбирается по таблице производителя и проверяется при примерке.',chest:'Рост помогает сузить выбор. Учитывайте обхват груди и посадку плечевых чашек. Если подходят два диапазона, сравните оба размера.',elbows:'Рост помогает сузить выбор. Проверьте длину руки и посадку защиты на локте.',gloves:'Измерьте кисть и сравните с таблицей производителя. Рост сам по себе не определяет размер перчаток.',pants:'Измерьте обхват талии. Проверьте длину шорт и посадку с остальной защитой.',groin:'Выберите возрастную категорию и проверьте плотность посадки. Защита надевается под хоккейные шорты.',shins:'Измерьте длину голени от центра колена до верха конька. Ростовая сетка каталога даёт ориентир, но не заменяет примерку.'};
 
@@ -22,6 +23,11 @@ function Modal({title,onClose,children}){
 export function Constructor({catalog}){
  const router=useRouter();
  const cart=useCart();
+ // The complete new palette is about 200 KB; warm it at low priority to avoid
+ // an unpainted white shell while its first selected colour downloads.
+ useEffect(()=>{
+  for(const src of COLOUR_ASSET_URLS){const image=new window.Image();image.decoding='async';image.fetchPriority='low';image.src=src;}
+ },[]);
  const [height,setHeight]=useState(178);
  const [active,setActive]=useState(catalog.find(g=>g.key==='gloves')?.key??catalog[0].key);
  const [selections,setSelections]=useState(()=>initialSelections(catalog,178));
@@ -36,7 +42,7 @@ export function Constructor({catalog}){
  const enabled=catalog.filter(g=>selections[g.key].enabled);
  const total=enabled.reduce((sum,g)=>sum+getPrice(getVariant(g,selections[g.key]),selections[g.key]),0);
  const incomplete=enabled.filter(g=>orderIssue(g,selections[g.key]));
- const scene=useMemo(()=>createScene({prefix:'player',on:Object.fromEntries(catalog.map(g=>[g.key,selections[g.key].enabled])),colour:selections.gloves?.colour??'black',neckLine:selections.neck?.line??'base'}),[catalog,selections]);
+ const scene=useMemo(()=>createScene({prefix:'player',...figureSelection(catalog,selections)}),[catalog,selections]);
  const images=variant.images;
  const currentImage=images[gallery%images.length];
  const patch=values=>setSelections(prev=>({...prev,[active]:{...prev[active],...values}}));
@@ -57,14 +63,10 @@ export function Constructor({catalog}){
    return changed?out:prev;
   });
  };
- // Цвета берём из опций товара: у шлема их четыре, и все они заказываемые.
- // У перчаток цвета в каталоге нет — красные показываем как образ и к заказу не пускаем.
- const palette={white:{label:'Белый',css:'#f2f4f7'},black:{label:'Чёрный',css:'#1b2029'},red:{label:'Красный',css:'#d92b3c'},blue:{label:'Синий',css:'#2b63c6'},redblack:{label:'Красно-чёрный',css:'linear-gradient(135deg,#d92b3c 50%,#1b2029 50%)'},blueblack:{label:'Сине-чёрный',css:'linear-gradient(135deg,#2b63c6 50%,#1b2029 50%)'}};
- const colourOption=variant.options.find(o=>o.name==='Цвет');
- const hasColourOption=Boolean(colourOption);
- const swatches=colourOption
-  ? colourOption.values.map(value=>{const key=Object.keys(palette).find(k=>palette[k].label===value||palette[k].label.replace('ё','е')===value);return key?{key,...palette[key]}:null;}).filter(Boolean)
-  : (active==='gloves'&&selection.line==='base' ? [{key:'black',...palette.black},{key:'red',...palette.red}] : []);
+ // Catalog colour strings and figure keys are resolved through the same vocabulary.
+ const hasColourOption=variant.options.some(o=>o.name==='Цвет');
+ const swatches=hasColourOption?colourChoices(variant)
+  :(active==='gloves'&&selection.line==='base'?[{key:'black',...COLOURS.black},{key:'red',...COLOURS.red}]:[]);
  const line=value=>{setSelections(prev=>({...prev,[active]:changeLine(group,prev[active],value)}));setGallery(0);setSizeError(false);};
  const add=()=>{
   const issue=orderIssue(group,selection);
@@ -101,8 +103,7 @@ export function Constructor({catalog}){
     {group.variants.length>1&&<div className="product-line"><span>Линейка</span><div className="segmented small">{group.variants.map(v=><button key={v.id} aria-pressed={v.line===selection.line} onClick={()=>line(v.line)}>{v.line==='cube'?'CUBE':'Базовая'}</button>)}</div></div>}
     {swatches.length>1&&<div className="colour-row"><span>{hasColourOption?'Цвет':'Цвет образа'}</span>{swatches.map(s=><button key={s.key} className={'swatch '+s.key} style={{background:s.css}} aria-label={s.label} aria-pressed={selection.colour===s.key} onClick={()=>colour(s.key)}/>)}<span className="colour-name">{swatches.find(s=>s.key===selection.colour)?.label??''}</span>{!hasColourOption&&<span className="colour-hint">только для образа</span>}</div>}
     {active==='gloves'&&selection.colour==='red'&&!variant.options.some(o=>o.name==='Цвет')&&<p className="measure-note">Красный цвет доступен для просмотра. Для заказа уточните его у MWP: цвет ещё не привязан к варианту товара. <Link href={'/catalog/'+variant.slug}>Открыть карточку</Link></p>}
-    {active==='helmet'&&<p className="measure-note">На фигуре показан белый шлем. Другие цвета доступны в галерее каталога.</p>}
-    {selection.line==='cube'&&active!=='neck'&&<p className="measure-note">Карточка и цена — CUBE. На фигуре пока показана базовая экипировка.</p>}
+    {selection.line==='cube'&&!['neck','gloves'].includes(active)&&<p className="measure-note">Карточка и цена — CUBE. На фигуре пока показана базовая экипировка.</p>}
     {active==='mask'&&<p className="measure-note">Маска добавляется отдельно от шлема. На фото товара она уже с подбородочной чашкой.</p>}
     {active==='chin'&&<p className="measure-note">Отдельный аксессуар за {rubles(selectedPrice)}. Размер выбирать не нужно.</p>}
     {visualNote&&<p className="measure-note">{visualNote}{['mask','chin'].includes(active)&&!selections.helmet?.enabled&&<> <button className="inline-link" onClick={()=>choose('helmet')}>Выбрать шлем</button></>}</p>}
@@ -120,7 +121,7 @@ export function Constructor({catalog}){
   {modal&&<Modal title={modal==='catalog'?'Каталог экипировки':modal==='size'?(sizes.length?'Как выбрать размер':'О подборе и креплении'):modal==='about'?'Экипировка MWP':modal==='contacts'?'Связаться с MWP':'Как работает конструктор'} onClose={()=>setModal(null)}>
    {modal==='catalog'&&<div className="catalog-grid">{catalog.map(g=><button key={g.key} onClick={()=>{choose(g.key);setModal(null);}}><ProductImg file={g.variants[0].images[0]?.file??null} alt="" sizes="220px"/><span>{g.label}</span></button>)}</div>}
    {modal==='size'&&<div className="help-content"><p><strong>{group.label}: {group.measure}.</strong></p><p>{help[active]}</p>{recommendations.length>0&&<p>По ростовой сетке каталога при {height} см подходят размеры {recommendations.map(s=>s.split(' (')[0]).join(', ')}.</p>}{sizes.length>0&&<p>Если нужной мерки нет в таблице, уточните размер у MWP. Рост — ориентир, окончательный выбор проверяется при примерке.</p>}<button className="primary" onClick={()=>setModal(null)}>Понятно</button></div>}
-   {modal==='help'&&<div className="help-content"><p>Укажи рост, нажми на нужную часть тела и выбери линейку, цвет и размер. Переключатель «Надето» позволяет убрать предмет с фигуры и из комплекта.</p><p>Рост даёт ориентир для нагрудника, налокотников и щитков. Для шлема измерь голову, для перчаток — кисть, для шорт — талию.</p><p>Шлем и маска — отдельные позиции. Маска и защита подбородка показываются на фигуре со шлемом, но могут быть заказаны отдельно. Защита шеи переключается между базовой линейкой и CUBE.</p><p>Защита паха скрывается под шортами. Коньки показаны для завершённого образа и не добавляются в заказ.</p><p>Фотографии и цены берутся из каталога MWP. На фигуре показано сочетание базовой экипировки. Комплект добавляется в обычную корзину сайта, оформление заявки выполняется там.</p><button className="primary" onClick={()=>setModal(null)}>Собрать комплект</button></div>}
+   {modal==='help'&&<div className="help-content"><p>Укажи рост, нажми на нужную часть тела и выбери линейку, цвет и размер. Переключатель «Надето» позволяет убрать предмет с фигуры и из комплекта.</p><p>Рост даёт ориентир для нагрудника, налокотников и щитков. Для шлема измерь голову, для перчаток — кисть, для шорт — талию.</p><p>Шлем и маска — отдельные позиции. Маска и защита подбородка показываются на фигуре со шлемом, но могут быть заказаны отдельно. Защита шеи переключается между базовой линейкой и CUBE.</p><p>Защита паха скрывается под шортами. Коньки показаны для завершённого образа и не добавляются в заказ.</p><p>Фотографии и цены берутся из каталога MWP. На фигуре показан иллюстративный образ. Цвета шлема и перчаток соответствуют выбору; точные детали товаров смотрите в галерее. Комплект добавляется в обычную корзину сайта, оформление заявки выполняется там.</p><button className="primary" onClick={()=>setModal(null)}>Собрать комплект</button></div>}
    {modal==='about'&&<div className="help-content"><p>MWP — хоккейная экипировка. Здесь можно собрать защиту из каталога и сравнить базовую линейку с CUBE.</p><button className="primary" onClick={()=>{setModal('catalog');}}>Выбрать экипировку</button></div>}
    {modal==='contacts'&&<div className="help-content"><p>Для консультации по размерам и наличию откройте раздел контактов на сайте MWP.</p><a className="primary" href="https://mwp.135.106.192.220.sslip.io/" target="_blank" rel="noreferrer">Открыть сайт MWP <ArrowRight size={17}/></a></div>}
   </Modal>}
