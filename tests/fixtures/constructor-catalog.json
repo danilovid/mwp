@@ -10,9 +10,8 @@
     "variants": [
       {
         "id": 1,
-        "slug": "shlem",
         "name": "Шлем хоккейный",
-        "note": "",
+        "slug": "shlem",
         "line": "base",
         "options": [
           {
@@ -78,101 +77,262 @@
         "editions": [
           {
             "id": 143,
-            "price": 2040,
             "values": {
               "Цвет": "Черный",
               "Размер": "S"
-            }
+            },
+            "price": 2040
           },
           {
             "id": 144,
-            "price": 2040,
             "values": {
               "Цвет": "Черный",
               "Размер": "M"
-            }
+            },
+            "price": 2040
           },
           {
             "id": 145,
-            "price": 2040,
             "values": {
               "Цвет": "Черный",
               "Размер": "L"
-            }
+            },
+            "price": 2040
           },
           {
             "id": 146,
-            "price": 2040,
             "values": {
               "Цвет": "Белый",
               "Размер": "S"
-            }
+            },
+            "price": 2040
           },
           {
             "id": 147,
-            "price": 2040,
             "values": {
               "Цвет": "Белый",
               "Размер": "M"
-            }
+            },
+            "price": 2040
           },
           {
             "id": 148,
-            "price": 2040,
             "values": {
               "Цвет": "Белый",
               "Размер": "L"
-            }
+            },
+            "price": 2040
           },
           {
             "id": 149,
-            "price": 2040,
             "values": {
               "Цвет": "Красный",
               "Размер": "S"
-            }
+            },
+            "price": 2040
           },
           {
             "id": 150,
-            "price": 2040,
             "values": {
               "Цвет": "Красный",
               "Размер": "M"
-            }
+            },
+            "price": 2040
           },
           {
             "id": 151,
-            "price": 2040,
             "values": {
               "Цвет": "Красный",
               "Размер": "L"
-            }
+            },
+            "price": 2040
           },
           {
             "id": 152,
-            "price": 2040,
             "values": {
               "Цвет": "Синий",
               "Размер": "S"
-            }
+            },
+            "price": 2040
           },
           {
             "id": 153,
-            "price": 2040,
             "values": {
               "Цвет": "Синий",
               "Размер": "M"
-            }
+            },
+            "price": 2040
           },
           {
             "id": 154,
-            "price": 2040,
             "values": {
               "Цвет": "Синий",
               "Размер": "L"
-            }
+            },
+            "price": 2040
           }
-        ]
+        ],
+        "note": "",
+        "category": {
+          "slug": "head",
+          "name": "Голова и шея"
+        },
+        "baseId": null,
+        "includesMask": false,
+        "label": "Без маски"
+      },
+      {
+        "id": 2,
+        "name": "Шлем хоккейный с маской",
+        "slug": "shlem-s-maskoj",
+        "line": "base",
+        "options": [
+          {
+            "name": "Цвет",
+            "values": [
+              "Черный",
+              "Белый",
+              "Красный",
+              "Синий"
+            ]
+          },
+          {
+            "name": "Размер",
+            "values": [
+              "S",
+              "M",
+              "L"
+            ]
+          }
+        ],
+        "images": [
+          {
+            "file": "p2-6f7f68b0",
+            "optionValue": "",
+            "src": "/media/p2-6f7f68b0-480.webp"
+          },
+          {
+            "file": "p2-2897aaa0",
+            "optionValue": "",
+            "src": "/media/p2-2897aaa0-480.webp"
+          },
+          {
+            "file": "p2-428d568d",
+            "optionValue": "",
+            "src": "/media/p2-428d568d-480.webp"
+          },
+          {
+            "file": "p2-0b0d628f",
+            "optionValue": "",
+            "src": "/media/p2-0b0d628f-480.webp"
+          }
+        ],
+        "editions": [
+          {
+            "id": 13,
+            "values": {
+              "Цвет": "Черный",
+              "Размер": "S"
+            },
+            "price": 2970
+          },
+          {
+            "id": 14,
+            "values": {
+              "Цвет": "Черный",
+              "Размер": "M"
+            },
+            "price": 2970
+          },
+          {
+            "id": 15,
+            "values": {
+              "Цвет": "Черный",
+              "Размер": "L"
+            },
+            "price": 2970
+          },
+          {
+            "id": 16,
+            "values": {
+              "Цвет": "Белый",
+              "Размер": "S"
+            },
+            "price": 2970
+          },
+          {
+            "id": 17,
+            "values": {
+              "Цвет": "Белый",
+              "Размер": "M"
+            },
+            "price": 2970
+          },
+          {
+            "id": 18,
+            "values": {
+              "Цвет": "Белый",
+              "Размер": "L"
+            },
+            "price": 2970
+          },
+          {
+            "id": 19,
+            "values": {
+              "Цвет": "Красный",
+              "Размер": "S"
+            },
+            "price": 2970
+          },
+          {
+            "id": 20,
+            "values": {
+              "Цвет": "Красный",
+              "Размер": "M"
+            },
+            "price": 2970
+          },
+          {
+            "id": 21,
+            "values": {
+              "Цвет": "Красный",
+              "Размер": "L"
+            },
+            "price": 2970
+          },
+          {
+            "id": 22,
+            "values": {
+              "Цвет": "Синий",
+              "Размер": "S"
+            },
+            "price": 2970
+          },
+          {
+            "id": 23,
+            "values": {
+              "Цвет": "Синий",
+              "Размер": "M"
+            },
+            "price": 2970
+          },
+          {
+            "id": 24,
+            "values": {
+              "Цвет": "Синий",
+              "Размер": "L"
+            },
+            "price": 2970
+          }
+        ],
+        "note": "",
+        "category": {
+          "slug": "head",
+          "name": "Голова и шея"
+        },
+        "baseId": null,
+        "includesMask": true,
+        "label": "С маской"
       }
     ]
   },
@@ -187,9 +347,8 @@
     "variants": [
       {
         "id": 3,
-        "slug": "maska",
         "name": "Маска для шлема игрока",
-        "note": "",
+        "slug": "maska",
         "line": "base",
         "options": [
           {
@@ -220,19 +379,27 @@
         "editions": [
           {
             "id": 25,
-            "price": 980,
             "values": {
               "Размер": "S"
-            }
+            },
+            "price": 980
           },
           {
             "id": 26,
-            "price": 980,
             "values": {
               "Размер": "L"
-            }
+            },
+            "price": 980
           }
-        ]
+        ],
+        "note": "",
+        "category": {
+          "slug": "head",
+          "name": "Голова и шея"
+        },
+        "baseId": null,
+        "includesMask": false,
+        "label": "Базовая"
       }
     ]
   },
@@ -247,9 +414,8 @@
     "variants": [
       {
         "id": 4,
-        "slug": "zashchita-podborodka",
         "name": "Защита подбородка для шлема",
-        "note": "",
+        "slug": "zashchita-podborodka",
         "line": "base",
         "options": [],
         "images": [
@@ -272,10 +438,18 @@
         "editions": [
           {
             "id": 27,
-            "price": 490,
-            "values": {}
+            "values": {},
+            "price": 490
           }
-        ]
+        ],
+        "note": "",
+        "category": {
+          "slug": "head",
+          "name": "Голова и шея"
+        },
+        "baseId": null,
+        "includesMask": false,
+        "label": "Базовая"
       }
     ]
   },
@@ -290,9 +464,8 @@
     "variants": [
       {
         "id": 18,
-        "slug": "zashchita-shei",
         "name": "Защита шеи хоккейная",
-        "note": "",
+        "slug": "zashchita-shei",
         "line": "base",
         "options": [
           {
@@ -319,32 +492,39 @@
         "editions": [
           {
             "id": 111,
-            "price": 590,
             "values": {
               "Размер": "Детская"
-            }
+            },
+            "price": 590
           },
           {
             "id": 112,
-            "price": 590,
             "values": {
               "Размер": "Юниор"
-            }
+            },
+            "price": 590
           },
           {
             "id": 113,
-            "price": 590,
             "values": {
               "Размер": "Взрослая"
-            }
+            },
+            "price": 590
           }
-        ]
+        ],
+        "note": "",
+        "category": {
+          "slug": "head",
+          "name": "Голова и шея"
+        },
+        "baseId": null,
+        "includesMask": false,
+        "label": "Базовая"
       },
       {
         "id": 19,
-        "slug": "zashchita-shei-cube",
         "name": "Защита шеи хоккейная CUBE",
-        "note": "",
+        "slug": "zashchita-shei-cube",
         "line": "cube",
         "options": [
           {
@@ -376,26 +556,34 @@
         "editions": [
           {
             "id": 114,
-            "price": 750,
             "values": {
               "Размер": "Детская"
-            }
+            },
+            "price": 750
           },
           {
             "id": 115,
-            "price": 750,
             "values": {
               "Размер": "Юниор"
-            }
+            },
+            "price": 750
           },
           {
             "id": 116,
-            "price": 750,
             "values": {
               "Размер": "Взрослая"
-            }
+            },
+            "price": 750
           }
-        ]
+        ],
+        "note": "",
+        "category": {
+          "slug": "head",
+          "name": "Голова и шея"
+        },
+        "baseId": 18,
+        "includesMask": false,
+        "label": "CUBE"
       }
     ]
   },
@@ -410,9 +598,8 @@
     "variants": [
       {
         "id": 7,
-        "slug": "nagrudnik",
         "name": "Нагрудник хоккейный",
-        "note": "",
+        "slug": "nagrudnik",
         "line": "base",
         "options": [
           {
@@ -448,60 +635,67 @@
         "editions": [
           {
             "id": 155,
-            "price": 2750,
             "values": {
               "Размер": "1 (рост 110-120)"
-            }
+            },
+            "price": 2750
           },
           {
             "id": 156,
-            "price": 3080,
             "values": {
               "Размер": "2 (рост 120-135)"
-            }
+            },
+            "price": 3080
           },
           {
             "id": 157,
-            "price": 3080,
             "values": {
               "Размер": "3 (рост 135-145)"
-            }
+            },
+            "price": 3080
           },
           {
             "id": 158,
-            "price": 3410,
             "values": {
               "Размер": "4 (рост 145-165)"
-            }
+            },
+            "price": 3410
           },
           {
             "id": 159,
-            "price": 3960,
             "values": {
               "Размер": "5 (рост 165-175)"
-            }
+            },
+            "price": 3960
           },
           {
             "id": 160,
-            "price": 3960,
             "values": {
               "Размер": "6 (рост 175-190)"
-            }
+            },
+            "price": 3960
           },
           {
             "id": 161,
-            "price": 4280,
             "values": {
               "Размер": "7 (рост 180-195+объем)"
-            }
+            },
+            "price": 4280
           }
-        ]
+        ],
+        "note": "",
+        "category": {
+          "slug": "body",
+          "name": "Корпус"
+        },
+        "baseId": null,
+        "includesMask": false,
+        "label": "Базовая"
       },
       {
         "id": 8,
-        "slug": "nagrudnik-cube",
         "name": "Нагрудник хоккейный CUBE",
-        "note": "",
+        "slug": "nagrudnik-cube",
         "line": "cube",
         "options": [
           {
@@ -547,54 +741,62 @@
         "editions": [
           {
             "id": 47,
-            "price": 2850,
             "values": {
               "Размер": "1 (рост 110-120)"
-            }
+            },
+            "price": 2850
           },
           {
             "id": 48,
-            "price": 3180,
             "values": {
               "Размер": "2 (рост 120-135)"
-            }
+            },
+            "price": 3180
           },
           {
             "id": 49,
-            "price": 3180,
             "values": {
               "Размер": "3 (рост 135-145)"
-            }
+            },
+            "price": 3180
           },
           {
             "id": 50,
-            "price": 3510,
             "values": {
               "Размер": "4 (рост 145-165)"
-            }
+            },
+            "price": 3510
           },
           {
             "id": 51,
-            "price": 4060,
             "values": {
               "Размер": "5 (рост 165-175)"
-            }
+            },
+            "price": 4060
           },
           {
             "id": 52,
-            "price": 4060,
             "values": {
               "Размер": "6 (рост 175-190)"
-            }
+            },
+            "price": 4060
           },
           {
             "id": 53,
-            "price": 4380,
             "values": {
               "Размер": "7 (рост 180-195+объем)"
-            }
+            },
+            "price": 4380
           }
-        ]
+        ],
+        "note": "",
+        "category": {
+          "slug": "body",
+          "name": "Корпус"
+        },
+        "baseId": 7,
+        "includesMask": false,
+        "label": "CUBE"
       }
     ]
   },
@@ -609,9 +811,8 @@
     "variants": [
       {
         "id": 5,
-        "slug": "nalokotniki",
         "name": "Налокотники хоккейные",
-        "note": "",
+        "slug": "nalokotniki",
         "line": "base",
         "options": [
           {
@@ -641,53 +842,60 @@
         "editions": [
           {
             "id": 28,
-            "price": 1320,
             "values": {
               "Размер": "1 (рост 110-120)"
-            }
+            },
+            "price": 1320
           },
           {
             "id": 29,
-            "price": 1485,
             "values": {
               "Размер": "2 (рост 120-135)"
-            }
+            },
+            "price": 1485
           },
           {
             "id": 30,
-            "price": 1485,
             "values": {
               "Размер": "3 (рост 135-145)"
-            }
+            },
+            "price": 1485
           },
           {
             "id": 31,
-            "price": 1650,
             "values": {
               "Размер": "4 (рост 145-165)"
-            }
+            },
+            "price": 1650
           },
           {
             "id": 32,
-            "price": 1800,
             "values": {
               "Размер": "5 (рост 165-175)"
-            }
+            },
+            "price": 1800
           },
           {
             "id": 33,
-            "price": 1800,
             "values": {
               "Размер": "6 (рост 175-190)"
-            }
+            },
+            "price": 1800
           }
-        ]
+        ],
+        "note": "",
+        "category": {
+          "slug": "arms",
+          "name": "Руки"
+        },
+        "baseId": null,
+        "includesMask": false,
+        "label": "Базовая"
       },
       {
         "id": 6,
-        "slug": "nalokotniki-cube",
         "name": "Налокотники хоккейные CUBE",
-        "note": "",
+        "slug": "nalokotniki-cube",
         "line": "cube",
         "options": [
           {
@@ -727,47 +935,55 @@
         "editions": [
           {
             "id": 34,
-            "price": 1420,
             "values": {
               "Размер": "1 (рост 110-120)"
-            }
+            },
+            "price": 1420
           },
           {
             "id": 35,
-            "price": 1585,
             "values": {
               "Размер": "2 (рост 120-135)"
-            }
+            },
+            "price": 1585
           },
           {
             "id": 36,
-            "price": 1585,
             "values": {
               "Размер": "3 (рост 135-145)"
-            }
+            },
+            "price": 1585
           },
           {
             "id": 37,
-            "price": 1750,
             "values": {
               "Размер": "4 (рост 145-165)"
-            }
+            },
+            "price": 1750
           },
           {
             "id": 38,
-            "price": 1900,
             "values": {
               "Размер": "5 (рост 165-175)"
-            }
+            },
+            "price": 1900
           },
           {
             "id": 39,
-            "price": 1900,
             "values": {
               "Размер": "6 (рост 175-190)"
-            }
+            },
+            "price": 1900
           }
-        ]
+        ],
+        "note": "",
+        "category": {
+          "slug": "arms",
+          "name": "Руки"
+        },
+        "baseId": 5,
+        "includesMask": false,
+        "label": "CUBE"
       }
     ]
   },
@@ -782,9 +998,8 @@
     "variants": [
       {
         "id": 9,
-        "slug": "perchatki",
         "name": "Перчатки хоккейные",
-        "note": "",
+        "slug": "perchatki",
         "line": "base",
         "options": [
           {
@@ -832,171 +1047,178 @@
         "editions": [
           {
             "id": 162,
-            "price": 3520,
             "values": {
               "Цвет": "Черный",
               "Размер": "10,5"
-            }
+            },
+            "price": 3520
           },
           {
             "id": 163,
-            "price": 3520,
             "values": {
               "Цвет": "Черный",
               "Размер": "11,5"
-            }
+            },
+            "price": 3520
           },
           {
             "id": 164,
-            "price": 4120,
             "values": {
               "Цвет": "Черный",
               "Размер": "12,5"
-            }
+            },
+            "price": 4120
           },
           {
             "id": 165,
-            "price": 4730,
             "values": {
               "Цвет": "Черный",
               "Размер": "13,5"
-            }
+            },
+            "price": 4730
           },
           {
             "id": 166,
-            "price": 4730,
             "values": {
               "Цвет": "Черный",
               "Размер": "14,5"
-            }
+            },
+            "price": 4730
           },
           {
             "id": 167,
-            "price": 3520,
             "values": {
               "Цвет": "Красный",
               "Размер": "10,5"
-            }
+            },
+            "price": 3520
           },
           {
             "id": 168,
-            "price": 3520,
             "values": {
               "Цвет": "Красный",
               "Размер": "11,5"
-            }
+            },
+            "price": 3520
           },
           {
             "id": 169,
-            "price": 4120,
             "values": {
               "Цвет": "Красный",
               "Размер": "12,5"
-            }
+            },
+            "price": 4120
           },
           {
             "id": 170,
-            "price": 4730,
             "values": {
               "Цвет": "Красный",
               "Размер": "13,5"
-            }
+            },
+            "price": 4730
           },
           {
             "id": 171,
-            "price": 4730,
             "values": {
               "Цвет": "Красный",
               "Размер": "14,5"
-            }
+            },
+            "price": 4730
           },
           {
             "id": 172,
-            "price": 3520,
             "values": {
               "Цвет": "Красно-черный",
               "Размер": "10,5"
-            }
+            },
+            "price": 3520
           },
           {
             "id": 173,
-            "price": 3520,
             "values": {
               "Цвет": "Красно-черный",
               "Размер": "11,5"
-            }
+            },
+            "price": 3520
           },
           {
             "id": 174,
-            "price": 4120,
             "values": {
               "Цвет": "Красно-черный",
               "Размер": "12,5"
-            }
+            },
+            "price": 4120
           },
           {
             "id": 175,
-            "price": 4730,
             "values": {
               "Цвет": "Красно-черный",
               "Размер": "13,5"
-            }
+            },
+            "price": 4730
           },
           {
             "id": 176,
-            "price": 4730,
             "values": {
               "Цвет": "Красно-черный",
               "Размер": "14,5"
-            }
+            },
+            "price": 4730
           },
           {
             "id": 177,
-            "price": 3520,
             "values": {
               "Цвет": "Сине-черный",
               "Размер": "10,5"
-            }
+            },
+            "price": 3520
           },
           {
             "id": 178,
-            "price": 3520,
             "values": {
               "Цвет": "Сине-черный",
               "Размер": "11,5"
-            }
+            },
+            "price": 3520
           },
           {
             "id": 179,
-            "price": 4120,
             "values": {
               "Цвет": "Сине-черный",
               "Размер": "12,5"
-            }
+            },
+            "price": 4120
           },
           {
             "id": 180,
-            "price": 4730,
             "values": {
               "Цвет": "Сине-черный",
               "Размер": "13,5"
-            }
+            },
+            "price": 4730
           },
           {
             "id": 181,
-            "price": 4730,
             "values": {
               "Цвет": "Сине-черный",
               "Размер": "14,5"
-            }
+            },
+            "price": 4730
           }
-        ]
+        ],
+        "note": "",
+        "category": {
+          "slug": "arms",
+          "name": "Руки"
+        },
+        "baseId": null,
+        "includesMask": false,
+        "label": "Базовая"
       },
       {
         "id": 10,
-        "slug": "perchatki-cube",
         "name": "Перчатки хоккейные CUBE",
-        "note": "",
+        "slug": "perchatki-cube",
         "line": "cube",
         "options": [
           {
@@ -1076,45 +1298,119 @@
         "editions": [
           {
             "id": 182,
-            "price": 3620,
             "values": {
               "Цвет": "Черно-красный",
               "Размер": "10,5"
-            }
+            },
+            "price": 3620
           },
           {
             "id": 183,
-            "price": 3620,
             "values": {
               "Цвет": "Черно-красный",
               "Размер": "11,5"
-            }
+            },
+            "price": 3620
           },
           {
             "id": 184,
-            "price": 4220,
             "values": {
               "Цвет": "Черно-красный",
               "Размер": "12,5"
-            }
+            },
+            "price": 4220
           },
           {
             "id": 185,
-            "price": 4830,
             "values": {
               "Цвет": "Черно-красный",
               "Размер": "13,5"
-            }
+            },
+            "price": 4830
           },
           {
             "id": 186,
-            "price": 4830,
             "values": {
               "Цвет": "Черно-красный",
               "Размер": "14,5"
-            }
+            },
+            "price": 4830
           }
-        ]
+        ],
+        "note": "",
+        "category": {
+          "slug": "arms",
+          "name": "Руки"
+        },
+        "baseId": 9,
+        "includesMask": false,
+        "label": "CUBE"
+      },
+      {
+        "id": 11,
+        "name": "Перчатки хоккейные детские CUBE",
+        "slug": "perchatki-detskie-cube",
+        "line": "cube",
+        "options": [
+          {
+            "name": "Размер",
+            "values": [
+              "8",
+              "9"
+            ]
+          }
+        ],
+        "images": [
+          {
+            "file": "p11-1d8012b2",
+            "optionValue": "",
+            "src": "/media/p11-1d8012b2-480.webp"
+          },
+          {
+            "file": "p11-024e61cc",
+            "optionValue": "",
+            "src": "/media/p11-024e61cc-480.webp"
+          },
+          {
+            "file": "p11-138ac9bf",
+            "optionValue": "",
+            "src": "/media/p11-138ac9bf-480.webp"
+          },
+          {
+            "file": "p11-2d45e158",
+            "optionValue": "",
+            "src": "/media/p11-2d45e158-480.webp"
+          },
+          {
+            "file": "p11-b610951a",
+            "optionValue": "",
+            "src": "/media/p11-b610951a-480.webp"
+          }
+        ],
+        "editions": [
+          {
+            "id": 64,
+            "values": {
+              "Размер": "8"
+            },
+            "price": 3290
+          },
+          {
+            "id": 65,
+            "values": {
+              "Размер": "9"
+            },
+            "price": 3290
+          }
+        ],
+        "note": "",
+        "category": {
+          "slug": "arms",
+          "name": "Руки"
+        },
+        "baseId": null,
+        "includesMask": false,
+        "label": "Детские CUBE"
       }
     ]
   },
@@ -1129,9 +1425,8 @@
     "variants": [
       {
         "id": 12,
-        "slug": "shorty",
         "name": "Шорты хоккейные",
-        "note": "",
+        "slug": "shorty",
         "line": "base",
         "options": [
           {
@@ -1191,88 +1486,95 @@
         "editions": [
           {
             "id": 66,
-            "price": 2920,
             "values": {
               "Размер": "34"
-            }
+            },
+            "price": 2920
           },
           {
             "id": 67,
-            "price": 2920,
             "values": {
               "Размер": "36"
-            }
+            },
+            "price": 2920
           },
           {
             "id": 68,
-            "price": 2920,
             "values": {
               "Размер": "38"
-            }
+            },
+            "price": 2920
           },
           {
             "id": 69,
-            "price": 3260,
             "values": {
               "Размер": "40"
-            }
+            },
+            "price": 3260
           },
           {
             "id": 70,
-            "price": 3260,
             "values": {
               "Размер": "42"
-            }
+            },
+            "price": 3260
           },
           {
             "id": 71,
-            "price": 3400,
             "values": {
               "Размер": "44"
-            }
+            },
+            "price": 3400
           },
           {
             "id": 72,
-            "price": 3400,
             "values": {
               "Размер": "46"
-            }
+            },
+            "price": 3400
           },
           {
             "id": 73,
-            "price": 3940,
             "values": {
               "Размер": "48"
-            }
+            },
+            "price": 3940
           },
           {
             "id": 74,
-            "price": 3940,
             "values": {
               "Размер": "50"
-            }
+            },
+            "price": 3940
           },
           {
             "id": 75,
-            "price": 4100,
             "values": {
               "Размер": "52"
-            }
+            },
+            "price": 4100
           },
           {
             "id": 76,
-            "price": 4100,
             "values": {
               "Размер": "54"
-            }
+            },
+            "price": 4100
           }
-        ]
+        ],
+        "note": "",
+        "category": {
+          "slug": "legs",
+          "name": "Ноги"
+        },
+        "baseId": null,
+        "includesMask": false,
+        "label": "Базовая"
       },
       {
         "id": 13,
-        "slug": "shorty-cube",
         "name": "Шорты хоккейные CUBE",
-        "note": "",
+        "slug": "shorty-cube",
         "line": "cube",
         "options": [
           {
@@ -1322,82 +1624,90 @@
         "editions": [
           {
             "id": 77,
-            "price": 3020,
             "values": {
               "Размер": "34"
-            }
+            },
+            "price": 3020
           },
           {
             "id": 78,
-            "price": 3020,
             "values": {
               "Размер": "36"
-            }
+            },
+            "price": 3020
           },
           {
             "id": 79,
-            "price": 3020,
             "values": {
               "Размер": "38"
-            }
+            },
+            "price": 3020
           },
           {
             "id": 80,
-            "price": 3360,
             "values": {
               "Размер": "40"
-            }
+            },
+            "price": 3360
           },
           {
             "id": 81,
-            "price": 3360,
             "values": {
               "Размер": "42"
-            }
+            },
+            "price": 3360
           },
           {
             "id": 82,
-            "price": 3500,
             "values": {
               "Размер": "44"
-            }
+            },
+            "price": 3500
           },
           {
             "id": 83,
-            "price": 3500,
             "values": {
               "Размер": "46"
-            }
+            },
+            "price": 3500
           },
           {
             "id": 84,
-            "price": 4040,
             "values": {
               "Размер": "48"
-            }
+            },
+            "price": 4040
           },
           {
             "id": 85,
-            "price": 4040,
             "values": {
               "Размер": "50"
-            }
+            },
+            "price": 4040
           },
           {
             "id": 86,
-            "price": 4200,
             "values": {
               "Размер": "52"
-            }
+            },
+            "price": 4200
           },
           {
             "id": 87,
-            "price": 4200,
             "values": {
               "Размер": "54"
-            }
+            },
+            "price": 4200
           }
-        ]
+        ],
+        "note": "",
+        "category": {
+          "slug": "legs",
+          "name": "Ноги"
+        },
+        "baseId": 12,
+        "includesMask": false,
+        "label": "CUBE"
       }
     ]
   },
@@ -1412,9 +1722,8 @@
     "variants": [
       {
         "id": 17,
-        "slug": "zashchita-paha",
         "name": "Защита паха хоккейная",
-        "note": "",
+        "slug": "zashchita-paha",
         "line": "base",
         "options": [
           {
@@ -1441,26 +1750,34 @@
         "editions": [
           {
             "id": 108,
-            "price": 590,
             "values": {
               "Размер": "Детская"
-            }
+            },
+            "price": 590
           },
           {
             "id": 109,
-            "price": 590,
             "values": {
               "Размер": "Юниор"
-            }
+            },
+            "price": 590
           },
           {
             "id": 110,
-            "price": 590,
             "values": {
               "Размер": "Взрослая"
-            }
+            },
+            "price": 590
           }
-        ]
+        ],
+        "note": "",
+        "category": {
+          "slug": "body",
+          "name": "Корпус"
+        },
+        "baseId": null,
+        "includesMask": false,
+        "label": "Базовая"
       }
     ]
   },
@@ -1475,9 +1792,8 @@
     "variants": [
       {
         "id": 14,
-        "slug": "shchitki",
         "name": "Щитки хоккейные",
-        "note": "",
+        "slug": "shchitki",
         "line": "base",
         "options": [
           {
@@ -1525,74 +1841,81 @@
         "editions": [
           {
             "id": 88,
-            "price": 2310,
             "values": {
               "Размер": "8 (рост 100-110)"
-            }
+            },
+            "price": 2310
           },
           {
             "id": 89,
-            "price": 2310,
             "values": {
               "Размер": "9 (рост 110-120)"
-            }
+            },
+            "price": 2310
           },
           {
             "id": 90,
-            "price": 2600,
             "values": {
               "Размер": "10 (рост 120-135)"
-            }
+            },
+            "price": 2600
           },
           {
             "id": 91,
-            "price": 2600,
             "values": {
               "Размер": "11 (рост 135-145)"
-            }
+            },
+            "price": 2600
           },
           {
             "id": 92,
-            "price": 3090,
             "values": {
               "Размер": "12 (рост 145-155)"
-            }
+            },
+            "price": 3090
           },
           {
             "id": 93,
-            "price": 3090,
             "values": {
               "Размер": "13 (рост 155-165)"
-            }
+            },
+            "price": 3090
           },
           {
             "id": 94,
-            "price": 3400,
             "values": {
               "Размер": "14 (рост 165-175)"
-            }
+            },
+            "price": 3400
           },
           {
             "id": 95,
-            "price": 3400,
             "values": {
               "Размер": "15 (рост 175-185)"
-            }
+            },
+            "price": 3400
           },
           {
             "id": 96,
-            "price": 3400,
             "values": {
               "Размер": "16 (рост 185-190)"
-            }
+            },
+            "price": 3400
           }
-        ]
+        ],
+        "note": "",
+        "category": {
+          "slug": "legs",
+          "name": "Ноги"
+        },
+        "baseId": null,
+        "includesMask": false,
+        "label": "Базовая"
       },
       {
         "id": 15,
-        "slug": "shchitki-cube",
         "name": "Щитки хоккейные CUBE",
-        "note": "",
+        "slug": "shchitki-cube",
         "line": "cube",
         "options": [
           {
@@ -1635,68 +1958,76 @@
         "editions": [
           {
             "id": 97,
-            "price": 2410,
             "values": {
               "Размер": "8 (рост 100-110)"
-            }
+            },
+            "price": 2410
           },
           {
             "id": 98,
-            "price": 2410,
             "values": {
               "Размер": "9 (рост 110-120)"
-            }
+            },
+            "price": 2410
           },
           {
             "id": 99,
-            "price": 2700,
             "values": {
               "Размер": "10 (рост 120-135)"
-            }
+            },
+            "price": 2700
           },
           {
             "id": 100,
-            "price": 2700,
             "values": {
               "Размер": "11 (рост 135-145)"
-            }
+            },
+            "price": 2700
           },
           {
             "id": 101,
-            "price": 3190,
             "values": {
               "Размер": "12 (рост 145-155)"
-            }
+            },
+            "price": 3190
           },
           {
             "id": 102,
-            "price": 3190,
             "values": {
               "Размер": "13 (рост 155-165)"
-            }
+            },
+            "price": 3190
           },
           {
             "id": 103,
-            "price": 3500,
             "values": {
               "Размер": "14 (рост 165-175)"
-            }
+            },
+            "price": 3500
           },
           {
             "id": 104,
-            "price": 3500,
             "values": {
               "Размер": "15 (рост 175-185)"
-            }
+            },
+            "price": 3500
           },
           {
             "id": 105,
-            "price": 3500,
             "values": {
               "Размер": "16 (рост 185-190)"
-            }
+            },
+            "price": 3500
           }
-        ]
+        ],
+        "note": "",
+        "category": {
+          "slug": "legs",
+          "name": "Ноги"
+        },
+        "baseId": 14,
+        "includesMask": false,
+        "label": "CUBE"
       }
     ]
   }

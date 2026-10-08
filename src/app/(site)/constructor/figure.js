@@ -8,11 +8,11 @@
     { key: 'groin', group: 'groin', source: 'groin', feather: 7,
       allow: 'M 400 660 H 634 V 768 L 571 851 H 453 L 400 768 Z', path:
       'M 353 622 L 677 622 L 687 757 Q 680 798 630 825 L 580 858 L 445 858 L 399 827 Q 348 798 341 756 Z' },
-    {key:'pants', group:'pants', source:'full', path:'M 290 620 H 745 V 1000 H 290 Z', hide:'M 313 650 H 720 V 995 H 313 Z'},
-    {key:'shins', group:'shins', source:'full', path:'M 278 990 H 738 V 1310 H 278 Z', hide:'M 295 990 H 717 V 1310 H 295 Z'},
+    {key:'pants', group:'pants', source:'full', path:'M 290 620 H 745 V 978 H 290 Z', hide:'M 313 650 H 720 V 978 H 313 Z'},
+    {key:'shins', group:'shins', source:'full', path:'M 278 978 H 475 V 1310 H 278 Z M 558 978 H 738 V 1310 H 558 Z', hide:'M 295 978 H 460 V 1310 H 295 Z M 570 978 H 717 V 1310 H 570 Z'},
     {key:'skates', group:'skates', source:'full', path:'M 245 1290 H 790 V 1536 H 245 Z', hide:'M 270 1300 H 765 V 1536 H 270 Z'},
-    {key:'elbowL', group:'elbows', source:'full', path:'M 188 485 H 355 V 673 H 188 Z'},
-    {key:'elbowR', group:'elbows', source:'full', path:'M 670 485 H 855 V 673 H 670 Z'},
+    {key:'elbowL', group:'elbows', source:'full', path:'M 188 485 H 355 V 650 H 188 Z'},
+    {key:'elbowR', group:'elbows', source:'full', path:'M 670 485 H 855 V 650 H 670 Z'},
     { key: 'gloveL', group: 'gloves', source: 'gloves', wristBlend: true,
       allow: 'M 125 659 H 295 V 933 H 125 Z',
       hide: 'M 158 733 L 266 733 L 272 909 L 158 917 Z', path:
@@ -43,7 +43,11 @@
     helmetBlueBare: '/constructor-assets/figure/helmet-blue-bare.webp', helmetBlueMask: '/constructor-assets/figure/helmet-blue-mask.webp',
     glovesRedBlackL: '/constructor-assets/figure/gloves-redblack-left.webp', glovesRedBlackR: '/constructor-assets/figure/gloves-redblack-right.webp',
     glovesBlueBlackL: '/constructor-assets/figure/gloves-blueblack-left.webp', glovesBlueBlackR: '/constructor-assets/figure/gloves-blueblack-right.webp',
-    glovesCubeL: '/constructor-assets/figure/gloves-cube-left.webp', glovesCubeR: '/constructor-assets/figure/gloves-cube-right.webp'
+    glovesCubeL: '/constructor-assets/figure/gloves-cube-left.webp', glovesCubeR: '/constructor-assets/figure/gloves-cube-right.webp',
+    glovesChildCubeL: '/constructor-assets/figure/gloves-child-cube-left.webp', glovesChildCubeR: '/constructor-assets/figure/gloves-child-cube-right.webp',
+    cubeChest:'/constructor-assets/figure/cube-chest.webp',
+    cubeElbowL:'/constructor-assets/figure/cube-elbow-left.webp', cubeElbowR:'/constructor-assets/figure/cube-elbow-right.webp',
+    cubePants:'/constructor-assets/figure/cube-pants.webp', cubeShins:'/constructor-assets/figure/cube-shins.webp'
   };
 
   export const HELMET_SOURCES = {
@@ -55,9 +59,16 @@
     redblack:{left:'glovesRedBlackL',right:'glovesRedBlackR'},
     blueblack:{left:'glovesBlueBlackL',right:'glovesBlueBlackR'},
     cube:{left:'glovesCubeL',right:'glovesCubeR'},
+    childCube:{left:'glovesChildCubeL',right:'glovesChildCubeR'},
   };
+  export const CUBE_SOURCES={chest:'cubeChest',elbowL:'cubeElbowL',elbowR:'cubeElbowR',pants:'cubePants',shins:'cubeShins'};
   // Cropped exports keep the common 1024×1536 coordinates with a small download.
   export const SOURCE_FRAMES = Object.fromEntries([
+    ['cubeChest',{x:235,y:240,width:575,height:440}],
+    ['cubeElbowL',{x:185,y:480,width:175,height:200}],
+    ['cubeElbowR',{x:665,y:480,width:195,height:200}],
+    ['cubePants',{x:285,y:610,width:470,height:400}],
+    ['cubeShins',{x:275,y:975,width:475,height:340}],
     ...Object.values(HELMET_SOURCES).flatMap(pair=>Object.values(pair).map(key=>[key,{x:380,y:0,width:245,height:195}])),
     ...Object.values(GLOVE_SOURCES).flatMap(pair=>[
       [pair.left,{x:120,y:620,width:185,height:320}],
@@ -102,9 +113,10 @@
       else if(p.source === 'helmetPaint') sourceKey = HELMET_SOURCES[helmetColour][on.mask?'mask':'bare'];
       else if(p.source === 'neck') sourceKey = options.neckLine === 'cube' ? 'neckCube' : 'neckBase';
       else if(p.source === 'gloves') {
-        const pair = options.gloveLine === 'cube' ? GLOVE_SOURCES.cube : GLOVE_SOURCES[colour];
+        const pair = options.gloveSlug === 'perchatki-detskie-cube' ? GLOVE_SOURCES.childCube : options.gloveLine === 'cube' ? GLOVE_SOURCES.cube : GLOVE_SOURCES[colour];
         sourceKey = pair ? pair[p.key === 'gloveL' ? 'left' : 'right'] : colour === 'red' ? 'red' : 'master';
       }
+      if(CUBE_SOURCES[p.key] && options[p.group+'Line']==='cube')sourceKey=CUBE_SOURCES[p.key];
       const src = urls[sourceKey];
       const frame = SOURCE_FRAMES[sourceKey] || {x:0,y:0,width:W,height:H};
       const image = `<image href="${src}" x="${frame.x}" y="${frame.y}" width="${frame.width}" height="${frame.height}" preserveAspectRatio="none" mask="url(#${prefix}-${p.key})"/>`;

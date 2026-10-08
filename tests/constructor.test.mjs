@@ -1,8 +1,8 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
-import {initialSelections,getVariant,getEdition,getPrice,heightSuggestions,changeLine,cartItems,orderIssue,previewImage,visibilityNote,kitLabel,figureSelection} from '../src/app/(site)/constructor/model.js';
-import {createScene,DEFAULT_URLS,HELMET_SOURCES,GLOVE_SOURCES,SOURCE_FRAMES} from '../src/app/(site)/constructor/figure.js';
+import {initialSelections,getVariant,getEdition,getPrice,heightSuggestions,changeLine,changeVariant,setEnabled,cartItems,orderIssue,previewImage,visibilityNote,kitLabel,figureSelection} from '../src/app/(site)/constructor/model.js';
+import {createScene,DEFAULT_URLS,HELMET_SOURCES,GLOVE_SOURCES,CUBE_SOURCES,SOURCE_FRAMES} from '../src/app/(site)/constructor/figure.js';
 import {COLOURS,colourChoices,colourValue,colourKey,normaliseColour} from '../src/app/(site)/constructor/colours.js';
 import {createRequire} from 'node:module';
 const require=createRequire(import.meta.url);
@@ -186,11 +186,50 @@ test('all forty helmet/glove colour combinations select the correct available as
   assert.ok(!svg.includes('undefined'));assert.ok(!svg.includes('NaN'));
  }
 });
-test('all cropped assets exist, match their coordinate frames and stay below 250 KB combined',async()=>{
+test('all cropped assets exist, match their coordinate frames and stay below 400 KB combined',async()=>{
  const sharp=require('sharp');let bytes=0;
  for(const [key,frame] of Object.entries(SOURCE_FRAMES)){
   const path=new URL('../public'+DEFAULT_URLS[key],import.meta.url);const buf=readFileSync(path);bytes+=buf.length;
   const meta=await sharp(buf).metadata();assert.equal(meta.width,frame.width);assert.equal(meta.height,frame.height);assert.ok(meta.hasAlpha);
  }
- assert.ok(bytes<250000,`New colour assets total ${bytes} bytes`);
+ assert.ok(bytes<400000,`All cropped colour/CUBE assets total ${bytes} bytes`);
+});
+
+test('mixed base/CUBE equipment selects each independent source, never only a global line',()=>{
+ const keys=['chest','elbows','pants','shins'];
+ for(let mask=0;mask<16;mask++){
+  const selected=initialSelections(catalog);
+  for(const [i,key] of keys.entries()){
+   const group=catalog.find(g=>g.key===key);
+   selected[key]={...changeLine(group,selected[key],mask&(1<<i)?'cube':'base'),enabled:true};
+  }
+  const options=figureSelection(catalog,selected),svg=createScene(options);
+  for(const [part,source] of Object.entries(CUBE_SOURCES)){
+   const key=part.startsWith('elbow')?'elbows':part;
+   assert.equal(svg.includes(DEFAULT_URLS[source]),options[key+'Line']==='cube');
+  }
+ }
+});
+test('child CUBE is a separate glove SKU with sizes 8/9, genuine price and its own pattern',()=>{
+ const group=catalog.find(g=>g.key==='gloves'),child=group.variants.find(v=>v.slug==='perchatki-detskie-cube');
+ let selected=initialSelections(catalog);selected.gloves=changeVariant(group,{...selected.gloves,enabled:true,size:'12,5',colour:'red'},child.id);
+ assert.equal(selected.gloves.size,'');assert.match(orderIssue(group,selected.gloves),/размер/);
+ for(const size of ['8','9']){
+  selected.gloves={...selected.gloves,size};
+  const [item]=cartItems(catalog,selected);assert.equal(item.productId,11);assert.equal(item.price,3290);assert.deepEqual(item.values,{'Размер':size});
+  const svg=createScene(figureSelection(catalog,selected));assert.ok(svg.includes('gloves-child-cube-left.webp'));assert.ok(!svg.includes('/gloves-cube-left.webp'));
+ }
+ selected.gloves=changeLine(group,selected.gloves,'cube');assert.equal(getVariant(group,selected.gloves).id,11,'same-line master switch preserves child SKU');
+ selected.gloves=changeLine(group,selected.gloves,'base');assert.equal(getVariant(group,selected.gloves).id,9);assert.equal(selected.gloves.size,'');
+});
+test('bundled helmet includes mask at 2970 and replacing it with separate cage cannot charge twice',()=>{
+ const helmet=catalog.find(g=>g.key==='helmet'),bundle=helmet.variants.find(v=>v.includesMask);
+ let selected=initialSelections(catalog);selected.helmet={...changeVariant(helmet,selected.helmet,bundle.id),size:'M'};selected.mask={...selected.mask,enabled:true,size:'L'};
+ selected=setEnabled(catalog,selected,'helmet',true);
+ assert.equal(selected.mask.enabled,false);assert.equal(figureSelection(catalog,selected).on.mask,true);
+ let items=cartItems(catalog,selected);assert.equal(items.length,1);assert.equal(items[0].productId,2);assert.equal(items[0].price,2970);
+ selected=setEnabled(catalog,selected,'mask',true);items=cartItems(catalog,selected);
+ assert.deepEqual(items.map(i=>i.productId),[1,3]);assert.equal(items.reduce((sum,i)=>sum+i.price,0),3020);
+ assert.equal(selected.helmet.size,'M');assert.equal(selected.helmet.colour,'white');
+ selected=setEnabled(catalog,selected,'mask',false);assert.equal(figureSelection(catalog,selected).on.mask,false);
 });

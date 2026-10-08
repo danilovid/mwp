@@ -1,15 +1,15 @@
-import { getProductBySlug, type ProductDetail } from "./catalog";
+import { getProductBySlug, getPublishedSlugs, type ProductDetail } from "./catalog";
 import { imageUrl } from "./media";
 
 const categories = [
   // The helmet is sold without a cage here. The cage is a separate cart item.
-  { key: "helmet", label: "Шлем", slug: "shlem", hotspot: [57, 7], measure: "обхват головы" },
+  { key: "helmet", label: "Шлем", slug: "shlem", extraSlugs: ["shlem-s-maskoj"], hotspot: [57, 7], measure: "обхват головы" },
   { key: "mask", label: "Маска для шлема", slug: "maska", hotspot: [37, 11], measure: "размер маски и совместимость со шлемом" },
   { key: "chin", label: "Защита подбородка", slug: "zashchita-podborodka", hotspot: [44, 17], measure: "крепление и посадка" },
   { key: "neck", label: "Защита шеи", slug: "zashchita-shei", hotspot: [61, 21], measure: "возрастная категория и обхват шеи" },
   { key: "chest", label: "Нагрудник", slug: "nagrudnik", hotspot: [49, 27], measure: "рост и обхват груди" },
   { key: "elbows", label: "Налокотники", slug: "nalokotniki", hotspot: [29, 39], measure: "рост и длина руки" },
-  { key: "gloves", label: "Перчатки", slug: "perchatki", hotspot: [20, 53], measure: "длина кисти" },
+  { key: "gloves", label: "Перчатки", slug: "perchatki", extraSlugs: ["perchatki-detskie-cube"], hotspot: [20, 53], measure: "длина кисти" },
   { key: "pants", label: "Шорты", slug: "shorty", hotspot: [50, 52], measure: "обхват талии" },
   { key: "groin", label: "Защита паха", slug: "zashchita-paha", hotspot: [50, 62], measure: "индивидуальная посадка" },
   { key: "shins", label: "Щитки", slug: "shchitki", hotspot: [35, 77], measure: "длина голени" },
@@ -20,6 +20,9 @@ const toVariant = (p: ProductDetail) => ({
   slug: p.slug,
   name: p.name,
   note: p.note,
+  category: p.category,
+  includesMask: p.slug === "shlem-s-maskoj",
+  label: p.slug === "shlem-s-maskoj" ? "С маской" : p.slug === "perchatki-detskie-cube" ? "Детские CUBE" : p.line === "cube" ? "CUBE" : p.slug === "shlem" ? "Без маски" : "Базовая",
   line: p.line,
   options: p.options,
   editions: p.editions.map(({ id, values, price }) => ({ id, values, price })),
@@ -32,7 +35,9 @@ export async function getConstructorCatalog() {
     const base = await getProductBySlug(slug) ?? await getProductBySlug(`${slug}-cube`);
     if (!base) return null;
     const pair = base.pair ? await getProductBySlug(base.pair.slug) : null;
-    const variants = [base, pair]
+    const extraSlugs = "extraSlugs" in category ? category.extraSlugs : [];
+    const extra = await Promise.all(extraSlugs.map((slug) => getProductBySlug(slug)));
+    const variants = [base, pair, ...extra]
       .filter((p): p is ProductDetail => p !== null && p.editions.length > 0)
       .map(toVariant);
     return variants.length ? { ...category, variants } : null;
@@ -41,3 +46,12 @@ export async function getConstructorCatalog() {
 }
 
 export type ConstructorCatalog = Awaited<ReturnType<typeof getConstructorCatalog>>;
+
+/** Every remaining published SKU stays orderable, including goalie gear and spare parts. */
+export async function getConstructorExtras(catalog: ConstructorCatalog) {
+  const covered = new Set(catalog.flatMap((group) => group.variants.map((v) => v.slug)));
+  const published = await getPublishedSlugs();
+  const products = await Promise.all(published.filter((p) => !covered.has(p.slug)).map((p) => getProductBySlug(p.slug)));
+  return products.filter((p): p is ProductDetail => p !== null && p.editions.length > 0).map(toVariant);
+}
+export type ConstructorExtras = Awaited<ReturnType<typeof getConstructorExtras>>;

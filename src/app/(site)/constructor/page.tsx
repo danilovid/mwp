@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { PageBand } from "@/components/SiteChrome";
-import { getConstructorCatalog } from "@/lib/constructor";
+import { getConstructorCatalog, getConstructorExtras } from "@/lib/constructor";
 import { getPublicSettings } from "@/lib/settings";
 import { Constructor } from "./Constructor";
 
@@ -21,6 +21,7 @@ export default async function ConstructorPage() {
       <Link href="/#catalog">Открыть каталог</Link>
     </section>;
   }
+  const extras = await getConstructorExtras(catalog);
   return (
     <>
       <PageBand
@@ -29,7 +30,7 @@ export default async function ConstructorPage() {
         title="Собери комплект"
         lead="Укажите рост, выберите снаряжение на фигуре — и комплект уйдёт в заявку целиком."
       />
-      <Constructor catalog={catalog} />
+      <Constructor catalog={catalog} extras={extras} />
     </>
   );
 }
