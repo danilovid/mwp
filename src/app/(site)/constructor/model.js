@@ -16,8 +16,15 @@ export function initialSelections(catalog, height) {
 export function getVariant(group,selection) {
   return group.variants.find(v=>v.line===selection.line) ?? group.variants[0];
 }
+// Опция с единственным значением выбора не даёт — подставляем её, и цвет здесь не исключение:
+// у CUBE-перчаток расцветка одна, свотчей для неё не показывается, выбирать нечего.
+// Там, где значений несколько, цвет по-прежнему берётся только из явного выбора.
 const selectedValues = (variant,size,colour,options={}) => Object.fromEntries(variant.options.map(option=>[
-  option.name,option.name==='Размер'?size:option.name==='Цвет'?(colours[colour]??colour):(options[option.name]??(option.values.length===1?option.values[0]:''))
+  option.name,
+  option.values.length===1?option.values[0]
+  :option.name==='Размер'?size
+  :option.name==='Цвет'?(colours[colour]??colour)
+  :(options[option.name]??'')
 ]));
 export function getEdition(variant,size,colour,options={}) {
   const wanted=selectedValues(variant,size,colour,options);

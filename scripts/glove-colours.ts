@@ -22,28 +22,47 @@ import "dotenv/config";
 import { db } from "../src/lib/db";
 import { parseValues } from "../src/lib/catalog";
 
-const SLUG = "perchatki";
-const COLOURS = ["Черный", "Красный", "Красно-черный", "Сине-черный"] as const;
-
-/** Цены по размеру: розница, опт 10%, опт 20%. Из прайс-листа производителя. */
-const BY_SIZE: Record<string, [number, number, number]> = {
-  "10,5": [3520, 3080, 2800],
-  "11,5": [3520, 3080, 2800],
-  "12,5": [4120, 3740, 3330],
-  "13,5": [4730, 4290, 3850],
-  "14,5": [4730, 4290, 3850],
+type Plan = {
+  colours: string[];
+  /** Цены по размеру: розница, опт 10%, опт 20%. Из прайс-листа производителя. */
+  bySize: Record<string, [number, number, number]>;
+  /** Какая фотография галереи показывает какую расцветку. */
+  photos: Record<string, string>;
 };
 
-/** Какая фотография галереи показывает какую расцветку. */
-const PHOTOS: Record<string, string> = {
-  "p9-4f8251a5": "Черный",
-  "p9-b1a24abf": "Красный",
-  "p9-8d3ad275": "Красно-черный",
-  "p9-ce7d4da6": "Сине-черный",
+const PLANS: Record<string, Plan> = {
+  perchatki: {
+    colours: ["Черный", "Красный", "Красно-черный", "Сине-черный"],
+    bySize: {
+      "10,5": [3520, 3080, 2800],
+      "11,5": [3520, 3080, 2800],
+      "12,5": [4120, 3740, 3330],
+      "13,5": [4730, 4290, 3850],
+      "14,5": [4730, 4290, 3850],
+    },
+    photos: {
+      "p9-4f8251a5": "Черный",
+      "p9-b1a24abf": "Красный",
+      "p9-8d3ad275": "Красно-черный",
+      "p9-ce7d4da6": "Сине-черный",
+    },
+  },
+  // У CUBE расцветка одна — чёрно-красная, она же на всех одиннадцати снимках галереи.
+  // Выбирать нечего, но цвет записывается, чтобы в заявке было видно, какие перчатки заказали.
+  "perchatki-cube": {
+    colours: ["Черно-красный"],
+    bySize: {
+      "10,5": [3620, 3180, 2900],
+      "11,5": [3620, 3180, 2900],
+      "12,5": [4220, 3840, 3430],
+      "13,5": [4830, 4390, 3950],
+      "14,5": [4830, 4390, 3950],
+    },
+    photos: {},
+  },
 };
 
-async function main() {
-  const apply = process.argv.includes("--apply");
+async function run(SLUG: string, { colours: COLOURS, bySize: BY_SIZE, photos: PHOTOS }: Plan, apply: boolean) {
   const product = await db.product.findUnique({
     where: { slug: SLUG },
     include: { editions: { orderBy: { sort: "asc" } }, images: { orderBy: { sort: "asc" } } },
@@ -52,9 +71,10 @@ async function main() {
 
   const options = JSON.parse(product.options) as { name: string; values: string[] }[];
   if (options.some((o) => o.name === "Цвет")) {
-    console.log("У перчаток уже есть опция «Цвет» — нечего делать.");
+    console.log(`${SLUG}: опция «Цвет» уже есть — пропускаю.`);
     return;
   }
+  console.log(`\n=== ${SLUG} ===`);
 
   const sizes = options.find((o) => o.name === "Размер")?.values ?? [];
   const missing = sizes.filter((s) => !BY_SIZE[s]);
@@ -87,10 +107,7 @@ async function main() {
     const colour = PHOTOS[img.file];
     console.log(`  ${img.file} → ${colour ?? "— не трогаем —"}`);
   }
-  if (!apply) {
-    console.log("\nЭто предварительный показ. Для записи добавьте --apply");
-    return;
-  }
+  if (!apply) return;
 
   await db.$transaction(async (tx) => {
     await tx.edition.deleteMany({ where: { productId: product.id } });
@@ -100,7 +117,13 @@ async function main() {
       await tx.productImage.updateMany({ where: { productId: product.id, file }, data: { optionValue: colour } });
     }
   });
-  console.log("\nЗаписано.");
+  console.log("Записано.");
+}
+
+async function main() {
+  const apply = process.argv.includes("--apply");
+  for (const [slug, plan] of Object.entries(PLANS)) await run(slug, plan, apply);
+  if (!apply) console.log("\nЭто предварительный показ. Для записи добавьте --apply");
 }
 
 main()
