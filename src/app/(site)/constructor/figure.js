@@ -110,7 +110,11 @@
       const image = `<image href="${src}" x="${frame.x}" y="${frame.y}" width="${frame.width}" height="${frame.height}" preserveAspectRatio="none" mask="url(#${prefix}-${p.key})"/>`;
       return (p.allow || p.silhouetteSource) ? `<g mask="url(#${prefix}-${p.key}-silhouette)">${image}</g>` : image;
     }).join('');
-    return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" role="img" aria-label="Хоккеист с выбранной экипировкой"><defs>${defs}<mask id="${prefix}-body" maskUnits="userSpaceOnUse" maskContentUnits="userSpaceOnUse" x="0" y="0" width="${W}" height="${H}" style="mask-type:luminance"><rect width="${W}" height="${H}" fill="white"/>${hidden}</mask></defs><image href="${urls.base}" x="0" y="0" width="${W}" height="${H}" preserveAspectRatio="none" mask="url(#${prefix}-body)"/>${layers}</svg>`;
+    // Коньки упираются в лёд на y≈1472 (ниже прозрачно) — измерено по альфе base.webp.
+    // Тень рисуется до фигуры, поэтому видно только то, что выходит за лезвия.
+    const groundDefs = `<radialGradient id="${prefix}-ground-wide"><stop offset="0" stop-color="#0e1c2c" stop-opacity=".34"/><stop offset=".7" stop-color="#0e1c2c" stop-opacity=".2"/><stop offset="1" stop-color="#0e1c2c" stop-opacity="0"/></radialGradient><radialGradient id="${prefix}-ground-blade"><stop offset="0" stop-color="#0b1724" stop-opacity=".62"/><stop offset=".72" stop-color="#0b1724" stop-opacity=".38"/><stop offset="1" stop-color="#0b1724" stop-opacity="0"/></radialGradient>`;
+    const ground = `<ellipse cx="514" cy="1488" rx="340" ry="46" fill="url(#${prefix}-ground-wide)"/><ellipse cx="323" cy="1482" rx="104" ry="22" fill="url(#${prefix}-ground-blade)"/><ellipse cx="705" cy="1480" rx="104" ry="22" fill="url(#${prefix}-ground-blade)"/>`;
+    return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" role="img" aria-label="Хоккеист с выбранной экипировкой"><defs>${defs}<mask id="${prefix}-body" maskUnits="userSpaceOnUse" maskContentUnits="userSpaceOnUse" x="0" y="0" width="${W}" height="${H}" style="mask-type:luminance"><rect width="${W}" height="${H}" fill="white"/>${hidden}</mask>${groundDefs}</defs>${ground}<image href="${urls.base}" x="0" y="0" width="${W}" height="${H}" preserveAspectRatio="none" mask="url(#${prefix}-body)"/>${layers}</svg>`;
   }
 
 
