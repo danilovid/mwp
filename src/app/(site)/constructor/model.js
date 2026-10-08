@@ -1,4 +1,4 @@
-const colours = {white:'Белый',black:'Черный',red:'Красный',blue:'Синий'};
+const colours = {white:'Белый',black:'Черный',red:'Красный',blue:'Синий',redblack:'Красно-черный',blueblack:'Сине-черный'};
 export function initialSelections(catalog, height) {
   return Object.fromEntries(catalog.map(group => {
     // Хоккеист начинает раздетым: посетитель сам набирает комплект.

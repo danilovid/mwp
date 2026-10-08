@@ -59,7 +59,7 @@ export function Constructor({catalog}){
  };
  // Цвета берём из опций товара: у шлема их четыре, и все они заказываемые.
  // У перчаток цвета в каталоге нет — красные показываем как образ и к заказу не пускаем.
- const palette={white:{label:'Белый',css:'#f2f4f7'},black:{label:'Чёрный',css:'#1b2029'},red:{label:'Красный',css:'#d92b3c'},blue:{label:'Синий',css:'#2b63c6'}};
+ const palette={white:{label:'Белый',css:'#f2f4f7'},black:{label:'Чёрный',css:'#1b2029'},red:{label:'Красный',css:'#d92b3c'},blue:{label:'Синий',css:'#2b63c6'},redblack:{label:'Красно-чёрный',css:'linear-gradient(135deg,#d92b3c 50%,#1b2029 50%)'},blueblack:{label:'Сине-чёрный',css:'linear-gradient(135deg,#2b63c6 50%,#1b2029 50%)'}};
  const colourOption=variant.options.find(o=>o.name==='Цвет');
  const hasColourOption=Boolean(colourOption);
  const swatches=colourOption
