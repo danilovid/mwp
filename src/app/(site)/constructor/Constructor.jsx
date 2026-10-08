@@ -34,6 +34,7 @@ export function Constructor({catalog,extras=[]}){
  const extraGroups=useMemo(()=>extras.map(v=>({key:'extra-'+v.id,label:v.name,variants:[v]})),[extras]);
  const [extraSelections,setExtraSelections]=useState(()=>initialSelections(extraGroups));
  const selectedExtras=extraGroups.filter(g=>extraSelections[g.key]?.enabled);
+ const [panelOpen,setPanelOpen]=useState(false);
  const [gallery,setGallery]=useState(0);
  const [modal,setModal]=useState(null);
  const [notice,setNotice]=useState('');
@@ -50,8 +51,9 @@ export function Constructor({catalog,extras=[]}){
  const scene=useMemo(()=>createScene({prefix:'player',...figureSelection(catalog,selections)}),[catalog,selections]);
  const images=variant.images;
  const currentImage=images[gallery%images.length];
+ useEffect(()=>{const onKey=e=>{if(e.key==='Escape')setPanelOpen(false);};window.addEventListener('keydown',onKey);return()=>window.removeEventListener('keydown',onKey);},[]);
  const patch=values=>setSelections(prev=>({...prev,[active]:{...prev[active],...values}}));
- const choose=key=>{setActive(key);const v=getVariant(catalog.find(g=>g.key===key),selections[key]);setGallery(Math.max(0,v.images.indexOf(previewImage(v,selections[key].colour))));setSizeError(false);};
+ const choose=key=>{setActive(key);setPanelOpen(true);const v=getVariant(catalog.find(g=>g.key===key),selections[key]);setGallery(Math.max(0,v.images.indexOf(previewImage(v,selections[key].colour))));setSizeError(false);};
  const colour=value=>{patch({colour:value});setGallery(Math.max(0,variant.images.indexOf(previewImage(variant,value))));setSizeError(false);};
  // Рост уже выбран ползунком. Там, где он зашит в размерную сетку — нагрудник,
  // налокотники, щитки, — размер подставляется сам. Для шлема, перчаток и шорт
@@ -73,7 +75,7 @@ export function Constructor({catalog,extras=[]}){
  const swatches=hasColourOption?colourChoices(variant)
   :(variant.slug==='perchatki'&&selection.line==='base'?[{key:'black',...COLOURS.black},{key:'red',...COLOURS.red}]:[]);
  const selectVariant=id=>{const next=changeVariant(group,selection,id),v=getVariant(group,next);if(selection.enabled&&v.includesMask&&selections.mask?.enabled)setNotice('Маска входит в выбранный шлем. Отдельная маска убрана из комплекта.');setSelections(prev=>{const updated={...prev,[active]:changeVariant(group,prev[active],id)};return setEnabled(catalog,updated,active,updated[active].enabled);});setGallery(Math.max(0,v.images.indexOf(previewImage(v,next.colour))));setSizeError(false);};
- const toggleEnabled=value=>{setSelections(prev=>setEnabled(catalog,prev,active,value));if(value&&active==='mask'&&selections.helmet?.enabled&&getVariant(catalog.find(g=>g.key==='helmet'),selections.helmet).includesMask)setNotice('Шлем переключён на модель без маски. Маска добавлена отдельной позицией.');};
+ const remove=()=>{setSelections(prev=>setEnabled(catalog,prev,active,false));setNotice(group.label+': снято с фигуры и убрано из комплекта');};
  const add=()=>{
   const issue=orderIssue(group,selection);
   if(issue){setSizeError(true);setNotice(issue);sizeRef.current?.focus();return;}
@@ -105,7 +107,8 @@ export function Constructor({catalog,extras=[]}){
     <button className="hint-button" onClick={()=>setModal('help')}><Info size={17}/> Как работает подбор</button>
    </aside>
    <div className="stage"><div className="figure" dangerouslySetInnerHTML={{__html:scene}}/>{catalog.map(g=><button key={g.key} className={'hotspot '+(active===g.key?'active':'')+(!selections[g.key].enabled?' removed':'')} style={{left:g.hotspot[0]+'%',top:g.hotspot[1]+'%'}} onClick={()=>choose(g.key)} aria-label={'Выбрать: '+g.label} aria-pressed={active===g.key}><span className="hotspot-label">{g.label}</span></button>)}<span className="stage-caption">Нажми на точку — выбери экипировку</span></div>
-   <aside className="product-panel" aria-label="Варианты экипировки"><div className="panel-heading"><button className="icon-button" onClick={()=>setModal('catalog')} aria-label="Все категории"><ChevronLeft size={19}/></button><span>{group.label}</span><label className="wear-toggle"><input type="checkbox" checked={selection.enabled} onChange={e=>toggleEnabled(e.target.checked)}/><span>{selection.enabled?(visibilityNote(active,selections,catalog)?'В комплекте':'Надето'):'Снято'}</span></label></div>
+   <div className={'panel-backdrop'+(panelOpen?' open':'')} onClick={()=>setPanelOpen(false)}/>
+   <aside className={'product-panel'+(panelOpen?' open':'')} aria-label="Варианты экипировки"><div className="panel-heading"><button className="icon-button" onClick={()=>setModal('catalog')} aria-label="Все категории"><ChevronLeft size={19}/></button><span>{group.label}</span><button className="icon-button panel-close" onClick={()=>setPanelOpen(false)} aria-label="Закрыть карточку"><X size={20}/></button></div>
     <div className="product-image"><ProductImg file={currentImage?.file??null} alt={variant.name+' — фото из каталога MWP'} sizes="(max-width:620px) 90vw, 415px" eager/>{images.length>1&&<><button className="gallery-prev" aria-label="Предыдущее фото" onClick={()=>setGallery(g=>(g+images.length-1)%images.length)}><ChevronLeft size={19}/></button><button className="gallery-next" aria-label="Следующее фото" onClick={()=>setGallery(g=>(g+1)%images.length)}><ChevronRight size={19}/></button></>}</div><div className="gallery-dots">{images.map((img,i)=><button key={img.src} aria-label={'Фото '+(i+1)} aria-pressed={gallery%images.length===i} onClick={()=>setGallery(i)}/>)}</div>
     <h2>{variant.name.replace(' хоккейные','').replace(' хоккейный','')} <span>MWP</span></h2><p className="product-description">{variant.note||'Защита и комфорт в каждой смене.'}</p>
     {group.variants.length>1&&<div className="product-line"><span>Вариант</span><div className="segmented small product-variants">{group.variants.map(v=><button key={v.id} aria-pressed={v.id===variant.id} onClick={()=>selectVariant(v.id)}>{v.label??(v.line==='cube'?'CUBE':'Базовая')}</button>)}</div></div>}
@@ -121,7 +124,7 @@ export function Constructor({catalog,extras=[]}){
     {sizeError&&<p className="field-error" role="alert">{orderIssue(group,selection)}</p>}
     {recommendations.length>0&&<div className="recommendation">По сетке роста {height} см: {recommendations.map(size=><button key={size} onClick={()=>{patch({size});setSizeError(false);}}>{size.split(' (')[0]}</button>)}<small>Ориентир из каталога. Проверьте посадку.</small></div>}
     <button className="size-help" id="size-help" onClick={()=>setModal('size')}>{sizes.length?<Ruler size={17}/>:<Info size={17}/>} {sizes.length?'Как выбрать размер':'О подборе и креплении'}</button>
-    <div className="panel-price"><strong>{!getEdition(variant,selection.size,selection.colour,selection.options)&&'от '}{rubles(selectedPrice)}</strong>{active==='groin'&&selections.pants?.enabled&&<small>Надета под шортами</small>}</div><button className="primary add-button" onClick={add}>{selection.enabled?'Заменить в комплекте':'Добавить в комплект'} {selection.enabled?<Check size={18}/>:<Plus size={18}/>}</button>
+    <div className="panel-footer"><div className="panel-price"><strong>{!getEdition(variant,selection.size,selection.colour,selection.options)&&'от '}{rubles(selectedPrice)}</strong>{active==='groin'&&selections.pants?.enabled&&<small>Надета под шортами</small>}</div><button className={'primary add-button'+(selection.enabled?' worn':'')} aria-pressed={selection.enabled} title={selection.enabled?'Нажмите, чтобы снять':undefined} onClick={()=>selection.enabled?remove():add()}>{selection.enabled?(visualNote?'В комплекте':'Надето'):'Добавить в комплект'} {selection.enabled?<Check size={18}/>:<Plus size={18}/>}</button></div>
    </aside>
   </section>
   <section className="kit" aria-label="Твой комплект"><div className="kit-heading"><h2>Твой комплект</h2><p>{enabled.length} из {catalog.length} позиций{selectedExtras.length>0&&<> + {selectedExtras.length} дополнительных</>}</p></div><div className="kit-products">{catalog.map(g=>{const s=selections[g.key],v=getVariant(g,s);const img=previewImage(v,s.colour);return <button key={g.key} className={'kit-item '+(active===g.key?'active':'')+(!s.enabled?' disabled':'')} onClick={()=>choose(g.key)} aria-pressed={active===g.key}><div className="kit-thumb"><ProductImg file={img?.file??null} alt="" sizes="100px"/>{s.enabled&&!orderIssue(g,s)&&<span className="kit-check"><Check size={12}/></span>}</div><span>{g.label}</span><small>{kitLabel(g,s)}</small></button>;})}{selectedExtras.map(g=>{const s=extraSelections[g.key],v=g.variants[0];return <button key={g.key} className="kit-item" title={v.name} onClick={()=>document.getElementById(g.key)?.scrollIntoView({behavior:'smooth',block:'center'})}><div className="kit-thumb"><ProductImg file={previewImage(v,s.colour)?.file??null} alt="" sizes="100px"/>{!orderIssue(g,s)&&<span className="kit-check"><Check size={12}/></span>}</div><span>{v.name}</span><small>{kitLabel(g,s)}</small></button>;})}</div><div className="kit-total"><small>{incomplete.length||incompleteExtras.length?'Предварительно, от':'Итого'}</small><strong>{rubles(total)}</strong><button className="primary" disabled={!cart.ready} onClick={openCart}>В корзину <ArrowRight size={19}/></button></div></section>
