@@ -659,6 +659,11 @@
   padding-bottom: 72px;
   --page-ink: var(--ink);
   --page-muted: var(--muted);
+  --page-line: var(--line);
+  --page-card: var(--card);
+  --page-bg: var(--bg);
+  --page-tint: var(--tint);
+  --page-red: var(--red);
 }
 .duo {
   padding-top: 24px;
