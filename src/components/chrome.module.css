@@ -28,10 +28,12 @@
   background: #e0304a;
   transform: skewX(-12deg);
 }
-.logoText {
-  display: inline-block;
-  transform: skewX(-12deg);
-  letter-spacing: 0.01em;
+.logoMark {
+  height: 23px;
+  aspect-ratio: 1680 / 319;
+  background: currentColor;
+  -webkit-mask: url("/images/logo-mwp.webp") no-repeat center / contain;
+  mask: url("/images/logo-mwp.webp") no-repeat center / contain;
 }
 
 .nav {
@@ -240,12 +242,13 @@
   color: #e6eef6;
 }
 .footerLogo {
-  font-weight: 800;
-  font-size: 28px;
-  transform: skewX(-12deg);
-  display: inline-block;
+  height: 28px;
+  aspect-ratio: 1680 / 319;
+  background: currentColor;
+  -webkit-mask: url("/images/logo-mwp.webp") no-repeat left center / contain;
+  mask: url("/images/logo-mwp.webp") no-repeat left center / contain;
   align-self: flex-start;
-  margin-bottom: 4px;
+  margin-bottom: 8px;
 }
 .footerMono {
   font-family: var(--mono);

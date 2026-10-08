@@ -8,7 +8,7 @@ export function Logo() {
   return (
     <Link href="/" className={s.logo} aria-label="MWP — на главную">
       <span className={s.logoBar} />
-      <span className={s.logoText}>MWP</span>
+      <span className={s.logoMark} aria-hidden="true" />
     </Link>
   );
 }
@@ -71,7 +71,7 @@ export function SiteFooter({ settings }: { settings: PublicSettings }) {
     <footer id="contacts" className={s.footer}>
       <div className={s.footerGrid}>
         <div className={s.footerCol}>
-          <span className={s.footerLogo}>MWP</span>
+          <span className={s.footerLogo} aria-hidden="true" />
           <span>{settings.company}</span>
           <span>{settings.address}</span>
           <span className={s.footerMono}>ИНН {settings.inn}</span>
