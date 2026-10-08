@@ -1,7 +1,8 @@
 const colours = {white:'Белый',black:'Черный',red:'Красный',blue:'Синий'};
 export function initialSelections(catalog) {
   return Object.fromEntries(catalog.map(group => [group.key,{
-    enabled:true,line:group.variants.find(v=>v.line==='base')?.line??group.variants[0].line,
+    // Хоккеист начинает раздетым: посетитель сам набирает комплект.
+    enabled:false,line:group.variants.find(v=>v.line==='base')?.line??group.variants[0].line,
     size:'',colour:group.key==='helmet'?'white':'black',options:{}
   }]));
 }

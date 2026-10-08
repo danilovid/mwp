@@ -1,7 +1,7 @@
 "use client";
 
 import {useEffect,useMemo,useRef,useState} from 'react';
-import {ArrowRight,ChevronDown,ChevronLeft,ChevronRight,Check,Minus,Plus,ShoppingCart,X,Ruler,Info} from './icons';
+import {ArrowRight,ChevronLeft,ChevronRight,Check,Minus,Plus,X,Ruler,Info} from './icons';
 import Link from 'next/link';
 import {useRouter} from 'next/navigation';
 import {useCart} from '@/components/cart';
@@ -62,9 +62,9 @@ export function Constructor({catalog}){
 
 
  return <section className={styles.root}>
-  <header className="header"><Link className="brand" href="/" aria-label="MWP — на главную">MWP</Link><nav aria-label="Основная навигация"><button onClick={()=>setModal('catalog')}>Каталог <ChevronDown size={15}/></button><Link href="/about">О бренде</Link><Link href="/about#address">Контакты</Link></nav><Link className="cart-button" href="/cart" aria-label={'Корзина, '+cart.count+' товаров'}><ShoppingCart size={27}/><span>{cart.count}</span></Link></header>
+  
   <section className="constructor" id="constructor" aria-label="Конструктор экипировки">
-   <aside className="profile"><div className="intro"><h1>Собери<br/>свой комплект</h1><p>Профессиональная защита.<br/>Твой стиль. MWP.</p></div>
+   <aside className="profile">
     <div className="control-card height-card"><label htmlFor="height">Рост <strong>{height} см</strong></label><div className="range-row"><button className="icon-button" onClick={()=>setHeight(h=>Math.max(110,h-1))} aria-label="Уменьшить рост" disabled={height===110}><Minus size={19}/></button><input id="height" type="range" min="110" max="195" value={height} onChange={e=>setHeight(Number(e.target.value))}/><button className="icon-button" onClick={()=>setHeight(h=>Math.min(195,h+1))} aria-label="Увеличить рост" disabled={height===195}><Plus size={19}/></button></div><small>Начнём с роста. У каждого предмета — своя мерка.</small></div>
     <div className="control-card"><p className="card-label">Линейка экипировки</p><div className="segmented">{[['base','Базовая'],['cube','CUBE']].map(([key,label])=><button key={key} aria-pressed={dominantLine===key} onClick={()=>setGlobalLine(key)}>{label}</button>)}</div><small>{dominantLine==='cube'?'CUBE для доступных позиций. Шлем и защита паха остаются в базовой линейке.':'Надёжная защита. Продуманный комфорт для твоей игры.'}</small></div>
     <button className="hint-button" onClick={()=>setModal('help')}><Info size={17}/> Как работает подбор</button>

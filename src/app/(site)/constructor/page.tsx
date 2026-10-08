@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { PageBand } from "@/components/SiteChrome";
 import { getConstructorCatalog } from "@/lib/constructor";
+import { getPublicSettings } from "@/lib/settings";
 import { Constructor } from "./Constructor";
 
 export const metadata: Metadata = {
@@ -11,7 +13,7 @@ export const metadata: Metadata = {
 export const dynamic = "force-dynamic";
 
 export default async function ConstructorPage() {
-  const catalog = await getConstructorCatalog();
+  const [settings, catalog] = await Promise.all([getPublicSettings(), getConstructorCatalog()]);
   if (!catalog.length) {
     return <section className="wrap" style={{ paddingBlock: 48 }}>
       <h1>Экипировка пока недоступна</h1>
@@ -19,5 +21,15 @@ export default async function ConstructorPage() {
       <Link href="/#catalog">Открыть каталог</Link>
     </section>;
   }
-  return <Constructor catalog={catalog} />;
+  return (
+    <>
+      <PageBand
+        settings={settings}
+        crumbs={[{ href: "/", label: "Главная" }, { label: "Подбор экипировки" }]}
+        title="Собери комплект"
+        lead="Укажите рост, выберите снаряжение на фигуре — и комплект уйдёт в заявку целиком."
+      />
+      <Constructor catalog={catalog} />
+    </>
+  );
 }
