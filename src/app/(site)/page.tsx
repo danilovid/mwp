@@ -179,8 +179,6 @@ export default async function HomePage() {
         </Link>
       </section>
 
-      <PricesSection cards={cards} priceListUrl={settings.priceListUrl} />
-
       {builder.length > 0 && (
         <section id="kit" className={`wrap ${s.builder}`}>
           <div className="sectionHead">
@@ -195,6 +193,8 @@ export default async function HomePage() {
           <Constructor catalog={builder} extras={builderExtras} embedded />
         </section>
       )}
+
+      <PricesSection cards={cards} priceListUrl={settings.priceListUrl} />
 
       <section className={`wrap ${s.trio}`}>
         <SupplyCard />
