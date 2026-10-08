@@ -64,7 +64,11 @@ export function CartView() {
               </span>
             </div>
             <div className={s.itemQty}>
-              <button type="button" onClick={() => setQty(i.key, i.qty - 1)} aria-label="Меньше">
+              <button
+                type="button"
+                onClick={() => (i.qty > 1 ? setQty(i.key, i.qty - 1) : remove(i.key))}
+                aria-label={i.qty > 1 ? "Меньше" : "Убрать из заявки"}
+              >
                 −
               </button>
               <span>{i.qty}</span>

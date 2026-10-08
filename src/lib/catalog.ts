@@ -75,6 +75,8 @@ export type CardVariant = {
   options: ProductOption[];
   editions: { values: EditionValues; price: number }[];
   image: string | null;
+  /** Все фото варианта с привязкой к цвету: в быстром выборе снимок меняется вслед за расцветкой. */
+  images: { file: string; optionValue: string }[];
 };
 
 export type CatalogCard = {
@@ -138,6 +140,7 @@ function toCard(base: Loaded | null, cube: Loaded | null): CatalogCard {
       options: parseOptions(p.options),
       editions: p.editions.map((e) => ({ values: parseValues(e.values), price: e.price })),
       image: p.images[0]?.file ?? null,
+      images: p.images.map((i) => ({ file: i.file, optionValue: i.optionValue })),
     })),
   };
 }

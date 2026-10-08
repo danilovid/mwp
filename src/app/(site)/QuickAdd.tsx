@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { useCart } from "@/components/cart";
+import { ProductImg } from "@/components/ProductImg";
 import type { CardVariant, CatalogCard } from "@/lib/catalog";
 import { formatPrice } from "@/lib/format";
 import s from "./home.module.css";
@@ -58,6 +59,8 @@ export function QuickAdd({ card }: { card: CatalogCard }) {
   const matching = variant.editions.filter((e) => Object.entries(values).every(([k, v]) => e.values[k] === v));
   const pool = matching.length ? matching : variant.editions;
   const edition = complete ? (matching[0] ?? null) : null;
+  // Фото идёт за выбранным цветом; если привязки нет — первое из галереи.
+  const photo = variant.images.find((i) => i.optionValue && i.optionValue === values["Цвет"]) ?? variant.images[0] ?? null;
   const low = Math.min(...pool.map((e) => e.price));
 
   const put = (v: CardVariant, vals: Record<string, string>, price: number) => {
@@ -98,6 +101,15 @@ export function QuickAdd({ card }: { card: CatalogCard }) {
               <button type="button" className={s.sheetClose} onClick={() => setOpen(false)} aria-label="Закрыть">
                 ×
               </button>
+            </div>
+
+            <div className={s.sheetPhoto}>
+              <ProductImg
+                file={photo?.file ?? null}
+                alt={values["Цвет"] ? `${variant.name}, ${values["Цвет"].toLowerCase()}` : variant.name}
+                sizes="(max-width: 760px) 90vw, 520px"
+                eager
+              />
             </div>
 
             {card.buy.length > 1 && (
