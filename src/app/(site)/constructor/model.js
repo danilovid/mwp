@@ -75,3 +75,19 @@ export function cartItems(catalog,selections) {
   });
 }
 export const rubles=amount=>new Intl.NumberFormat('ru-RU',{style:'currency',currency:'RUB',maximumFractionDigits:0}).format(amount);
+
+// Accessories can be ordered separately, e.g. for a helmet the customer already owns.
+// This describes visibility only; it never silently adds or removes a cart item.
+export function visibilityNote(key,selections) {
+  if(!selections[key]?.enabled)return null;
+  if(['mask','chin'].includes(key)&&!selections.helmet?.enabled)return 'В комплекте. На фигуре появится, когда добавите шлем.';
+  if(key==='chin'&&selections.mask?.enabled)return 'В комплекте как отдельный аксессуар. У маски на фото уже есть подбородочная чашка.';
+  if(key==='groin'&&selections.pants?.enabled)return 'Надета под шортами';
+  return null;
+}
+export function kitLabel(group,selection) {
+  if(!selection.enabled)return 'Не в комплекте';
+  const edition=getEdition(getVariant(group,selection),selection.size,selection.colour,selection.options);
+  if(!edition)return 'Выберите опции';
+  return edition.values['Размер']?.split(' (')[0] || 'В комплекте';
+}

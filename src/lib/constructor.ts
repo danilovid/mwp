@@ -2,7 +2,11 @@ import { getProductBySlug, type ProductDetail } from "./catalog";
 import { imageUrl } from "./media";
 
 const categories = [
-  { key: "helmet", label: "Шлем", slug: "shlem-s-maskoj", hotspot: [57, 7], measure: "обхват головы" },
+  // The helmet is sold without a cage here. The cage is a separate cart item.
+  { key: "helmet", label: "Шлем", slug: "shlem", hotspot: [57, 7], measure: "обхват головы" },
+  { key: "mask", label: "Маска для шлема", slug: "maska", hotspot: [37, 11], measure: "размер маски и совместимость со шлемом" },
+  { key: "chin", label: "Защита подбородка", slug: "zashchita-podborodka", hotspot: [44, 17], measure: "крепление и посадка" },
+  { key: "neck", label: "Защита шеи", slug: "zashchita-shei", hotspot: [61, 21], measure: "возрастная категория и обхват шеи" },
   { key: "chest", label: "Нагрудник", slug: "nagrudnik", hotspot: [49, 27], measure: "рост и обхват груди" },
   { key: "elbows", label: "Налокотники", slug: "nalokotniki", hotspot: [29, 39], measure: "рост и длина руки" },
   { key: "gloves", label: "Перчатки", slug: "perchatki", hotspot: [20, 53], measure: "длина кисти" },

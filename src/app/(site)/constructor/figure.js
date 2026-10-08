@@ -21,13 +21,20 @@
       allow: 'M 719 659 H 910 V 936 H 719 Z',
       hide: 'M 769 733 L 875 733 L 881 918 L 769 918 Z', path:
       'M 741 623 L 856 623 L 904 722 L 906 860 L 849 931 L 781 931 L 726 864 L 723 737 Z' },
-    { key: 'helmet', group: 'helmet', source: 'master', path:
-      'M 330 0 L 670 0 L 670 237 L 590 237 L 576 277 Q 514 313 437 279 L 415 237 L 330 237 Z' }
+    { key: 'helmet', group: 'helmet', source: 'head', headBlend: true, hide:'M 419 20 H 603 V 144 H 549 L 529 108 H 405 Z', path:
+      'M 330 0 H 670 V 220 H 592 L 582 266 Q 542 280 500 268 L 479 248 L 456 244 L 413 232 H 330 Z' },
+    { key: 'chin', group: 'chin', source: 'chin', path:
+      'M 423 197 Q 452 191 493 199 L 507 160 L 507 110 L 525 108 L 526 159 L 507 197 L 566 161 L 577 163 L 571 183 L 510 215 Q 503 245 477 249 Q 437 253 422 232 L 416 214 Z' },
+    { key: 'neck', group: 'neck', source: 'neck', feather: 1.5, path:
+      'M 442 235 Q 483 262 555 237 L 560 215 Q 575 214 585 245 L 589 266 Q 637 261 655 285 Q 671 309 645 335 Q 622 365 587 384 Q 515 408 442 383 Q 397 365 373 327 Q 360 305 377 284 Q 400 269 436 267 Z' }
+
   ];
 
   const DEFAULT_URLS = {
     base: '/constructor-assets/figure/base.webp', master: '/constructor-assets/figure/master.webp',
-    red: '/constructor-assets/figure/red-gloves.webp', groin: '/constructor-assets/figure/groin.webp', full: '/constructor-assets/figure/full.webp'
+    red: '/constructor-assets/figure/red-gloves.webp', groin: '/constructor-assets/figure/groin.webp', full: '/constructor-assets/figure/full.webp',
+    helmetBare: '/constructor-assets/figure/helmet-bare.webp', chin: '/constructor-assets/figure/chin.webp',
+    neckBase: '/constructor-assets/figure/neck-base.webp', neckCube: '/constructor-assets/figure/neck-cube.webp'
   };
 
   function createScene(options = {}) {
@@ -35,20 +42,32 @@
     const on = options.on || { helmet: true, chest: true, gloves: true, groin: true };
     const colour = options.colour || 'black';
     const urls = { ...DEFAULT_URLS, ...options.urls };
-    const active = PARTS.filter(p => (p.group === 'skates' || on[p.group]) && !(p.group === 'groin' && on.pants));
+    const active = PARTS.filter(p => (p.group === 'skates' || on[p.group]) && !(p.group === 'groin' && on.pants) && !(p.group === 'chin' && (!on.helmet || on.mask))).map(p => {
+      if(p.group === 'neck' && on.chest) return {...p,path:'M 442 235 Q 483 262 555 237 L 560 215 Q 575 214 585 245 L 589 282 Q 580 305 515 305 Q 465 304 436 282 Z'};
+      if(p.group === 'helmet') return {...p,allow:on.mask
+        ? 'M 407 79 Q 397 42 431 19 Q 481 -1 542 8 Q 612 29 608 89 L 602 168 L 578 210 L 576 277 Q 514 313 437 279 L 399 237 Q 377 197 380 132 L 385 97 Z'
+        : 'M 407 79 Q 397 42 431 19 Q 481 -1 542 8 Q 612 29 608 89 L 602 168 L 578 210 L 578 251 Q 517 300 439 256 L 405 231 L 402 190 L 413 145 L 409 107 Z'};
+      return p;
+    });
     const defs = active.map(p => {
       const filter = p.feather ? `<filter id="${prefix}-${p.key}-blur" x="-10%" y="-10%" width="120%" height="120%"><feGaussianBlur stdDeviation="${p.feather}"/></filter>` : '';
       const gradient = p.wristBlend ? `<linearGradient id="${prefix}-${p.key}-wrist" gradientUnits="userSpaceOnUse" x1="0" y1="623" x2="0" y2="660"><stop offset="0" stop-color="black"/><stop offset="1" stop-color="white"/></linearGradient>` : '';
-      const fill = p.wristBlend ? `url(#${prefix}-${p.key}-wrist)` : 'white';
+      const headGradient = p.headBlend ? `<linearGradient id="${prefix}-${p.key}-contact" gradientUnits="userSpaceOnUse" x1="0" y1="225" x2="0" y2="270"><stop offset="0" stop-color="white"/><stop offset="1" stop-color="black"/></linearGradient>` : '';
+      const headSolid = p.headBlend ? '<path d="M 330 0 H 670 V 210 H 590 L 568 225 L 513 240 L 486 247 L 439 241 L 412 230 H 330 Z" fill="white"/>' : '';
+      const fill = p.headBlend ? `url(#${prefix}-${p.key}-contact)` : p.wristBlend ? `url(#${prefix}-${p.key}-wrist)` : 'white';
       const filterAttribute = p.feather ? ` filter="url(#${prefix}-${p.key}-blur)"` : '';
       const silhouette = p.allow ? `<mask id="${prefix}-${p.key}-silhouette" maskUnits="userSpaceOnUse" maskContentUnits="userSpaceOnUse" x="0" y="0" width="${W}" height="${H}" style="mask-type:alpha"><image href="${urls.base}" width="${W}" height="${H}"/><path d="${p.allow}" fill="white"/></mask>` : '';
-      return `${filter}${gradient}${silhouette}<mask id="${prefix}-${p.key}" maskUnits="userSpaceOnUse" maskContentUnits="userSpaceOnUse" x="0" y="0" width="${W}" height="${H}" style="mask-type:luminance"><path d="${p.path}" fill="${fill}"${filterAttribute}/></mask>`;
+      return `${filter}${gradient}${headGradient}${silhouette}<mask id="${prefix}-${p.key}" maskUnits="userSpaceOnUse" maskContentUnits="userSpaceOnUse" x="0" y="0" width="${W}" height="${H}" style="mask-type:luminance"><path d="${p.path}" fill="${fill}"${filterAttribute}/>${headSolid}</mask>`;
     }).join('');
     // Only clear anatomy that would protrude. Keep the base behind contact patches
     // so antialiased/feathered seams cannot punch holes in clothing or legs.
     const hidden = active.filter(p => p.hide || p.group === 'helmet').map(p => `<path d="${p.hide || p.path}" fill="black"/>`).join('');
     const layers = active.map(p => {
-      const src = p.source === 'gloves' ? (colour === 'red' ? urls.red : urls.master) : urls[p.source];
+      // A mask already includes its photographed chin cup. The separate chin accessory
+      // has its own small layer; it never draws a second cup over the cage.
+      const src = p.source === 'head' ? (on.mask ? urls.master : urls.helmetBare)
+        : p.source === 'neck' ? (options.neckLine === 'cube' ? urls.neckCube : urls.neckBase)
+        : p.source === 'gloves' ? (colour === 'red' ? urls.red : urls.master) : urls[p.source];
       const image = `<image href="${src}" x="0" y="0" width="${W}" height="${H}" preserveAspectRatio="none" mask="url(#${prefix}-${p.key})"/>`;
       return p.allow ? `<g mask="url(#${prefix}-${p.key}-silhouette)">${image}</g>` : image;
     }).join('');
