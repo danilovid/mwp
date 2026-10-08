@@ -663,6 +663,7 @@
   --page-card: var(--card);
   --page-bg: var(--bg);
   --page-tint: var(--tint);
+  --page-tint2: var(--tint2);
   --page-red: var(--red);
 }
 .duo {
