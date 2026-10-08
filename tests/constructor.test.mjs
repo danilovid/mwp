@@ -4,8 +4,14 @@ import {readFileSync} from 'node:fs';
 import {initialSelections,getVariant,getEdition,getPrice,heightSuggestions,changeLine,cartItems,orderIssue,previewImage} from '../src/app/(site)/constructor/model.js';
 import {createScene} from '../src/app/(site)/constructor/figure.js';
 const catalog=JSON.parse(readFileSync(new URL('./fixtures/constructor-catalog.json',import.meta.url)));
+// Хоккеист начинает раздетым, поэтому полный комплект для проверок собирается явно.
+const allEnabled=(list=catalog)=>{
+ const selected=initialSelections(list);
+ for(const g of list)selected[g.key].enabled=true;
+ return selected;
+};
 const validSelections=()=>{
- const selected=initialSelections(catalog);
+ const selected=allEnabled();
  for(const g of catalog){const v=getVariant(g,selected[g.key]);selected[g.key].size=v.options.find(o=>o.name==='Размер').values[0];}
  return selected;
 };
@@ -24,7 +30,8 @@ test('all required options must match; arbitrary size or missing colour is never
  assert.equal(getEdition(helmet,'invented','white'),null);
  assert.equal(getEdition(helmet,'S',''),null);
  assert.equal(getEdition(helmet,'S','purple'),null);
- assert.throws(()=>cartItems(catalog,initialSelections(catalog)),/Выберите/);
+ assert.throws(()=>cartItems(catalog,allEnabled()),/Выберите/);
+ assert.deepEqual(cartItems(catalog,initialSelections(catalog)),[],'раздетый хоккеист — пустой комплект');
 });
 test('unmapped red gloves are visible but cannot enter the real cart',()=>{
  const selected=validSelections();selected.gloves.colour='red';
