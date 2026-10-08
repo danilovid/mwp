@@ -9,7 +9,7 @@ export const SETTING_DEFAULTS = {
   email2: "mwprofi@mail.ru",
   orderEmail: "zakaz@mwphockey.ru",
   company: "ООО «МВСПОРТ»",
-  inn: "2124024431",
+  inn: "2100030242",
   ogrn: "1252100008192",
   kpp: "210001001",
   address: "428031, Чувашская Республика, г. Чебоксары, ул. 324 Стрелковой дивизии, д. 28",
