@@ -38,6 +38,15 @@ export function getPrice(variant,selection) {
   const matches=variant.editions.filter(e=>Object.entries(wanted).every(([key,value])=>!value||e.values[key]===value));
   return Math.min(...(matches.length?matches:variant.editions).map(e=>e.price));
 }
+/** Строки таблицы размеров: что выбрать, под какой рост и почём. */
+export function sizeRows(variant) {
+  const sizes=variant.options.find(o=>o.name==='Размер')?.values??[];
+  return sizes.map(size=>{
+    const m=size.match(/рост\s*(\d+)\s*[-–]\s*(\d+)/i);
+    const prices=variant.editions.filter(e=>e.values['Размер']===size).map(e=>e.price);
+    return {size,label:size.split(' (')[0],height:m?m[1]+'–'+m[2]:'',price:prices.length?Math.min(...prices):null};
+  });
+}
 export function heightSuggestions(variant,height) {
   const sizes=variant.options.find(o=>o.name==='Размер')?.values ?? [];
   return sizes.filter(size=>{const m=size.match(/рост\s*(\d+)\s*[-–]\s*(\d+)/i);return m&&height>=Number(m[1])&&height<=Number(m[2]);});
