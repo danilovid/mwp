@@ -4,7 +4,8 @@
 }
 .buyGrid {
   display: grid;
-  grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+  grid-template-columns: minmax(0, 440px) minmax(0, 560px);
+  justify-content: space-between;
   gap: 40px;
   align-items: start;
 }
