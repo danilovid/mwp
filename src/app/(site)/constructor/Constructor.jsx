@@ -52,6 +52,15 @@ export function Constructor({catalog,extras=[]}){
  const images=variant.images;
  const currentImage=images[gallery%images.length];
  useEffect(()=>{const onKey=e=>{if(e.key==='Escape')setPanelOpen(false);};window.addEventListener('keydown',onKey);return()=>window.removeEventListener('keydown',onKey);},[]);
+ const panelRef=useRef(null);
+ const drag=useRef(null);
+ const dragStart=e=>{const el=panelRef.current;if(!el||getComputedStyle(el).position!=='fixed')return;
+  // С липкой шапки тянем всегда — это её ручка. С остального только сверху списка,
+  // иначе свайп отбирал бы у карточки обычную прокрутку.
+  if(el.scrollTop>0&&!e.target.closest('.panel-top'))return;
+  drag.current={y:e.touches[0].clientY,dy:0};};
+ const dragMove=e=>{const d=drag.current;if(!d)return;d.dy=e.touches[0].clientY-d.y;panelRef.current.style.transition='none';panelRef.current.style.transform=d.dy>0?'translateY('+d.dy+'px)':'';};
+ const dragEnd=()=>{const d=drag.current;if(!d)return;drag.current=null;const el=panelRef.current;el.style.transition='';el.style.transform='';if(d.dy>90)setPanelOpen(false);};
  const patch=values=>setSelections(prev=>({...prev,[active]:{...prev[active],...values}}));
  const choose=key=>{setActive(key);setPanelOpen(true);const v=getVariant(catalog.find(g=>g.key===key),selections[key]);setGallery(Math.max(0,v.images.indexOf(previewImage(v,selections[key].colour))));setSizeError(false);};
  const colour=value=>{patch({colour:value});setGallery(Math.max(0,variant.images.indexOf(previewImage(variant,value))));setSizeError(false);};
@@ -108,7 +117,7 @@ export function Constructor({catalog,extras=[]}){
    </aside>
    <div className="stage"><div className="figure" dangerouslySetInnerHTML={{__html:scene}}/>{catalog.map(g=><button key={g.key} className={'hotspot '+(active===g.key?'active':'')+(!selections[g.key].enabled?' removed':'')} style={{left:g.hotspot[0]+'%',top:g.hotspot[1]+'%'}} onClick={()=>choose(g.key)} aria-label={'Выбрать: '+g.label} aria-pressed={active===g.key}><span className="hotspot-label">{g.label}</span></button>)}<span className="stage-caption">Нажми на точку — выбери экипировку</span></div>
    <div className={'panel-backdrop'+(panelOpen?' open':'')} onClick={()=>setPanelOpen(false)}/>
-   <aside className={'product-panel'+(panelOpen?' open':'')} aria-label="Варианты экипировки"><div className="panel-heading"><button className="icon-button" onClick={()=>setModal('catalog')} aria-label="Все категории"><ChevronLeft size={19}/></button><span>{group.label}</span><button className="icon-button panel-close" onClick={()=>setPanelOpen(false)} aria-label="Закрыть карточку"><X size={20}/></button></div>
+   <aside ref={panelRef} onTouchStart={dragStart} onTouchMove={dragMove} onTouchEnd={dragEnd} onTouchCancel={dragEnd} className={'product-panel'+(panelOpen?' open':'')} aria-label="Варианты экипировки"><div className="panel-top"><span className="panel-grabber" aria-hidden="true"/><div className="panel-heading"><button className="icon-button" onClick={()=>setModal('catalog')} aria-label="Все категории"><ChevronLeft size={19}/></button><span>{group.label}</span><button className="icon-button panel-close" onClick={()=>setPanelOpen(false)} aria-label="Закрыть карточку"><X size={20}/></button></div></div>
     <div className="product-image"><ProductImg file={currentImage?.file??null} alt={variant.name+' — фото из каталога MWP'} sizes="(max-width:620px) 90vw, 415px" eager/>{images.length>1&&<><button className="gallery-prev" aria-label="Предыдущее фото" onClick={()=>setGallery(g=>(g+images.length-1)%images.length)}><ChevronLeft size={19}/></button><button className="gallery-next" aria-label="Следующее фото" onClick={()=>setGallery(g=>(g+1)%images.length)}><ChevronRight size={19}/></button></>}</div><div className="gallery-dots">{images.map((img,i)=><button key={img.src} aria-label={'Фото '+(i+1)} aria-pressed={gallery%images.length===i} onClick={()=>setGallery(i)}/>)}</div>
     <h2>{variant.name.replace(' хоккейные','').replace(' хоккейный','')} <span>MWP</span></h2><p className="product-description">{variant.note||'Защита и комфорт в каждой смене.'}</p>
     {group.variants.length>1&&<div className="product-line"><span>Вариант</span><div className="segmented small product-variants">{group.variants.map(v=><button key={v.id} aria-pressed={v.id===variant.id} onClick={()=>selectVariant(v.id)}>{v.label??(v.line==='cube'?'CUBE':'Базовая')}</button>)}</div></div>}
