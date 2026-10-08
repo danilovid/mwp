@@ -57,30 +57,6 @@ export function KitAndClub({ kit }: { kit: KitData }) {
   return (
     <section className={`wrap ${s.duo}`}>
       <div id="kit" className={s.panel}>
-          <div className={s.panelHead}>
-            <div>
-              <h2>Собери комплект на фигуре</h2>
-              <span className={s.panelSub}>
-                {kit.items.length} {plural(kit.items.length, "позиция", "позиции", "позиций")}, рост {lo}–{hi} см
-              </span>
-            </div>
-          </div>
-          <p className={s.panelText}>
-            Укажите рост и выбирайте снаряжение прямо на хоккеисте: шлем, нагрудник, перчатки и остальное. Цвет и размер
-            подбираются на месте, собранный комплект уходит в заявку целиком.
-          </p>
-          <div className={s.kitTotal}>
-            <div className={s.kitSum}>
-              <span>Комплект целиком, от</span>
-              <span>{formatPrice(kit.items.reduce((a, i) => a + Math.min(...i.base), 0))}</span>
-            </div>
-          </div>
-          <Link href="/constructor" className="btnRed">
-            Открыть конструктор
-          </Link>
-        </div>
-      ) : (
-      <div id="kit" className={s.panel}>
         <div className={s.panelHead}>
           <div>
             <h2>Комплект на игрока</h2>
