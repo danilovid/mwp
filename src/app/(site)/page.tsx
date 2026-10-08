@@ -59,9 +59,9 @@ export default async function HomePage() {
               <a href="#catalog" className={s.heroBtnWhite}>
                 Каталог с ценами
               </a>
-              <a href="#prices" className={s.heroBtnRed}>
+              <Link href="/opt" className={s.heroBtnRed}>
                 Оптовые закупки
-              </a>
+              </Link>
             </div>
             {/* Розница уходит на маркетплейсы — даём переход сразу с первого экрана */}
             <div className={s.heroShops}>
