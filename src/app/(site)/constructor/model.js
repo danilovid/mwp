@@ -97,10 +97,17 @@ export const rubles=amount=>new Intl.NumberFormat('ru-RU',{style:'currency',curr
 
 // Accessories can be ordered separately, e.g. for a helmet the customer already owns.
 // This describes visibility only; it never silently adds or removes a cart item.
+/** Маска в комплекте: отдельной позицией или внутри шлема «с маской». */
+export function hasCage(catalog,selections) {
+  if(selections.mask?.enabled)return true;
+  const helmetGroup=catalog.find(g=>g.key==='helmet');
+  return !!(helmetGroup&&selections.helmet?.enabled&&getVariant(helmetGroup,selections.helmet).includesMask);
+}
 export function visibilityNote(key,selections,catalog=[]) {
   if(!selections[key]?.enabled)return null;
+  // Сначала про дубль: что чашка оплачена дважды, важнее, чем когда она появится на фигуре.
+  if(key==='chin'&&hasCage(catalog,selections))return 'Эта защита — запасная: в выбранной маске подбородочная чашка уже есть.';
   if(['mask','chin'].includes(key)&&!selections.helmet?.enabled)return 'В комплекте. На фигуре появится, когда добавите шлем.';
-  if(key==='chin'&&(selections.mask?.enabled||(selections.helmet?.enabled&&catalog.find(g=>g.key==='helmet')&&getVariant(catalog.find(g=>g.key==='helmet'),selections.helmet).includesMask)))return 'В комплекте как отдельный аксессуар. У маски на фото уже есть подбородочная чашка.';
   if(key==='groin'&&selections.pants?.enabled)return 'Надета под шортами';
   return null;
 }
